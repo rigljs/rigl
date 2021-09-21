@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rigl</title>
+</head>
+<body>
+  <r-header id="header"></r-header>
+
+  <main is="r-content"></main>
+
+  <r-footer></r-footer>
+
+
+  <!-- *************************************************************************** -->
+
+
+  <template title="r-header">
+    <h1>Hello ${ message }!</h1>
+
+    <style>
+      h1 {
+        color: orangered;
+      }
+    </style>
+
+    <script>
+      this.message = 'Rigl'
+    </script>
+  </template>
+
+
+  <template title="r-content"  slot="main">
+    <h2>${ title }</h2>
+    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quasi, ullam.</p>
+
+    <script>
+      this.title = 'Content'
+    </script>
+  </template>
+
+  
+  <template title="r-footer">
+    <p>${ copyright }</p>
+
+    <style>
+      :host {
+        display: block;
+        margin-top: 50px;
+      }
+      p {
+        color: ${ textColor() };
+      }
+    </style>
+
+    <script>
+      this.copyright = 'Copyright Rigl.js'
+      this.textColor = () => '#545454'
+    </script>
+  </template>
+
+
+  <!-- *************************************************************************** -->
+  
+
+  <script src="rigl.js"></script>
+
+  <script>
+    Rigl.create(document.querySelectorAll('template[title]'))
+  </script>
+</body>
+</html>
+
+
+<!-- 
+
+  console > header.$data.message = 'Web components'
+
+ -->
