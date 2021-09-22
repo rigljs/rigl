@@ -58,7 +58,7 @@
 <!-- подключить Rigl -->
 <script src="rigl.min.js"></script>
 
-<!-- передать компонент в функцию создания -->
+<!-- передать шаблон компонента в функцию создания -->
 <script>
   Rigl.create(document.querySelector('template[title]'))
 </script>
@@ -67,7 +67,7 @@
 За один раз можно передать несколько компонентов:
 
 ```html
-<!-- передать несколько компонентов в функцию создания -->
+<!-- передать несколько шаблонов в функцию создания -->
 <script>
   Rigl.create(document.querySelectorAll('template[title]'))
 </script>
@@ -108,7 +108,7 @@
   <!-- подключение Rigl -->
   <script src="rigl.min.js"></script>
 
-  <!-- выборка и передача компонента в функцию создания -->
+  <!-- выборка и передача шаблона компонента в функцию создания -->
   <script>
     Rigl.create(document.querySelector('template[title]'))
   </script>

@@ -58,7 +58,7 @@ After the component template has been defined, it must be passed to the creation
 <!-- connect Rigl -->
 <script src="rigl.min.js"></script>
 
-<!-- pass the component to the create function -->
+<!-- pass the component template to the create function -->
 <script>
   Rigl.create(document.querySelector('template[title]'))
 </script>
@@ -67,7 +67,7 @@ After the component template has been defined, it must be passed to the creation
 Multiple components can be transferred at a time:
 
 ```html
-<!-- pass multiple components to create function -->
+<!-- pass multiple templates to create function -->
 <script>
   Rigl.create(document.querySelectorAll('template[title]'))
 </script>
@@ -108,7 +108,7 @@ Thus, the full cycle of creating an inline component is demonstrated below:
   <!-- connect Rigl -->
   <script src="rigl.min.js"></script>
 
-  <!-- fetching and passing the component to the create function -->
+  <!-- fetching and passing the component template to the create function -->
   <script>
     Rigl.create(document.querySelector('template[title]'))
   </script>
