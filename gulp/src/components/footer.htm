@@ -1,0 +1,18 @@
+<r-footer>
+  <p>${ copyright }</p>
+
+  <style>
+    :host {
+      display: block;
+      margin-top: 50px;
+    }
+    p {
+      color: ${ textColor() };
+    }
+  </style>
+
+  <script>
+    this.copyright = 'Copyright Rigl.js'
+    this.textColor = () => '#545454'
+  </script>
+</r-footer>
