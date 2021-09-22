@@ -52,3 +52,67 @@ To insert a component into the content of an HTML page, use custom tags correspo
 ```html
 <r-header></r-header>
 ```
+
+After the component template has been defined, it must be passed to the creation function in Rigl:
+
+```html
+<!-- Rigl connection -->
+<script src="rigl.min.js"></script>
+
+<!-- pass the component to the create function -->
+<script>
+  Rigl.create(document.querySelector('template[title]'))
+</script>
+```
+
+Multiple components can be transferred at a time:
+
+```html
+<!-- pass multiple components to create function -->
+<script>
+  Rigl.create(document.querySelectorAll('template[title]'))
+</script>
+```
+
+Thus, the full cycle of creating an inline component is demonstrated below:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rigl</title>
+</head>
+<body>
+  <!-- component mounting -->
+  <r-header></r-header>
+
+
+  <!-- component template -->
+  <template title="r-header">
+    <h1>Hello ${ message }!</h1>
+
+    <style>
+      h1 {
+        color: orangered;
+      }
+    </style>
+
+    <script>
+      this.message = 'Rigl'
+    </script>
+  </template>
+  
+
+  <!-- Rigl connection -->
+  <script src="rigl.min.js"></script>
+
+  <!-- fetching and passing the component to the create function -->
+  <script>
+    Rigl.create(document.querySelector('template[title]'))
+  </script>
+</body>
+</html>
+```
