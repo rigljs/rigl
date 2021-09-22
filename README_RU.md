@@ -9,8 +9,7 @@
 <br>
 
 1. [Начало работы](#beginning-of-work)
-2. [Встроенные компоненты](#built-in-components)
-3. [Внешние компоненты](#external-components)
+2. [Внешние компоненты](#external-components)
 
 
 <br>

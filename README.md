@@ -9,8 +9,7 @@
 <br>
 
 1. [Beginning of work](#beginning-of-work)
-2. [Built-in components](#built-in-components)
-3. [External components](#external-components)
+2. [External components](#external-components)
 
 
 <br>
@@ -56,7 +55,7 @@ To insert a component into the content of an HTML page, use custom tags correspo
 After the component template has been defined, it must be passed to the creation function in Rigl:
 
 ```html
-<!-- Rigl connection -->
+<!-- connect Rigl -->
 <script src="rigl.min.js"></script>
 
 <!-- pass the component to the create function -->
@@ -106,7 +105,7 @@ Thus, the full cycle of creating an inline component is demonstrated below:
   </template>
   
 
-  <!-- Rigl connection -->
+  <!-- connect Rigl -->
   <script src="rigl.min.js"></script>
 
   <!-- fetching and passing the component to the create function -->
