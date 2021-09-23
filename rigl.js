@@ -1,6 +1,5 @@
 /*!
- * Rigl.js v1.0.0
- * (c) 2021 rigljs@mail.ru
+ * Rigl.js v1.0.0 | rigljs@mail.ru
  * Released under the MIT License.
  */
  (function(modules) { 
