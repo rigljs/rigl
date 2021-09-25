@@ -144,7 +144,7 @@ Components in Rigl can be put into separate files with the *.htm* extension and 
 
   <r-footer></r-footer>
 
-  <!-- ************************ -->
+  <!-- ******************* -->
   
 
   <!-- connect Rigl -->
