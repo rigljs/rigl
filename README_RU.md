@@ -309,21 +309,26 @@ gulp.task('default', dev)
 ```html
 <r-header>
   <!-- выражение в текстовом содержимом элемента H1 -->
-  <h1>Hello ${ message }!</h1>
+  <h1>Hello ${ toUppercase(message) }! ${ new Date().getFullYear() }</h1>
 
   <!-- выражение в атрибуте "title" элемента H1 -->
   <h1 title="${ message }">Hello!</h1>
 
+
   <style>
     h1 {
       /* выражение в свойстве стиля элемента H1 */
-      color: ${ titleColor() };
+      color: ${ titleColor };
     }
   </style>
 
+
   <script>
     this.message = 'Rigl'
-    this.titleColor = () => 'orangered'
+
+    this.titleColor = 'orangered'
+    
+    this.toUppercase = text => text.toUpperCase()
   </script>
 </r-header>
 ```

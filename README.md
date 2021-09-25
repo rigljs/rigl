@@ -309,21 +309,26 @@ Expressions in Rigl use the template string syntax *${ expression }*. Expression
 ```html
 <r-header>
   <!-- expression in the text content of the H1 element -->
-  <h1>Hello ${ message }!</h1>
+  <h1>Hello ${ toUppercase(message) }! ${ new Date().getFullYear() }</h1>
 
   <!-- expression in the "title" attribute of the H1 element -->
   <h1 title="${ message }">Hello!</h1>
 
+
   <style>
     h1 {
       /* expression in the style property of the H1 element */
-      color: ${ titleColor() };
+      color: ${ titleColor };
     }
   </style>
 
+
   <script>
     this.message = 'Rigl'
-    this.titleColor = () => 'orangered'
+
+    this.titleColor = 'orangered'
+    
+    this.toUppercase = text => text.toUpperCase()
   </script>
 </r-header>
 ```
