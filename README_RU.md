@@ -116,7 +116,6 @@
 </body>
 </html>
 ```
-
 <br>
 
 <h2 id="external-components">Внешние компоненты</h2>
@@ -247,3 +246,8 @@ const dev = gulp.series(clean, copy, components, serve, watch)
 
 gulp.task('default', dev)
 ```
+<br>
+
+<h2 id="replacing-components">Замена компонентов</h2>
+
+<br>

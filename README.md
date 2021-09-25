@@ -116,7 +116,6 @@ Thus, the full cycle of creating an inline component is demonstrated below:
 </body>
 </html>
 ```
-
 <br>
 
 <h2 id="external-components">External components</h2>
@@ -247,3 +246,8 @@ const dev = gulp.series(clean, copy, components, serve, watch)
 
 gulp.task('default', dev)
 ```
+<br>
+
+<h2 id="replacing-components">Replacing components</h2>
+
+<br>
