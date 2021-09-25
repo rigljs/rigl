@@ -10,6 +10,7 @@
 
 1. [Beginning of work](#beginning-of-work)
 2. [External components](#external-components)
+3. [Replacing components](#replacing-components)
 
 
 <br>
@@ -114,4 +115,136 @@ Thus, the full cycle of creating an inline component is demonstrated below:
   </script>
 </body>
 </html>
+```
+
+<br>
+<br>
+
+<h2 id="external-components">External components</h2>
+
+<br>
+
+Components in Rigl can be put into separate files with the *.htm* extension and then assembled into one file, for example, using *Gulp*. The collected file will be connected on the main page through the upload function in Rigl:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rigl</title>
+</head>
+<body>
+  <!-- mounting components -->
+
+  <r-header id="header"></r-header>
+
+  <main is="r-content"></main>
+
+  <r-footer></r-footer>
+
+  <!-- ************************ -->
+  
+
+  <!-- connect Rigl -->
+  <script src="rigl.min.js"></script>
+
+  <!-- passing the path to the component file in the load function -->
+  <script>
+    Rigl.load('components.htm')
+  </script>
+</body>
+</html>
+```
+
+**Working with external components requires the use of a server such as *lite-server***
+
+Unlike built-in components, templates for external components are located in tags corresponding to the names of the components. The *title* attribute is no longer used in them, since the name of the component is determined by its parent tag:
+
+
+```html
+<r-header>
+  <h1>Hello ${ message }!</h1>
+
+  <style>
+    h1 {
+      color: orangered;
+    }
+  </style>
+
+  <script>
+    this.message = 'Rigl'
+  </script>
+</r-header>
+```
+
+ When using the *Gulp* task manager, the approximate project structure might look like this:
+
+```
+app
+  index.html
+  package.json
+  gulpfile.js
+  /src
+    /assets
+      rigl.min.js
+      /img
+        logo.png
+    /components
+      content.htm
+      footer.htm
+      header.htm
+      menu.htm
+  /dist
+    components.htm
+    rigl.min.js
+    /img
+      logo.png 
+```
+
+And the content of the *gulpfile.js* file can be like this:
+
+```js
+const gulp = require('gulp')
+const concat = require('gulp-concat')
+const browserSync = require('browser-sync').create()
+const del = require('del')
+
+
+function components() {
+  return gulp.src('src/components/*.{html,htm}')
+    .pipe(concat('components.htm'))
+    .pipe(gulp.dest('dist'))
+}
+
+function serve(done) {
+  browserSync.init({
+    server: { baseDir: "./" }
+  })
+  done()
+}
+
+function reload(done) {
+  browserSync.reload()
+  done()
+}
+
+function clean() {
+  return del('dist')
+}
+
+function copy() {
+  return gulp.src('src/assets/**/*.*')
+    .pipe(gulp.dest('dist'))
+}
+
+function watch() {
+  gulp.watch('index.html', gulp.series(reload))
+  gulp.watch('src/**/*.{html,htm}', gulp.series(components, reload))
+}
+
+const dev = gulp.series(clean, copy, components, serve, watch)
+
+gulp.task('default', dev)
 ```
