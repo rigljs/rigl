@@ -13,6 +13,7 @@
 3. [Замена компонентов](#replacing-components)
 4. [Выражения](#expressions)
 5. [Свойства](#properties)
+6. [Миксины](#mixins)
 
 
 <br>
@@ -309,10 +310,10 @@ gulp.task('default', dev)
 ```html
 <r-header>
   <!-- выражение в текстовом содержимом элемента H1 -->
-  <h1>Hello ${ toUppercase(message) }! ${ new Date().getFullYear() }</h1>
+  <h1>Hello ${ toUpper(message) }! ${ new Date().getFullYear() }</h1>
 
-  <!-- выражение в атрибуте "title" элемента H1 -->
-  <h1 title="${ message }">Hello!</h1>
+  <!-- выражение в атрибуте "title" элемента H2 -->
+  <h2 title="${ message }">Hello!</h2>
 
 
   <style>
@@ -328,12 +329,61 @@ gulp.task('default', dev)
 
     this.titleColor = 'orangered'
     
-    this.toUppercase = text => text.toUpperCase()
+    this.toUpper = text => text.toUpperCase()
   </script>
 </r-header>
 ```
 <br>
 
 <h2 id="properties">Свойства</h2>
+
+<br>
+
+Любые пользовательские свойства компонента определяются в его теге *SCRIPT* с помощью ключевого слова *.this*. Этих тегов в компоненте может быть любое количество. Кроме определения пользовательских свойств, в них может располагаться произвольный JavaScript:
+
+```html
+<r-header>
+  <h1>Hello ${ toUpper(message) }!</h1>
+
+  <pre>${ user }</pre>
+
+  <pre>${ numbers }</pre>
+
+  <style>
+    h1 {
+      color: ${ titleColor };
+    }
+  </style>
+
+  <script>
+    // создать пустой массив
+    const arr = []
+
+    // заполнить массив значениями
+    for (i = 0; i <= 5; i++) arr[i] = i
+
+    // определить пользовательское свойство "message"
+    this.message = 'Rigl'
+
+    // определить пользовательское свойство "titleColor"
+    this.titleColor = 'orangered'
+
+    // определить пользовательский объект "user"
+    this.user = {
+      name: 'Alex',
+      age: 29,
+    }
+
+    // определить пользовательский массив "numbers"
+    this.numbers = arr
+
+    // определить пользовательский метод "toUpper"
+    this.toUpper = text => text.toUpperCase()
+  </script>
+</r-header>
+```
+<br>
+
+<h2 id="mixins">Миксины</h2>
 
 <br>

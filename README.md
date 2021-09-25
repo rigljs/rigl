@@ -13,6 +13,7 @@
 3. [Replacing components](#replacing-components)
 4. [Expressions](#expressions)
 5. [Properties](#properties)
+6. [Mixins](#mixins)
 
 
 <br>
@@ -309,10 +310,10 @@ Expressions in Rigl use the template string syntax *${ expression }*. Expression
 ```html
 <r-header>
   <!-- expression in the text content of the H1 element -->
-  <h1>Hello ${ toUppercase(message) }! ${ new Date().getFullYear() }</h1>
+  <h1>Hello ${ toUpper(message) }! ${ new Date().getFullYear() }</h1>
 
-  <!-- expression in the "title" attribute of the H1 element -->
-  <h1 title="${ message }">Hello!</h1>
+  <!-- expression in the "title" attribute of the H2 element -->
+  <h2 title="${ message }">Hello!</h2>
 
 
   <style>
@@ -328,12 +329,61 @@ Expressions in Rigl use the template string syntax *${ expression }*. Expression
 
     this.titleColor = 'orangered'
     
-    this.toUppercase = text => text.toUpperCase()
+    this.toUpper = text => text.toUpperCase()
   </script>
 </r-header>
 ```
 <br>
 
 <h2 id="properties">Properties</h2>
+
+<br>
+
+Any custom properties of a component are defined in its *SCRIPT* tag using the *.this* keyword. There can be any number of these tags in a component. In addition to defining custom properties, they can contain arbitrary JavaScript:
+
+```html
+<r-header>
+  <h1>Hello ${ toUpper(message) }!</h1>
+
+  <pre>${ user }</pre>
+
+  <pre>${ numbers }</pre>
+
+  <style>
+    h1 {
+      color: ${ titleColor };
+    }
+  </style>
+
+  <script>
+    // create an empty array
+    const arr = []
+
+    // fill the array with values
+    for (i = 0; i <= 5; i++) arr[i] = i
+
+    // define custom property "message"
+    this.message = 'Rigl'
+
+    // define custom property "titleColor"
+    this.titleColor = 'orangered'
+
+    // define a custom object "user"
+    this.user = {
+      name: 'Alex',
+      age: 29,
+    }
+
+    // define a custom array "numbers"
+    this.numbers = arr
+
+    // define a custom method "toUpper"
+    this.toUpper = text => text.toUpperCase()
+  </script>
+</r-header>
+```
+<br>
+
+<h2 id="mixins">Mixins</h2>
 
 <br>
