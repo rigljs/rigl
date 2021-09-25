@@ -118,7 +118,6 @@
 ```
 
 <br>
-<br>
 
 <h2 id="external-components">Внешние компоненты</h2>
 

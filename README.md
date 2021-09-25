@@ -118,7 +118,6 @@ Thus, the full cycle of creating an inline component is demonstrated below:
 ```
 
 <br>
-<br>
 
 <h2 id="external-components">External components</h2>
 
