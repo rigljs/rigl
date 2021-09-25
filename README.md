@@ -22,7 +22,7 @@
 
 <br>
 
-There are two types of components in Rigl: built-in and external. To create a component embedded in an HTML page, you must use the *template* tag with the *title* attribute, which specifies the name of the component:
+There are two types of components in Rigl: built-in and external. To create a component embedded in an HTML page, you must use the *TEMPLATE* tag with the ***title*** attribute, which specifies the name of the component:
 
 ```html
 <template title="r-header">
@@ -159,7 +159,7 @@ Components in Rigl can be put into separate files with the *.htm* extension and 
 
 **Working with external components requires the use of a server, for example *lite-server***
 
-Unlike built-in components, templates for external components are located in tags corresponding to the names of the components. The *title* attribute is no longer used in them, since the name of the component is determined by its parent tag:
+Unlike built-in components, templates for external components are located in tags corresponding to the names of the components. The ***title*** attribute is no longer used in them, since the name of the component is determined by its parent tag:
 
 
 ```html
@@ -253,7 +253,7 @@ gulp.task('default', dev)
 
 <br>
 
-Components can replace standard HTML elements. For example, the *R-HEADER* component can replace the *HEADER* element. To do this, the *slot* attribute is used in the parent tag of the component template, which indicates the name of the element that replaces the component:
+Components can replace standard HTML elements. For example, the *R-HEADER* component can replace the *HEADER* element. To do this, the ***slot*** attribute is used in the parent tag of the component template, which indicates the name of the element that replaces the component:
 
 ```html
 <r-header slot="header">
@@ -271,7 +271,7 @@ Components can replace standard HTML elements. For example, the *R-HEADER* compo
 </r-header>
 ```
 
-The HTML element itself uses the *is* attribute, which indicates the name of the component that replaces this element:
+The HTML element itself uses the ***is*** attribute, which indicates the name of the component that replaces this element:
 
 ```html
 <!DOCTYPE html>
