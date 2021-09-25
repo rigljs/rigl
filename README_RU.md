@@ -11,6 +11,7 @@
 1. [Начало работы](#beginning-of-work)
 2. [Внешние компоненты](#external-components)
 3. [Замена компонентов](#replacing-components)
+4. [Выражения](#expressions)
 
 
 <br>
@@ -148,7 +149,7 @@
   <!-- подключение Rigl -->
   <script src="rigl.min.js"></script>
 
-  <!-- передача пути к файлу компонентов в функции загрузки -->
+  <!-- передача пути к файлу компонентов в функцию загрузки -->
   <script>
     Rigl.load('components.htm')
   </script>
@@ -249,5 +250,55 @@ gulp.task('default', dev)
 <br>
 
 <h2 id="replacing-components">Замена компонентов</h2>
+
+<br>
+
+Компоненты могут заменять стандартные HTML-элементы. Например, компонент *R-HEADER* может заменить элемент *HEADER*. Для этого в родительском теге шаблона компонента используется атрибут *slot*, в котором указывается название элемента, который заменяет компонент:
+
+```html
+<r-header slot="header">
+  <h1>Hello ${ message }!</h1>
+
+  <style>
+    h1 {
+      color: orangered;
+    }
+  </style>
+
+  <script>
+    this.message = 'Rigl'
+  </script>
+</r-header>
+```
+
+В самом HTML-элементе используется атрибут *is*, в котором указывается название компонента, который заменяет этот элемент:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rigl</title>
+</head>
+<body>
+  <!-- замена элемента HEADER компонентом R-HEADER -->
+  <header is="r-header"></header>
+  
+
+  <!-- подключение Rigl -->
+  <script src="rigl.min.js"></script>
+
+  <!-- передача пути к файлу компонентов в функцию загрузки -->
+  <script>
+    Rigl.load('components.htm')
+  </script>
+</body>
+</html>
+```
+<br>
+
+<h2 id="expressions">Выражения</h2>
 
 <br>

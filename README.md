@@ -11,6 +11,7 @@
 1. [Beginning of work](#beginning-of-work)
 2. [External components](#external-components)
 3. [Replacing components](#replacing-components)
+4. [Expressions](#expressions)
 
 
 <br>
@@ -249,5 +250,55 @@ gulp.task('default', dev)
 <br>
 
 <h2 id="replacing-components">Replacing components</h2>
+
+<br>
+
+Components can replace standard HTML elements. For example, the *R-HEADER* component can replace the *HEADER* element. To do this, the *slot* attribute is used in the parent tag of the component template, which indicates the name of the element that replaces the component:
+
+```html
+<r-header slot="header">
+  <h1>Hello ${ message }!</h1>
+
+  <style>
+    h1 {
+      color: orangered;
+    }
+  </style>
+
+  <script>
+    this.message = 'Rigl'
+  </script>
+</r-header>
+```
+
+The HTML element itself uses the *is* attribute, which indicates the name of the component that replaces this element:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rigl</title>
+</head>
+<body>
+  <!-- replacing the HEADER element with the R-HEADER component -->
+  <header is="r-header"></header>
+  
+
+  <!-- connect Rigl -->
+  <script src="rigl.min.js"></script>
+
+  <!-- passing the path to the component file in the load function -->
+  <script>
+    Rigl.load('components.htm')
+  </script>
+</body>
+</html>
+```
+<br>
+
+<h2 id="expressions">Expressions</h2>
 
 <br>
