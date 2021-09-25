@@ -12,6 +12,7 @@
 2. [External components](#external-components)
 3. [Replacing components](#replacing-components)
 4. [Expressions](#expressions)
+5. [Properties](#properties)
 
 
 <br>
@@ -300,5 +301,36 @@ The HTML element itself uses the ***is*** attribute, which indicates the name of
 <br>
 
 <h2 id="expressions">Expressions</h2>
+
+<br>
+
+Expressions in Rigl use the template string syntax *${ expression }*. Expressions can contain any valid JavaScript and custom properties. They can be placed anywhere in the component where the value can be displayed, for example, in attributes, text nodes, and styles:
+
+```html
+<r-header>
+  <!-- expression in the text content of the H1 element -->
+  <h1>Hello ${ message }!</h1>
+
+  <!-- expression in the "title" attribute of the H1 element -->
+  <h1 title="${ message }">Hello!</h1>
+
+  <style>
+    h1 {
+      /* expression in the style property of the H1 element */
+      color: ${ titleColor() };
+    }
+  </style>
+
+  <script>
+    this.message = 'Rigl'
+    this.titleColor = () => 'orangered'
+  </script>
+</r-header>
+```
+
+All nodes that use expressions become reactive!
+<br>
+
+<h2 id="properties">Properties</h2>
 
 <br>
