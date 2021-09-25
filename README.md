@@ -304,7 +304,7 @@ The HTML element itself uses the ***is*** attribute, which indicates the name of
 
 <br>
 
-Expressions in Rigl use the template string syntax *${ expression }*. Expressions can contain any valid JavaScript and custom properties. They can be placed anywhere in the component where the value can be displayed, for example, in attributes, text nodes, and styles:
+Expressions in Rigl use the template string syntax *${ expression }*. Expressions can contain any valid JavaScript and custom properties. They can be placed anywhere in the component where the value can be displayed, for example, in attributes, text nodes, and styles. All nodes that use expressions become reactive:
 
 ```html
 <r-header>
@@ -327,8 +327,6 @@ Expressions in Rigl use the template string syntax *${ expression }*. Expression
   </script>
 </r-header>
 ```
-
-All nodes that use expressions become reactive!
 <br>
 
 <h2 id="properties">Properties</h2>
