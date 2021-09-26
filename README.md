@@ -468,13 +468,12 @@ To set properties and methods in a mixin object, you need to access it through R
 
 The value of the ***year*** property for all components will be taken from the mixin object, except for the *R-FOOTER* component, in which this property is explicitly defined:
 
-```
-R-HEADER | 2021
 
-R-CONTENT | 2021
+<h1>R-HEADER | 2021</h1>
 
-R-FOOTER | Two thousand twenty first
-```
+<h2>R-CONTENT | 2021</h2>
+
+<p>R-FOOTER | Two thousand twenty first</p>
 <br>
 
 <h2 id="reactivity">Reactivity</h2>
@@ -524,9 +523,7 @@ The *R-HEADER* component contains only one property ***message***:
 
 Initially, the browser will show:
 
-```
-Hello Rigl!
-```
+<h1>Hello Rigl!</h1>
 
 To change the value of the ***message*** property, enter the following command in the browser console:
 
@@ -536,9 +533,7 @@ To change the value of the ***message*** property, enter the following command i
 
 The result will be immediately displayed in the browser:
 
-```
-Hello Web components!
-```
+<h1>Hello Web components!</h1>
 
 To get the value of a property, you need to specify in the console:
 
