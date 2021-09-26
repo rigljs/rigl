@@ -457,7 +457,7 @@ To set properties and methods in a mixin object, you need to access it through R
 </html>
 ```
 
-The value of the ***year*** property for all components will be taken from the mixin object, except for the * FOOTER * component, in which this property is explicitly defined:
+The value of the ***year*** property for all components will be taken from the mixin object, except for the *R-FOOTER* component, in which this property is explicitly defined:
 
 ```
 HEADER | 2021
