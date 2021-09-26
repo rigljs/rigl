@@ -14,6 +14,15 @@
 4. [Expressions](#expressions)
 5. [Properties](#properties)
 6. [Mixins](#mixins)
+7. [~~Reactivity~~](#reactivity)
+8. [~~Attributes~~](#attributes)
+9. [~~Cycles~~](#cycles)
+10. [~~Options~~](#options)
+11. [~~Service~~](#service)
+12. [~~Events~~](#events)
+13. [~~Emitter~~](#emitter)
+14. [~~Router~~](#router)
+15. [~~API~~](#api)
 
 
 <br>
