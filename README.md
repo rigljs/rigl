@@ -169,7 +169,7 @@ Components in Rigl can be put into separate files with the *.htm* extension and 
 </html>
 ```
 
-> *Working with external components requires the use of a server, for example **lite-server***
+> *Working with external components requires the use of a server, for example [lite-server](https://www.npmjs.com/package/lite-server)*
 
 Unlike built-in components, templates for external components are located in tags corresponding to the names of the components. The ***title*** attribute is no longer used in them, since the name of the component is determined by its parent tag:
 
