@@ -387,3 +387,82 @@ Any custom properties of a component are defined in its *SCRIPT* tag using the *
 <h2 id="mixins">Mixins</h2>
 
 <br>
+
+Mixins allow you to share helper functions among all components. All properties from the mixin object are added to each component. Primitive properties are copied by value, and objects and functions are passed by reference. If the component has a property with the same name as the property in the mixins object, then the property from the component overrides the property from the mixins object:
+
+```html
+<r-header>
+  <!-- method "printName" and property "year" from mixins object  -->
+  <h1>${ printName(name) } | ${ year }</h1>
+
+  <script>
+    this.name = 'HEADER'
+  </script>
+</r-header>
+
+
+<r-content>
+  <!-- method "printName" and property "year" from mixins object  -->
+  <h2>${ printName(name) } | ${ year }</h2>
+
+  <script>
+    this.name = 'CONTENT'
+  </script>
+</r-content>
+
+
+<r-footer>
+  <!-- the "printName" method from the mixin object and the "year" property from the component  -->
+  <p>${ printName(name) } | ${ year }</p>
+
+  <script>
+    this.name = 'FOOTER'
+    this.year = 'Two thousand twenty first'
+  </script>
+</r-footer>
+```
+
+To set properties and methods in a mixin object, you need to access it through Rigl:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rigl</title>
+</head>
+<body>
+  <r-header></r-header>
+
+  <r-content></r-content>
+
+  <r-footer></r-footer>
+  
+
+  <script src="rigl.min.js"></script>
+
+  <script>
+    // adding the "printName" method to the "mixins" object
+    Rigl.mixins.printName = name => name
+
+    // adding the "year" property to the "mixins" object
+    Rigl.mixins.year = new Date().getFullYear()
+    
+
+    Rigl.load('components.htm')
+  </script>
+</body>
+</html>
+```
+
+The value of the ***year*** property for all components will be taken from the mixin object, except for the * FOOTER * component, in which this property is explicitly defined:
+
+```
+HEADER | 2021
+
+CONTENT | 2021
+
+FOOTER | Two thousand twenty first
+```

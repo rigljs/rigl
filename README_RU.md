@@ -387,3 +387,82 @@ gulp.task('default', dev)
 <h2 id="mixins">Миксины</h2>
 
 <br>
+
+Миксины позволяют разделять вспомогательные функции между всеми компонентами. Все свойства из объекта миксинов добавляются каждому компоненту. Примитивные свойства копируются по значению, а объекты и функции передаются по ссылке. Если в компоненте имеется свойство с таким же именем, как и свойство в объекте миксинов, то свойство из компонента переопределяет свойство из объекта миксинов:
+
+```html
+<r-header>
+  <!-- метод "printName" и свойство "year" из объекта миксинов  -->
+  <h1>${ printName(name) } | ${ year }</h1>
+
+  <script>
+    this.name = 'HEADER'
+  </script>
+</r-header>
+
+
+<r-content>
+  <!-- метод "printName" и свойство "year" из объекта миксинов  -->
+  <h2>${ printName(name) } | ${ year }</h2>
+
+  <script>
+    this.name = 'CONTENT'
+  </script>
+</r-content>
+
+
+<r-footer>
+  <!-- метод "printName" из объекта миксинов и свойство "year" из компонента  -->
+  <p>${ printName(name) } | ${ year }</p>
+
+  <script>
+    this.name = 'FOOTER'
+    this.year = 'Две тысячи двадцать первый'
+  </script>
+</r-footer>
+```
+
+Чтобы задать свойства и методы в объекте миксинов, необходимо обратиться к нему через Rigl:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rigl</title>
+</head>
+<body>
+  <r-header></r-header>
+
+  <r-content></r-content>
+
+  <r-footer></r-footer>
+  
+
+  <script src="rigl.min.js"></script>
+
+  <script>
+    // добавление метода "printName" в объект "mixins"
+    Rigl.mixins.printName = name => name
+
+    // добавление свойства "year" в объект "mixins"
+    Rigl.mixins.year = new Date().getFullYear()
+    
+    
+    Rigl.load('components.htm')
+  </script>
+</body>
+</html>
+```
+
+Значение свойства ***year*** для всех компонентов будет браться из объекта миксинов, кроме компонента *FOOTER*, в котором это свойство определено явно:
+
+```
+HEADER | 2021
+
+CONTENT | 2021
+
+FOOTER | Две тысячи двадцать первый
+```
