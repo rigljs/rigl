@@ -15,7 +15,7 @@
 5. [Свойства](#properties)
 6. [Миксины](#mixins)
 7. [Реактивность](#reactivity)
-8. [~~Атрибуты~~](#attributes)
+8. [Атрибуты](#attributes)
 9. [~~Циклы~~](#cycles)
 10. [~~Параметры~~](#parameters)
 11. [~~Сервис~~](#service)
@@ -509,21 +509,28 @@ gulp.task('default', dev)
 
 **Все сервисные свойства начинаются со знака *$* и их нельзя изменять**
 
-Компонет *R-HEADER* содержит всего одно свойство ***message***:
+Компонет *R-HEADER* содержит два свойства ***message*** и ***titleColor***:
 
 ```html
 <r-header>
   <h1>Hello ${ message }!</h1>
 
+  <style>
+    h1 {
+      color: ${ titleColor };
+    }
+  </style>
+
   <script>
     this.message = 'Rigl'
+    this.titleColor = 'orangered'
   </script>
 </r-header>
 ```
 
 Изначально в браузере будет показано:
 
-<h1>Hello Rigl!</h1>
+<h1 style="color: orangered;">Hello Rigl!</h1>
 
 Чтобы изменить значение свойства ***message***, необходимо ввести в консоли барузера следующую команду:
 
@@ -533,7 +540,7 @@ gulp.task('default', dev)
 
 Результат сразу отобразится в браузере:
 
-<h1>Hello Web components!</h1>
+<h1 style="color: orangered;">Hello Web components!</h1>
 
 Для получения значения свойства, нужно указать в консоли:
 
@@ -546,3 +553,30 @@ gulp.task('default', dev)
 ```
 < 'Web components'
 ```
+
+Аналогичным образом измените значение свойства ***titleColor***:
+
+```
+> header.$data.titleColor = 'green'
+```
+
+Цвет заголовка изменится:
+
+<h1 style="color: green;">Hello Web components!</h1>
+
+Проверьте новое значение свойства:
+
+```
+> header.$data.titleColor
+```
+
+Результат будет соответствовать:
+
+```
+< 'green'
+```
+<br>
+
+<h2 id="attributes">Атрибуты</h2>
+
+<br>

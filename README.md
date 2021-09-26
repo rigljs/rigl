@@ -15,7 +15,7 @@
 5. [Properties](#properties)
 6. [Mixins](#mixins)
 7. [Reactivity](#reactivity)
-8. [~~Attributes~~](#attributes)
+8. [Attributes](#attributes)
 9. [~~Cycles~~](#cycles)
 10. [~~Parameters~~](#parameters)
 11. [~~Service~~](#service)
@@ -509,21 +509,28 @@ A component is accessed through its mount tag. To get quick access to it, let's 
 
 **All service properties start with *$* and cannot be changed**
 
-The *R-HEADER* component contains only one property ***message***:
+The *R-HEADER* component contains two properties ***message*** and ***titleColor***:
 
 ```html
 <r-header>
   <h1>Hello ${ message }!</h1>
 
+  <style>
+    h1 {
+      color: ${ titleColor };
+    }
+  </style>
+
   <script>
     this.message = 'Rigl'
+    this.titleColor = 'orangered'
   </script>
 </r-header>
 ```
 
 Initially, the browser will show:
 
-<h1>Hello Rigl!</h1>
+<h1 style="color: orangered;">Hello Rigl!</h1>
 
 To change the value of the ***message*** property, enter the following command in the browser console:
 
@@ -533,7 +540,7 @@ To change the value of the ***message*** property, enter the following command i
 
 The result will be immediately displayed in the browser:
 
-<h1>Hello Web components!</h1>
+<h1 style="color: orangered;">Hello Web components!</h1>
 
 To get the value of a property, you need to specify in the console:
 
@@ -546,3 +553,30 @@ The current value of the property will be shown below:
 ```
 < 'Web components'
 ```
+
+Change the value of the ***titleColor*** property in the same way:
+
+```
+> header.$data.titleColor = 'green'
+```
+
+The title color will change:
+
+<h1 style="color: green;">Hello Web components!</h1>
+
+Check the new property value:
+
+```
+> header.$data.titleColor
+```
+
+The result will match:
+
+```
+< 'green'
+```
+<br>
+
+<h2 id="attributes">Attributes</h2>
+
+<br>
