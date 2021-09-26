@@ -17,7 +17,7 @@
 7. [~~Reactivity~~](#reactivity)
 8. [~~Attributes~~](#attributes)
 9. [~~Cycles~~](#cycles)
-10. [~~Options~~](#options)
+10. [~~Parameters~~](#parameters)
 11. [~~Service~~](#service)
 12. [~~Events~~](#events)
 13. [~~Emitter~~](#emitter)
