@@ -396,7 +396,7 @@ Mixins allow you to share helper functions among all components. All properties 
   <h1>${ printName(name) } | ${ year }</h1>
 
   <script>
-    this.name = 'HEADER'
+    this.name = 'R-HEADER'
   </script>
 </r-header>
 
@@ -406,7 +406,7 @@ Mixins allow you to share helper functions among all components. All properties 
   <h2>${ printName(name) } | ${ year }</h2>
 
   <script>
-    this.name = 'CONTENT'
+    this.name = 'R-CONTENT'
   </script>
 </r-content>
 
@@ -416,7 +416,7 @@ Mixins allow you to share helper functions among all components. All properties 
   <p>${ printName(name) } | ${ year }</p>
 
   <script>
-    this.name = 'FOOTER'
+    this.name = 'R-FOOTER'
     this.year = 'Two thousand twenty first'
   </script>
 </r-footer>
@@ -460,9 +460,9 @@ To set properties and methods in a mixin object, you need to access it through R
 The value of the ***year*** property for all components will be taken from the mixin object, except for the *R-FOOTER* component, in which this property is explicitly defined:
 
 ```
-HEADER | 2021
+R-HEADER | 2021
 
-CONTENT | 2021
+R-CONTENT | 2021
 
-FOOTER | Two thousand twenty first
+R-FOOTER | Two thousand twenty first
 ```

@@ -396,7 +396,7 @@ gulp.task('default', dev)
   <h1>${ printName(name) } | ${ year }</h1>
 
   <script>
-    this.name = 'HEADER'
+    this.name = 'R-HEADER'
   </script>
 </r-header>
 
@@ -406,7 +406,7 @@ gulp.task('default', dev)
   <h2>${ printName(name) } | ${ year }</h2>
 
   <script>
-    this.name = 'CONTENT'
+    this.name = 'R-CONTENT'
   </script>
 </r-content>
 
@@ -416,7 +416,7 @@ gulp.task('default', dev)
   <p>${ printName(name) } | ${ year }</p>
 
   <script>
-    this.name = 'FOOTER'
+    this.name = 'R-FOOTER'
     this.year = 'Две тысячи двадцать первый'
   </script>
 </r-footer>
@@ -460,9 +460,9 @@ gulp.task('default', dev)
 Значение свойства ***year*** для всех компонентов будет браться из объекта миксинов, кроме компонента *R-FOOTER*, в котором это свойство определено явно:
 
 ```
-HEADER | 2021
+R-HEADER | 2021
 
-CONTENT | 2021
+R-CONTENT | 2021
 
-FOOTER | Две тысячи двадцать первый
+R-FOOTER | Две тысячи двадцать первый
 ```
