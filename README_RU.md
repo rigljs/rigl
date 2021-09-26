@@ -1,6 +1,6 @@
 # Rigl.js
 
-![rigl](img/logo.png)
+![rigl](https://raw.githubusercontent.com/rigljs/rigl/main/img/logo.png)
 
 <br>
 
@@ -539,7 +539,7 @@ gulp.task('default', dev)
 
 Изначально в браузере будет показано:
 
-![rigl](img/h1/1.png)
+![rigl](https://raw.githubusercontent.com/rigljs/rigl/main/img/h1/1.png)
 
 Чтобы изменить значение свойства **message**, необходимо ввести в консоли барузера следующую команду:
 
@@ -549,7 +549,7 @@ gulp.task('default', dev)
 
 Результат сразу отобразится в браузере:
 
-![rigl](img/h1/2.png)
+![rigl](https://raw.githubusercontent.com/rigljs/rigl/main/img/h1/2.png)
 
 Для получения значения свойства, нужно указать в консоли:
 
@@ -571,7 +571,7 @@ gulp.task('default', dev)
 
 Цвет заголовка изменится:
 
-![rigl](img/h1/3.png)
+![rigl](https://raw.githubusercontent.com/rigljs/rigl/main/img/h1/3.png)
 
 Проверьте новое значение свойства:
 
