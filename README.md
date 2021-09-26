@@ -30,7 +30,7 @@
 <hr>
 <br>
 
-<h2 id="beginning-of-work">Beginning of work</h2>
+<h2 id="beginning-of-work"># Beginning of work</h2>
 
 <br>
 
@@ -131,7 +131,7 @@ Thus, the full cycle of creating an inline component is demonstrated below:
 ```
 <br>
 
-<h2 id="external-components">External components</h2>
+<h2 id="external-components"># External components</h2>
 
 <br>
 
@@ -261,7 +261,7 @@ gulp.task('default', dev)
 ```
 <br>
 
-<h2 id="replacing-components">Replacing components</h2>
+<h2 id="replacing-components"># Replacing components</h2>
 
 <br>
 
@@ -311,7 +311,7 @@ The HTML element itself uses the ***is*** attribute, which indicates the name of
 ```
 <br>
 
-<h2 id="expressions">Expressions</h2>
+<h2 id="expressions"># Expressions</h2>
 
 <br>
 
@@ -345,7 +345,7 @@ Expressions in Rigl use the template string syntax *${ expression }*. Expression
 ```
 <br>
 
-<h2 id="properties">Properties</h2>
+<h2 id="properties"># Properties</h2>
 
 <br>
 
@@ -394,7 +394,7 @@ Any custom properties of a component are defined in its *SCRIPT* tag using the *
 ```
 <br>
 
-<h2 id="mixins">Mixins</h2>
+<h2 id="mixins"># Mixins</h2>
 
 <br>
 
@@ -477,7 +477,7 @@ The value of the **year** property for all components will be taken from the mix
 <p>R-FOOTER | Two thousand twenty first</p>
 <br>
 
-<h2 id="reactivity">Reactivity</h2>
+<h2 id="reactivity"># Reactivity</h2>
 
 <br>
 
@@ -578,6 +578,6 @@ The result will match:
 ```
 <br>
 
-<h2 id="stylization">Stylization</h2>
+<h2 id="stylization"># Stylization</h2>
 
 <br>

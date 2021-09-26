@@ -30,7 +30,7 @@
 <hr>
 <br>
 
-<h2 id="beginning-of-work">Начало работы</h2>
+<h2 id="beginning-of-work"># Начало работы</h2>
 
 <br>
 
@@ -131,7 +131,7 @@
 ```
 <br>
 
-<h2 id="external-components">Внешние компоненты</h2>
+<h2 id="external-components"># Внешние компоненты</h2>
 
 <br>
 
@@ -261,7 +261,7 @@ gulp.task('default', dev)
 ```
 <br>
 
-<h2 id="replacing-components">Замена компонентов</h2>
+<h2 id="replacing-components"># Замена компонентов</h2>
 
 <br>
 
@@ -311,7 +311,7 @@ gulp.task('default', dev)
 ```
 <br>
 
-<h2 id="expressions">Выражения</h2>
+<h2 id="expressions"># Выражения</h2>
 
 <br>
 
@@ -345,7 +345,7 @@ gulp.task('default', dev)
 ```
 <br>
 
-<h2 id="properties">Свойства</h2>
+<h2 id="properties"># Свойства</h2>
 
 <br>
 
@@ -394,7 +394,7 @@ gulp.task('default', dev)
 ```
 <br>
 
-<h2 id="mixins">Миксины</h2>
+<h2 id="mixins"># Миксины</h2>
 
 <br>
 
@@ -477,7 +477,7 @@ gulp.task('default', dev)
 
 <br>
 
-<h2 id="reactivity">Реактивность</h2>
+<h2 id="reactivity"># Реактивность</h2>
 
 <br>
 
@@ -578,6 +578,6 @@ gulp.task('default', dev)
 ```
 <br>
 
-<h2 id="stylization">Стилизация</h2>
+<h2 id="stylization"># Стилизация</h2>
 
 <br>
