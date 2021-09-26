@@ -15,14 +15,15 @@
 5. [Properties](#properties)
 6. [Mixins](#mixins)
 7. [Reactivity](#reactivity)
-8. [Attributes](#attributes)
-9. [~~Cycles~~](#cycles)
-10. [~~Parameters~~](#parameters)
-11. [~~Service~~](#service)
-12. [~~Events~~](#events)
-13. [~~Emitter~~](#emitter)
-14. [~~Router~~](#router)
-15. [~~API~~](#api)
+8. [~~Stylization~~](#stylization)
+9. [~~Hide/Show~~](#hide-show)
+10. [~~Cycles~~](#cycles)
+11. [~~Parameters~~](#parameters)
+12. [~~Service~~](#service)
+13. [~~Events~~](#events)
+14. [~~Emitter~~](#emitter)
+15. [~~Router~~](#router)
+16. [~~API~~](#api)
 
 
 <br>
@@ -466,7 +467,7 @@ To set properties and methods in a mixin object, you need to access it through R
 </html>
 ```
 
-The value of the ***year*** property for all components will be taken from the mixin object, except for the *R-FOOTER* component, in which this property is explicitly defined:
+The value of the **year** property for all components will be taken from the mixin object, except for the *R-FOOTER* component, in which this property is explicitly defined:
 
 
 <h1>R-HEADER | 2021</h1>
@@ -480,7 +481,7 @@ The value of the ***year*** property for all components will be taken from the m
 
 <br>
 
-Reactivity in Rigl is done using proxy objects. All nodes that use *${ expression }* expressions are reactively linked to custom component properties that are specified in those expressions. To change or read the value of a custom property of a component, you need to access it through the ***$data*** service property, which contains all the custom properties and methods of the component.
+Reactivity in Rigl is done using proxy objects. All nodes that use *${ expression }* expressions are reactively linked to custom component properties that are specified in those expressions. To change or read the value of a custom property of a component, you need to access it through the **$data** service property, which contains all the custom properties and methods of the component.
 
 A component is accessed through its mount tag. To get quick access to it, let's assign an identifier to the mount tag:
 
@@ -509,7 +510,7 @@ A component is accessed through its mount tag. To get quick access to it, let's 
 
 **All service properties start with *$* and cannot be changed**
 
-The *R-HEADER* component contains two properties ***message*** and ***titleColor***:
+The *R-HEADER* component contains two properties **message** and **titleColor**:
 
 ```html
 <r-header>
@@ -532,7 +533,7 @@ Initially, the browser will show:
 
 ![rigl](img/h1/1.png)
 
-To change the value of the ***message*** property, enter the following command in the browser console:
+To change the value of the **message** property, enter the following command in the browser console:
 
 ```
 > header.$data.message = 'Web components'
@@ -554,7 +555,7 @@ The current value of the property will be shown below:
 < 'Web components'
 ```
 
-Change the value of the ***titleColor*** property in the same way:
+Change the value of the **titleColor** property in the same way:
 
 ```
 > header.$data.titleColor = 'green'
@@ -577,6 +578,6 @@ The result will match:
 ```
 <br>
 
-<h2 id="attributes">Attributes</h2>
+<h2 id="stylization">Stylization</h2>
 
 <br>
