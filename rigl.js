@@ -1,7 +1,7 @@
 /*!
  * Rigl.js v1.0.0 | A framework for building reactive web components
  * https://github.com/rigljs/rigl | https://www.npmjs.com/package/rigl
- * Released under the MIT License.
+ * Released under the MIT License
  */
  (function(modules) { 
  	var installedModules = {};
