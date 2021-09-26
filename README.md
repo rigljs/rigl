@@ -2,7 +2,8 @@
 
 ![rigl](https://raw.githubusercontent.com/rigljs/rigl/main/img/logo.png)
 
-<br>
+- **[github](https://github.com/rigljs/rigl)**
+- **[npmjs](https://www.npmjs.com/package/rigl)**
 
 **Rigl** is a framework for building reactive Web Components. In addition to a convenient way to create components and add reactive behavior to them, Rigl provides an Observer for tracking events between different components and a simple Router.
 

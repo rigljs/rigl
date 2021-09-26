@@ -2,7 +2,8 @@
 
 ![rigl](https://raw.githubusercontent.com/rigljs/rigl/main/img/logo.png)
 
-<br>
+- **[github](https://github.com/rigljs/rigl)**
+- **[npmjs](https://www.npmjs.com/package/rigl)**
 
 **Rigl** - это фреймворк для создания реактивных Веб-компонентов. Кроме удобного способа создания компонентов и добавления им реактивного поведения, Rigl предоставляет Наблюдателя для отслеживания событий между различными компонентами и несложный Маршрутизатор.
 
