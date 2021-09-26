@@ -530,7 +530,7 @@ gulp.task('default', dev)
 
 Изначально в браузере будет показано:
 
-<h1 style="color: orangered;">Hello Rigl!</h1>
+![rigl](img/h1/1.png)
 
 Чтобы изменить значение свойства ***message***, необходимо ввести в консоли барузера следующую команду:
 
@@ -540,7 +540,7 @@ gulp.task('default', dev)
 
 Результат сразу отобразится в браузере:
 
-<h1 style="color: orangered;">Hello Web components!</h1>
+![rigl](img/h1/2.png)
 
 Для получения значения свойства, нужно указать в консоли:
 
@@ -562,7 +562,7 @@ gulp.task('default', dev)
 
 Цвет заголовка изменится:
 
-<h1 style="color: green;">Hello Web components!</h1>
+![rigl](img/h1/3.png)
 
 Проверьте новое значение свойства:
 

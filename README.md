@@ -530,7 +530,7 @@ The *R-HEADER* component contains two properties ***message*** and ***titleColor
 
 Initially, the browser will show:
 
-<h1 style="color: orangered;">Hello Rigl!</h1>
+![rigl](img/h1/1.png)
 
 To change the value of the ***message*** property, enter the following command in the browser console:
 
@@ -540,7 +540,7 @@ To change the value of the ***message*** property, enter the following command i
 
 The result will be immediately displayed in the browser:
 
-<h1 style="color: orangered;">Hello Web components!</h1>
+![rigl](img/h1/2.png)
 
 To get the value of a property, you need to specify in the console:
 
@@ -562,7 +562,7 @@ Change the value of the ***titleColor*** property in the same way:
 
 The title color will change:
 
-<h1 style="color: green;">Hello Web components!</h1>
+![rigl](img/h1/3.png)
 
 Check the new property value:
 
