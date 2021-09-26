@@ -14,7 +14,7 @@
 4. [Expressions](#expressions)
 5. [Properties](#properties)
 6. [Mixins](#mixins)
-7. [~~Reactivity~~](#reactivity)
+7. [Reactivity](#reactivity)
 8. [~~Attributes~~](#attributes)
 9. [~~Cycles~~](#cycles)
 10. [~~Parameters~~](#parameters)
@@ -474,4 +474,80 @@ R-HEADER | 2021
 R-CONTENT | 2021
 
 R-FOOTER | Two thousand twenty first
+```
+<br>
+
+<h2 id="reactivity">Reactivity</h2>
+
+<br>
+
+Reactivity in Rigl is done using proxy objects. All nodes that use *${ expression }* expressions are reactively linked to custom component properties that are specified in those expressions. To change or read the value of a custom property of a component, you need to access it through the ***$data*** service property, which contains all the custom properties and methods of the component.
+
+A component is accessed through its mount tag. To get quick access to it, let's assign an identifier to the mount tag:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rigl</title>
+</head>
+<body>
+  <!-- mount tag set id equal to "header" -->
+  <r-header id="header"></r-header>
+
+  
+  <script src="rigl.min.js"></script>
+
+  <script>
+    Rigl.load('components.htm')
+  </script>
+</body>
+</html>
+```
+
+**All service properties start with *$* and cannot be changed**
+
+The *R-HEADER* component contains only one property ***message***:
+
+```html
+<r-header>
+  <h1>Hello ${ message }!</h1>
+
+  <script>
+    this.message = 'Rigl'
+  </script>
+</r-header>
+```
+
+Initially, the browser will show:
+
+```
+Hello Rigl!
+```
+
+To change the value of the ***message*** property, enter the following command in the browser console:
+
+```
+> header.$data.message = 'Web components'
+```
+
+The result will be immediately displayed in the browser:
+
+```
+Hello Web components!
+```
+
+To get the value of a property, you need to specify in the console:
+
+```
+> header.$data.message
+```
+
+The current value of the property will be shown below:
+
+```
+< 'Web components'
 ```
