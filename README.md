@@ -22,11 +22,14 @@
 9. [~~Hide/Show~~](#hide-show)
 10. [~~Cycles~~](#cycles)
 11. [~~Parameters~~](#parameters)
-12. [~~Service~~](#service)
+12. [~~Service properties~~](#service-properties)
 13. [~~Events~~](#events)
-14. [~~Emitter~~](#emitter)
-15. [~~Router~~](#router)
-16. [~~API~~](#api)
+14. [~~Closed components~~](#closed-components)
+15. [~~Upper components~~](#upper-components)
+16. [~~Shared state~~](#shared-state)
+17. [~~Emitter~~](#emitter)
+18. [~~Router~~](#router)
+19. [~~API~~](#api)
 
 
 <br>

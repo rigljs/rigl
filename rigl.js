@@ -2056,7 +2056,7 @@ var configMutations = {
   subtree: true
 }; 
 
-var compKeys = "$root,$host,$props,$uppers,$data,$timer,".concat(Object.keys(methods.prototype)); 
+var compKeys = "$root,$host,$upper,$uppers,$data,$timer,".concat(Object.keys(methods.prototype)); 
 
 var mapNames = ['sources', 'values', 'depends', 'callbacks', 'nodes']; 
 
@@ -2134,7 +2134,7 @@ var component_default = function (_Methods) {
       $data: {
         value: sharedStores[_this.nodeName] ? sharedStores[_this.nodeName].$data : observable.call(assertThisInitialized_default()(_this), STORE.get(assertThisInitialized_default()(_this)).object)
       },
-      $props: {
+      $upper: {
         value: upperProxyData
       },
       $uppers: {
@@ -2153,7 +2153,7 @@ var component_default = function (_Methods) {
 
     Function(scripts).call(new Proxy(_this.$data, {
       get: function get(target, key) {
-        return upperComponent && key === '$props' ? upperProxyObject : Reflect.get(target, key);
+        return upperComponent && key === '$upper' ? upperProxyObject : Reflect.get(target, key);
       }
     })); 
 
