@@ -642,8 +642,6 @@ Now change the value of the **titleColor** property in the console:
 The title color will change:
 
 ![rigl](https://raw.githubusercontent.com/rigljs/rigl/main/img/h1/3.png)
-
-<br>
 <br>
 
 <h2 id="classes"># Classes</h2>
@@ -685,5 +683,3 @@ header.$data.titleClass = 'green'
 The title color will change:
 
 ![rigl](https://raw.githubusercontent.com/rigljs/rigl/main/img/h1/3.png)
-
-<br>
