@@ -25,7 +25,7 @@
 12. [~~Service properties~~](#service-properties)
 13. [~~Events~~](#events)
 14. [~~Closed components~~](#closed-components)
-15. [~~Upper components~~](#upper-components)
+15. [~~Outer components~~](#outer-components)
 16. [~~Shared state~~](#shared-state)
 17. [~~Emitter~~](#emitter)
 18. [~~Router~~](#router)

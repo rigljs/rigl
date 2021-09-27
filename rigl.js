@@ -1960,12 +1960,12 @@ function observable(obj, dep) {
 
   return new Proxy(obj, {
     get: function get(target, key) {
-      for (var i = _this.$uppers.length - 1; i >= 0; i--) {
+      for (var i = _this.$outers.length - 1; i >= 0; i--) {
         if (isData) {
-          if (_this.$uppers[i].$data.hasOwnProperty(key)) return Reflect.get(_this.$uppers[i].$data, key);
+          if (_this.$outers[i].$data.hasOwnProperty(key)) return Reflect.get(_this.$outers[i].$data, key);
         } 
         else {
-          if (STORE.get(_this.$uppers[i]).object.hasOwnProperty(key)) return Reflect.get(STORE.get(_this.$uppers[i]).object, key);
+          if (STORE.get(_this.$outers[i]).object.hasOwnProperty(key)) return Reflect.get(STORE.get(_this.$outers[i]).object, key);
         }
       } 
 
@@ -2056,11 +2056,11 @@ var configMutations = {
   subtree: true
 }; 
 
-var compKeys = "$root,$host,$upper,$uppers,$data,$timer,".concat(Object.keys(methods.prototype)); 
+var compKeys = "$root,$host,$outer,$outers,$data,$timer,".concat(Object.keys(methods.prototype)); 
 
 var mapNames = ['sources', 'values', 'depends', 'callbacks', 'nodes']; 
 
-var upperComponents = []; 
+var outerComponents = []; 
 
 var sharedStores = {};
 
@@ -2088,9 +2088,9 @@ var component_default = function (_Methods) {
 
     STORE.get(assertThisInitialized_default()(_this)).adopted = new Set(); 
 
-    var upperComponent = upperComponents.length ? upperComponents[upperComponents.length - 1] : null; 
+    var outerComponent = outerComponents.length ? outerComponents[outerComponents.length - 1] : null; 
 
-    if (!upperComponent) {
+    if (!outerComponent) {
       if (sharedStores[_this.nodeName]) mapNames.forEach(function (prop) {
         return STORE.get(assertThisInitialized_default()(_this))[prop] = sharedStores[_this.nodeName][prop];
       }); 
@@ -2117,11 +2117,11 @@ var component_default = function (_Methods) {
       }
     } 
     else mapNames.forEach(function (prop) {
-      return STORE.get(assertThisInitialized_default()(_this))[prop] = STORE.get(upperComponent)[prop];
+      return STORE.get(assertThisInitialized_default()(_this))[prop] = STORE.get(outerComponent)[prop];
     }); 
 
 
-    var upperProxyData = upperComponent ? getproxy.call(assertThisInitialized_default()(_this), upperComponent.$data, true) : upperComponent; 
+    var outerProxyData = outerComponent ? getproxy.call(assertThisInitialized_default()(_this), outerComponent.$data, true) : outerComponent; 
 
     Object.defineProperties(assertThisInitialized_default()(_this), {
       $root: {
@@ -2134,11 +2134,11 @@ var component_default = function (_Methods) {
       $data: {
         value: sharedStores[_this.nodeName] ? sharedStores[_this.nodeName].$data : observable.call(assertThisInitialized_default()(_this), STORE.get(assertThisInitialized_default()(_this)).object)
       },
-      $upper: {
-        value: upperProxyData
+      $outer: {
+        value: outerProxyData
       },
-      $uppers: {
-        value: [].concat(upperComponents)
+      $outers: {
+        value: [].concat(outerComponents)
       },
       $timer: {
         value: function value(val) {
@@ -2147,13 +2147,13 @@ var component_default = function (_Methods) {
       }
     }); 
 
-    upperComponents.push(assertThisInitialized_default()(_this)); 
+    outerComponents.push(assertThisInitialized_default()(_this)); 
 
-    var upperProxyObject = upperComponent ? getproxy.call(assertThisInitialized_default()(_this), STORE.get(upperComponent).object) : upperComponent; 
+    var outerProxyObject = outerComponent ? getproxy.call(assertThisInitialized_default()(_this), STORE.get(outerComponent).object) : outerComponent; 
 
     Function(scripts).call(new Proxy(_this.$data, {
       get: function get(target, key) {
-        return upperComponent && key === '$upper' ? upperProxyObject : Reflect.get(target, key);
+        return outerComponent && key === '$outer' ? outerProxyObject : Reflect.get(target, key);
       }
     })); 
 
@@ -2174,7 +2174,7 @@ var component_default = function (_Methods) {
 
     create.call(assertThisInitialized_default()(_this), _this.$root); 
 
-    upperComponents.pop(); 
+    outerComponents.pop(); 
 
     new MutationObserver(function (mutationRecords, observer) {
       observer.disconnect(); 
