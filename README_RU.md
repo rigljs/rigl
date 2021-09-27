@@ -642,6 +642,8 @@ gulp.task('default', dev)
 Цвет заголовка изменится:
 
 ![rigl](https://raw.githubusercontent.com/rigljs/rigl/main/img/h1/3.png)
+
+<br>
 <br>
 
 <h2 id="classes"># Классы</h2>
@@ -683,3 +685,5 @@ header.$data.titleClass = 'green'
 Цвет заголовка изменится:
 
 ![rigl](https://raw.githubusercontent.com/rigljs/rigl/main/img/h1/3.png)
+
+<br>
