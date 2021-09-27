@@ -18,18 +18,19 @@
 5. [Properties](#properties)
 6. [Mixins](#mixins)
 7. [Reactivity](#reactivity)
-8. [~~Stylization~~](#stylization)
-9. [~~Hide/Show~~](#hide-show)
-10. [~~Cycles~~](#cycles)
-11. [~~Parameters~~](#parameters)
-12. [~~Service properties~~](#service-properties)
-13. [~~Events~~](#events)
-14. [~~Closed components~~](#closed-components)
-15. [~~Outer components~~](#outer-components)
-16. [~~Shared state~~](#shared-state)
-17. [~~Emitter~~](#emitter)
-18. [~~Router~~](#router)
-19. [~~API~~](#api)
+8. [Styles](#styles)
+9. [Classes](#classes)
+10. [~~Hide/Show~~](#hide-show)
+11. [~~Cycles~~](#cycles)
+12. [~~Parameters~~](#parameters)
+13. [~~Service properties~~](#service-properties)
+14. [~~Events~~](#events)
+15. [~~Closed components~~](#closed-components)
+16. [~~Outer components~~](#outer-components)
+17. [~~Shared state~~](#shared-state)
+18. [~~Emitter~~](#emitter)
+19. [~~Router~~](#router)
+20. [~~API~~](#api)
 
 
 <br>
@@ -592,6 +593,97 @@ The result will match:
 ```
 <br>
 
-<h2 id="stylization"># Stylization</h2>
+<h2 id="styles"># Styles</h2>
+
+<br>
+
+In Rigl, you can dynamically change the values of the style properties of elements by placing expressions either in the ***style*** attribute, for example:
+
+```html
+<r-header>
+  <!-- expression with the "titleColor" property in the style attribute -->
+  <h1 style="color:${ titleColor }">Hello Web components!</h1>
+
+  <script>
+    this.titleColor = 'orangered'
+  </script>
+</r-header>
+```
+
+Or inside the *STYLE* tag, as shown below:
+
+```html
+<r-header>
+  <h1>Hello Web components!</h1>
+
+  <style>
+    h1 {
+      /* expression with the "titleColor" property inside the STYLE tag */
+      color: ${ titleColor };
+    }
+  </style>
+
+  <script>
+    this.titleColor = 'orangered'
+  </script>
+</r-header>
+```
+
+The browser will display:
+
+![rigl](https://raw.githubusercontent.com/rigljs/rigl/main/img/h1/2.png)
+
+Now change the value of the **titleColor** property in the console:
+
+```
+> header.$data.titleColor = 'green'
+```
+
+The title color will change:
+
+![rigl](https://raw.githubusercontent.com/rigljs/rigl/main/img/h1/3.png)
+
+<br>
+<br>
+
+<h2 id="classes"># Classes</h2>
+
+<br>
+
+Rigl allows you to dynamically override element classes by placing expressions in the ***class*** attribute, for example:
+
+```html
+<r-header>
+  <!-- expression with the "titleClass" property in the class attribute -->
+  <h1 class="${ titleClass }">Hello Web components!</h1>
+
+  <style>
+    .orangered {
+      color: orangered;
+    }
+    .green {
+      color: green;
+    }
+  </style>
+
+  <script>
+    this.titleClass = 'orangered'
+  </script>
+</r-header>
+```
+
+The browser will display:
+
+![rigl](https://raw.githubusercontent.com/rigljs/rigl/main/img/h1/2.png)
+
+Now change the value of the **titleClass** property in the console:
+
+```
+header.$data.titleClass = 'green'
+```
+
+The title color will change:
+
+![rigl](https://raw.githubusercontent.com/rigljs/rigl/main/img/h1/3.png)
 
 <br>

@@ -18,18 +18,19 @@
 5. [Свойства](#properties)
 6. [Миксины](#mixins)
 7. [Реактивность](#reactivity)
-8. [~~Стилизация~~](#stylization)
-9. [~~Скрыть/Показать~~](#hide-show)
-10. [~~Циклы~~](#cycles)
-11. [~~Параметры~~](#parameters)
-12. [~~Служебные свойства~~](#service-properties)
-13. [~~События~~](#events)
-14. [~~Закрытые компоненты~~](#closed-components)
-15. [~~Внешние компоненты~~](#outer-components)
-16. [~~Разделяемое состояние~~](#shared-state)
-17. [~~Эмиттер~~](#emitter)
-18. [~~Маршрутизатор~~](#router)
-19. [~~API~~](#api)
+8. [Стили](#styles)
+9. [Классы](#classes)
+10. [~~Скрыть/Показать~~](#hide-show)
+11. [~~Циклы~~](#cycles)
+12. [~~Параметры~~](#parameters)
+13. [~~Служебные свойства~~](#service-properties)
+14. [~~События~~](#events)
+15. [~~Закрытые компоненты~~](#closed-components)
+16. [~~Внешние компоненты~~](#outer-components)
+17. [~~Разделяемое состояние~~](#shared-state)
+18. [~~Эмиттер~~](#emitter)
+19. [~~Маршрутизатор~~](#router)
+20. [~~API~~](#api)
 
 
 <br>
@@ -592,6 +593,97 @@ gulp.task('default', dev)
 ```
 <br>
 
-<h2 id="stylization"># Стилизация</h2>
+<h2 id="styles"># Стили</h2>
+
+<br>
+
+В Rigl можно динамически изменять значения стилевых свойств элементов, располагая выражения либо в атрибуте ***style***, например:
+
+```html
+<r-header>
+  <!-- выражение со свойством "titleColor" в атрибуте style -->
+  <h1 style="color:${ titleColor }">Hello Web components!</h1>
+
+  <script>
+    this.titleColor = 'orangered'
+  </script>
+</r-header>
+```
+
+Либо внутри тега *STYLE*, как показано ниже:
+
+```html
+<r-header>
+  <h1>Hello Web components!</h1>
+
+  <style>
+    h1 {
+      /* выражение со свойством "titleColor" внутри тега STYLE */
+      color: ${ titleColor };
+    }
+  </style>
+
+  <script>
+    this.titleColor = 'orangered'
+  </script>
+</r-header>
+```
+
+В браузере будет отображаться:
+
+![rigl](https://raw.githubusercontent.com/rigljs/rigl/main/img/h1/2.png)
+
+Теперь измените в консоли значение свойства **titleColor**:
+
+```
+> header.$data.titleColor = 'green'
+```
+
+Цвет заголовка изменится:
+
+![rigl](https://raw.githubusercontent.com/rigljs/rigl/main/img/h1/3.png)
+
+<br>
+<br>
+
+<h2 id="classes"># Классы</h2>
+
+<br>
+
+Rigl позволяет динамически переопределять классы элементов, располагая выражения в атрибуте ***class***, например:
+
+```html
+<r-header>
+  <!-- выражение со свойством "titleClass" в атрибуте class -->
+  <h1 class="${ titleClass }">Hello Web components!</h1>
+
+  <style>
+    .orangered {
+      color: orangered;
+    }
+    .green {
+      color: green;
+    }
+  </style>
+
+  <script>
+    this.titleClass = 'orangered'
+  </script>
+</r-header>
+```
+
+В браузере будет отображаться:
+
+![rigl](https://raw.githubusercontent.com/rigljs/rigl/main/img/h1/2.png)
+
+Теперь измените в консоли значение свойства **titleClass**:
+
+```
+header.$data.titleClass = 'green'
+```
+
+Цвет заголовка изменится:
+
+![rigl](https://raw.githubusercontent.com/rigljs/rigl/main/img/h1/3.png)
 
 <br>
