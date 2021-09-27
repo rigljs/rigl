@@ -2058,16 +2058,18 @@ var configMutations = {
 
 var compKeys = "$root,$host,$props,$uppers,$data,$timer,".concat(Object.keys(methods.prototype)); 
 
-var upperProps = ['sources', 'values', 'depends', 'callbacks', 'nodes']; 
+var mapNames = ['sources', 'values', 'depends', 'callbacks', 'nodes']; 
 
-var upperComponents = [];
+var upperComponents = []; 
+
+var sharedStores = {};
 
 var component_default = function (_Methods) {
   inherits_default()(_default, _Methods);
 
   var _super = component_createSuper(_default);
 
-  function _default(content, scripts, mode) {
+  function _default(content, scripts, mode, shared) {
     var _this;
 
     classCallCheck_default()(this, _default);
@@ -2089,17 +2091,32 @@ var component_default = function (_Methods) {
     var upperComponent = upperComponents.length ? upperComponents[upperComponents.length - 1] : null; 
 
     if (!upperComponent) {
-      STORE.get(assertThisInitialized_default()(_this)).sources = new WeakMap(); 
+      if (sharedStores[_this.nodeName]) mapNames.forEach(function (prop) {
+        return STORE.get(assertThisInitialized_default()(_this))[prop] = sharedStores[_this.nodeName][prop];
+      }); 
+      else {
+        STORE.get(assertThisInitialized_default()(_this)).sources = new WeakMap(); 
 
-      STORE.get(assertThisInitialized_default()(_this)).values = new WeakMap(); 
+        STORE.get(assertThisInitialized_default()(_this)).values = new WeakMap(); 
 
-      STORE.get(assertThisInitialized_default()(_this)).depends = new WeakMap(); 
+        STORE.get(assertThisInitialized_default()(_this)).depends = new WeakMap(); 
 
-      STORE.get(assertThisInitialized_default()(_this)).callbacks = new WeakMap(); 
+        STORE.get(assertThisInitialized_default()(_this)).callbacks = new WeakMap(); 
 
-      STORE.get(assertThisInitialized_default()(_this)).nodes = [];
+        STORE.get(assertThisInitialized_default()(_this)).nodes = []; 
+
+        if (shared) {
+          sharedStores[_this.nodeName] = {
+            $data: observable.call(assertThisInitialized_default()(_this), STORE.get(assertThisInitialized_default()(_this)).object)
+          }; 
+
+          mapNames.forEach(function (prop) {
+            return sharedStores[_this.nodeName][prop] = STORE.get(assertThisInitialized_default()(_this))[prop];
+          });
+        }
+      }
     } 
-    else upperProps.forEach(function (prop) {
+    else mapNames.forEach(function (prop) {
       return STORE.get(assertThisInitialized_default()(_this))[prop] = STORE.get(upperComponent)[prop];
     }); 
 
@@ -2115,7 +2132,7 @@ var component_default = function (_Methods) {
         value: assertThisInitialized_default()(_this)
       },
       $data: {
-        value: observable.call(assertThisInitialized_default()(_this), STORE.get(assertThisInitialized_default()(_this)).object)
+        value: sharedStores[_this.nodeName] ? sharedStores[_this.nodeName].$data : observable.call(assertThisInitialized_default()(_this), STORE.get(assertThisInitialized_default()(_this)).object)
       },
       $props: {
         value: upperProxyData
@@ -2246,9 +2263,12 @@ function rigl_create() {
 
   for (var _i = 0, _args = args; _i < _args.length; _i++) {
     var html = _args[_i];
-    if (typeof html === 'string') storeTemplate.innerHTML = html;else if (html instanceof HTMLElement) storeTemplate.content.append(html.cloneNode(true));else if (html instanceof NodeList || Array.isArray(html)) return html.forEach(function (elem) {
+    if (typeof html === 'string') storeTemplate.innerHTML = html; 
+    else if (html instanceof HTMLElement) storeTemplate.content.append(html.cloneNode(true)); 
+    else if (html instanceof NodeList || Array.isArray(html)) return html.forEach(function (elem) {
       return rigl_create(elem);
-    });else return;
+    }); 
+    else return;
   } 
 
 
@@ -2262,6 +2282,8 @@ function rigl_create() {
 
     var mode = temp.hasAttribute('closed') ? 'closed' : 'open'; 
 
+    var shared = temp.hasAttribute('shared'); 
+
     customElements.define((temp.getAttribute('title') || temp.nodeName).toLocaleLowerCase(), function (_Component) {
       inherits_default()(_class, _Component);
 
@@ -2270,7 +2292,7 @@ function rigl_create() {
       function _class() {
         classCallCheck_default()(this, _class);
 
-        return _super.call(this, content.cloneNode(true), scripts, mode);
+        return _super.call(this, content.cloneNode(true), scripts, mode, shared);
       } 
 
 
