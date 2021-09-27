@@ -678,7 +678,7 @@ The browser will display:
 Now change the value of the **titleClass** property in the console:
 
 ```
-header.$data.titleClass = 'green'
+> header.$data.titleClass = 'green'
 ```
 
 The title color will change:

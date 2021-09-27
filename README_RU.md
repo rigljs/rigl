@@ -678,7 +678,7 @@ Rigl позволяет динамически переопределять кл
 Теперь измените в консоли значение свойства **titleClass**:
 
 ```
-header.$data.titleClass = 'green'
+> header.$data.titleClass = 'green'
 ```
 
 Цвет заголовка изменится:
