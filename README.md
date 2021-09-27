@@ -40,10 +40,10 @@
 
 <br>
 
-There are two types of components in Rigl: built-in and external. To create a component embedded in an HTML page, you must use the *TEMPLATE* tag with the ***title*** attribute, which specifies the name of the component:
+There are two types of components in Rigl: built-in and external. To create a component embedded in an HTML page, you must use the *TEMPLATE* tag with the ***name*** attribute, which specifies the name of the component:
 
 ```html
-<template title="r-header">
+<template name="r-header">
   <!-- component content -->
 </template>
 ```
@@ -51,7 +51,7 @@ There are two types of components in Rigl: built-in and external. To create a co
 Tags, styles and its scripts can be located inside the component:
 
 ```html
-<template title="r-header">
+<template name="r-header">
   <h1>Hello ${ message }!</h1>
 
   <style>
@@ -80,7 +80,7 @@ After the component template has been defined, it must be passed to the creation
 
 <!-- pass the component template to the create function -->
 <script>
-  Rigl.create(document.querySelector('template[title]'))
+  Rigl.create(document.querySelector('template[name]'))
 </script>
 ```
 
@@ -89,7 +89,7 @@ Multiple components can be transferred at a time:
 ```html
 <!-- pass multiple templates to create function -->
 <script>
-  Rigl.create(document.querySelectorAll('template[title]'))
+  Rigl.create(document.querySelectorAll('template[name]'))
 </script>
 ```
 
@@ -110,7 +110,7 @@ Thus, the full cycle of creating an inline component is demonstrated below:
 
 
   <!-- component template -->
-  <template title="r-header">
+  <template name="r-header">
     <h1>Hello ${ message }!</h1>
 
     <style>
@@ -130,7 +130,7 @@ Thus, the full cycle of creating an inline component is demonstrated below:
 
   <!-- fetching and passing the component template to the create function -->
   <script>
-    Rigl.create(document.querySelector('template[title]'))
+    Rigl.create(document.querySelector('template[name]'))
   </script>
 </body>
 </html>
@@ -181,7 +181,7 @@ Components in Rigl can be put into separate files with the *.htm* extension and 
 
 <br>
 
-Unlike built-in components, templates for external components are located in tags corresponding to the names of the components. The ***title*** attribute is no longer used in them, since the name of the component is determined by its parent tag:
+Unlike built-in components, templates for external components are located in tags corresponding to the names of the components. The ***name*** attribute is no longer used in them, since the name of the component is determined by its parent tag:
 
 
 ```html

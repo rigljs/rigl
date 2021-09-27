@@ -17,7 +17,7 @@
   <!-- *************************************************************************** -->
 
 
-  <template title="r-header">
+  <template name="r-header">
     <h1>Hello ${ message }!</h1>
 
     <style>
@@ -32,7 +32,7 @@
   </template>
 
 
-  <template title="r-content"  slot="main">
+  <template name="r-content"  slot="main">
     <h2>${ title }</h2>
     <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quasi, ullam.</p>
 
@@ -42,7 +42,7 @@
   </template>
 
   
-  <template title="r-footer">
+  <template name="r-footer">
     <p>${ copyright }</p>
 
     <style>
@@ -68,7 +68,7 @@
   <script src="rigl.min.js"></script>
 
   <script>
-    Rigl.create(document.querySelectorAll('template[title]'))
+    Rigl.create(document.querySelectorAll('template[name]'))
   </script>
 </body>
 </html>

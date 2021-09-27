@@ -2284,7 +2284,7 @@ function rigl_create() {
 
     var shared = temp.hasAttribute('shared'); 
 
-    customElements.define((temp.getAttribute('title') || temp.nodeName).toLocaleLowerCase(), function (_Component) {
+    customElements.define((temp.getAttribute('name') || temp.nodeName).toLocaleLowerCase(), function (_Component) {
       inherits_default()(_class, _Component);
 
       var _super = rigl_createSuper(_class);
