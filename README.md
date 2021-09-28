@@ -713,10 +713,10 @@ To hide elements, a special attribute ***$hide*** is used, which adds the standa
 </r-header>
 ```
 
-All special attributes begin with ***$*** and are converted to ***data-attributes*** at compile time. For example, the attribute ***$hide*** is converted to ***data-rigl-hide***:
+All special attributes begin with ***$*** and are converted to ***data-\**** attributes at compile time. For example, the attribute ***$hide*** is converted to ***data-rigl-hide***:
 
 ```html
-<!-- special attributes are converted to data-attributes -->
+<!-- special attributes are converted to data-* attributes -->
 <h1 data-rigl-hide="display">Hello Rigl!</h1>
 ```
 
