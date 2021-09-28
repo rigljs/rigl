@@ -20,7 +20,7 @@
 7. [Реактивность](#reactivity)
 8. [Стили](#styles)
 9. [Классы](#classes)
-10. [~~Скрыть/Показать~~](#hide-show)
+10. [Скрыть/Показать](#hide-show)
 11. [~~Циклы~~](#cycles)
 12. [~~Параметры~~](#parameters)
 13. [~~Служебные свойства~~](#service-properties)
@@ -136,6 +136,7 @@
 </body>
 </html>
 ```
+<br>
 <br>
 
 <h2 id="external-components"># Внешние компоненты</h2>
@@ -271,6 +272,7 @@ const dev = gulp.series(clean, copy, components, serve, watch)
 gulp.task('default', dev)
 ```
 <br>
+<br>
 
 <h2 id="replacing-components"># Замена компонентов</h2>
 
@@ -321,6 +323,7 @@ gulp.task('default', dev)
 </html>
 ```
 <br>
+<br>
 
 <h2 id="expressions"># Выражения</h2>
 
@@ -354,6 +357,7 @@ gulp.task('default', dev)
   </script>
 </r-header>
 ```
+<br>
 <br>
 
 <h2 id="properties"># Свойства</h2>
@@ -403,6 +407,7 @@ gulp.task('default', dev)
   </script>
 </r-header>
 ```
+<br>
 <br>
 
 <h2 id="mixins"># Миксины</h2>
@@ -486,6 +491,7 @@ gulp.task('default', dev)
 
 <p>R-FOOTER | Две тысячи двадцать первый</p>
 
+<br>
 <br>
 
 <h2 id="reactivity"># Реактивность</h2>
@@ -592,6 +598,7 @@ gulp.task('default', dev)
 < 'green'
 ```
 <br>
+<br>
 
 <h2 id="styles"># Стили</h2>
 
@@ -644,6 +651,7 @@ gulp.task('default', dev)
 ![rigl](https://raw.githubusercontent.com/rigljs/rigl/main/img/h1/3.png)
 <br>
 <br>
+<br>
 
 <h2 id="classes"># Классы</h2>
 
@@ -685,3 +693,80 @@ Rigl позволяет динамически переопределять кл
 
 ![rigl](https://raw.githubusercontent.com/rigljs/rigl/main/img/h1/3.png)
 <br>
+<br>
+<br>
+
+<h2 id="hide-show"># Скрыть/Показать</h2>
+
+<br>
+
+Для скрытия элементов применяется специальный атрибут ***$hide***, который добавляет элементам стандартный атрибут ***hidden*** при значении Истина:
+
+```html
+<r-header>
+  <!-- атрибут $hide скрывает элемент при значении Истина -->
+  <h1 $hide="display">Hello Rigl!</h1>
+
+  <script>
+    this.display = true
+  </script>
+</r-header>
+```
+
+Все специальные атрибуты начинаются со знака ***$*** и во время компиляции компонента преобразуются в ***data-атрибуты***. Например, атрибут ***$hide*** преобразуется в ***data-rigl-hide***:
+
+```html
+<!-- специальные атрибуты преобразуются в data-атрибуты -->
+<h1 data-rigl-hide="display">Hello Rigl!</h1>
+```
+
+Выражения в специальных атрибутах указываются как есть, в них нельзя применять выражения шаблонных строк *${ выражение }*, например:
+
+```html
+<!-- Ошибка! Специальные атрибуты не допускают выражений шаблонных строк -->
+<h1 $hide="${ display }">Hello Rigl!</h1>
+```
+
+Если значение выражения будет Ложь, то атрибут ***$hide*** удалит атрибут ***hidden*** из элемента, сделав элемент снова видимым на экране:
+
+```
+> header.$data.display = false
+```
+
+Атрибут ***$show*** работает противоположно атрибуту ***$hide***. При значении Ложь он добавляет атрибут ***hidden*** элементу, а при значении Истина, удаляет его:
+
+```html
+<r-header>
+  <!-- атрибут $show скрывает элемент при значении Ложь -->
+  <h1 $show="display">Hello Rigl!</h1>
+
+  <script>
+    this.display = false
+  </script>
+</r-header>
+```
+
+Если понадобится скрыть весь компонент, то можно использовать селектор [:host](https://learn.javascript.ru/shadow-dom-style#host) для Веб-компонентов:
+
+```html
+<r-header>
+  <h1>Hello Rigl!</h1>
+
+  <style>
+    :host {
+      /* полностью скрывает весь компонент */
+      display: ${ display };
+    }
+  </style>
+
+  <script>
+    this.display = 'none'
+  </script>
+</r-header>
+```
+
+Чтобы снова показать компонент на экране, введите в консоли браузера:
+
+```
+> header.$data.display = 'block'
+```

@@ -20,7 +20,7 @@
 7. [Reactivity](#reactivity)
 8. [Styles](#styles)
 9. [Classes](#classes)
-10. [~~Hide/Show~~](#hide-show)
+10. [Hide/Show](#hide-show)
 11. [~~Cycles~~](#cycles)
 12. [~~Parameters~~](#parameters)
 13. [~~Service properties~~](#service-properties)
@@ -136,6 +136,7 @@ Thus, the full cycle of creating an inline component is demonstrated below:
 </body>
 </html>
 ```
+<br>
 <br>
 
 <h2 id="external-components"># External components</h2>
@@ -271,6 +272,7 @@ const dev = gulp.series(clean, copy, components, serve, watch)
 gulp.task('default', dev)
 ```
 <br>
+<br>
 
 <h2 id="replacing-components"># Replacing components</h2>
 
@@ -321,6 +323,7 @@ The HTML element itself uses the ***is*** attribute, which indicates the name of
 </html>
 ```
 <br>
+<br>
 
 <h2 id="expressions"># Expressions</h2>
 
@@ -354,6 +357,7 @@ Expressions in Rigl use the template string syntax *${ expression }*. Expression
   </script>
 </r-header>
 ```
+<br>
 <br>
 
 <h2 id="properties"># Properties</h2>
@@ -403,6 +407,7 @@ Any custom properties of a component are defined in its *SCRIPT* tag using the *
   </script>
 </r-header>
 ```
+<br>
 <br>
 
 <h2 id="mixins"># Mixins</h2>
@@ -486,6 +491,7 @@ The value of the **year** property for all components will be taken from the mix
 <h2>R-CONTENT | 2021</h2>
 
 <p>R-FOOTER | Two thousand twenty first</p>
+<br>
 <br>
 
 <h2 id="reactivity"># Reactivity</h2>
@@ -592,6 +598,7 @@ The result will match:
 < 'green'
 ```
 <br>
+<br>
 
 <h2 id="styles"># Styles</h2>
 
@@ -644,6 +651,7 @@ The title color will change:
 ![rigl](https://raw.githubusercontent.com/rigljs/rigl/main/img/h1/3.png)
 <br>
 <br>
+<br>
 
 <h2 id="classes"># Classes</h2>
 
@@ -685,3 +693,80 @@ The title color will change:
 
 ![rigl](https://raw.githubusercontent.com/rigljs/rigl/main/img/h1/3.png)
 <br>
+<br>
+<br>
+
+<h2 id="hide-show"># Hide/Show</h2>
+
+<br>
+
+To hide elements, a special attribute ***$hide*** is used, which adds the standard ***hidden*** attribute to elements if the value is True:
+
+```html
+<r-header>
+  <!-- the $hide attribute hides the element if True -->
+  <h1 $hide="display">Hello Rigl!</h1>
+
+  <script>
+    this.display = true
+  </script>
+</r-header>
+```
+
+All special attributes begin with ***$*** and are converted to ***data-attributes*** at compile time. For example, the attribute ***$hide*** is converted to ***data-rigl-hide***:
+
+```html
+<!-- special attributes are converted to data-attributes -->
+<h1 data-rigl-hide="display">Hello Rigl!</h1>
+```
+
+Expressions in special attributes are specified as is, they cannot use wildcard expressions *${ expression }*, for example:
+
+```html
+<!-- Error! Special attributes do not allow wildcard expressions -->
+<h1 $hide="${ display }">Hello Rigl!</h1>
+```
+
+If the expression is False, then the ***$hide*** attribute will remove the ***hidden*** attribute from the element, making the element visible on the screen again:
+
+```
+> header.$data.display = false
+```
+
+The ***$show*** attribute works the opposite of the ***$hide*** attribute. If the value is False, it adds the ***hidden*** attribute to the element, and if the value is True, it removes it:
+
+```html
+<r-header>
+  <!-- the $show attribute hides the element if False -->
+  <h1 $show="display">Hello Rigl!</h1>
+
+  <script>
+    this.display = false
+  </script>
+</r-header>
+```
+
+If you need to hide the entire component, you can use the [:host](https://javascript.info/shadow-dom-style#host) selector for Web Components:
+
+```html
+<r-header>
+  <h1>Hello Rigl!</h1>
+
+  <style>
+    :host {
+      /* hides the entire component completely */
+      display: ${ display };
+    }
+  </style>
+
+  <script>
+    this.display = 'none'
+  </script>
+</r-header>
+```
+
+To display the component on the screen again, enter in the browser console:
+
+```
+> header.$data.display = 'block'
+```
