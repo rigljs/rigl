@@ -1,5 +1,5 @@
 /*!
- * Rigl.js v1.2.0 | A framework for building reactive web components
+ * Rigl.js v1.3.0 | A framework for building reactive web components
  * https://github.com/rigljs/rigl | https://www.npmjs.com/package/rigl
  * Released under the MIT License
  */
@@ -2060,16 +2060,16 @@ var compKeys = "$root,$host,$outer,$outers,$data,$timer,".concat(Object.keys(met
 
 var mapNames = ['sources', 'values', 'depends', 'callbacks', 'nodes']; 
 
-var outerComponents = []; 
+var arrayOuterComponents = []; 
 
-var sharedStores = {};
+var sharedComponents = {};
 
 var component_default = function (_Methods) {
   inherits_default()(_default, _Methods);
 
   var _super = component_createSuper(_default);
 
-  function _default(content, scripts, mode, shared) {
+  function _default(content, scripts, mode, isShared) {
     var _this;
 
     classCallCheck_default()(this, _default);
@@ -2088,11 +2088,11 @@ var component_default = function (_Methods) {
 
     STORE.get(assertThisInitialized_default()(_this)).adopted = new Set(); 
 
-    var outerComponent = outerComponents.length ? outerComponents[outerComponents.length - 1] : null; 
+    var outerComponent = arrayOuterComponents.length ? arrayOuterComponents[arrayOuterComponents.length - 1] : null; 
 
     if (!outerComponent) {
-      if (sharedStores[_this.nodeName]) mapNames.forEach(function (prop) {
-        return STORE.get(assertThisInitialized_default()(_this))[prop] = sharedStores[_this.nodeName][prop];
+      if (sharedComponents[_this.nodeName]) mapNames.forEach(function (prop) {
+        return STORE.get(assertThisInitialized_default()(_this))[prop] = sharedComponents[_this.nodeName][prop];
       }); 
       else {
         STORE.get(assertThisInitialized_default()(_this)).sources = new WeakMap(); 
@@ -2105,14 +2105,10 @@ var component_default = function (_Methods) {
 
         STORE.get(assertThisInitialized_default()(_this)).nodes = []; 
 
-        if (shared) {
-          sharedStores[_this.nodeName] = {
-            $data: observable.call(assertThisInitialized_default()(_this), STORE.get(assertThisInitialized_default()(_this)).object)
-          }; 
+        if (isShared) {
+          sharedComponents[_this.nodeName] = STORE.get(assertThisInitialized_default()(_this)); 
 
-          mapNames.forEach(function (prop) {
-            return sharedStores[_this.nodeName][prop] = STORE.get(assertThisInitialized_default()(_this))[prop];
-          });
+          sharedComponents[_this.nodeName].data = observable.call(assertThisInitialized_default()(_this), STORE.get(assertThisInitialized_default()(_this)).object);
         }
       }
     } 
@@ -2132,13 +2128,13 @@ var component_default = function (_Methods) {
         value: assertThisInitialized_default()(_this)
       },
       $data: {
-        value: sharedStores[_this.nodeName] ? sharedStores[_this.nodeName].$data : observable.call(assertThisInitialized_default()(_this), STORE.get(assertThisInitialized_default()(_this)).object)
+        value: sharedComponents[_this.nodeName] ? sharedComponents[_this.nodeName].data : observable.call(assertThisInitialized_default()(_this), STORE.get(assertThisInitialized_default()(_this)).object)
       },
       $outer: {
         value: outerProxyData
       },
       $outers: {
-        value: [].concat(outerComponents)
+        value: [].concat(arrayOuterComponents)
       },
       $timer: {
         value: function value(val) {
@@ -2147,7 +2143,7 @@ var component_default = function (_Methods) {
       }
     }); 
 
-    outerComponents.push(assertThisInitialized_default()(_this)); 
+    arrayOuterComponents.push(assertThisInitialized_default()(_this)); 
 
     var outerProxyObject = outerComponent ? getproxy.call(assertThisInitialized_default()(_this), STORE.get(outerComponent).object) : outerComponent; 
 
@@ -2174,7 +2170,7 @@ var component_default = function (_Methods) {
 
     create.call(assertThisInitialized_default()(_this), _this.$root); 
 
-    outerComponents.pop(); 
+    arrayOuterComponents.pop(); 
 
     new MutationObserver(function (mutationRecords, observer) {
       observer.disconnect(); 
@@ -2282,7 +2278,7 @@ function rigl_create() {
 
     var mode = temp.hasAttribute('closed') ? 'closed' : 'open'; 
 
-    var shared = temp.hasAttribute('shared'); 
+    var isShared = temp.hasAttribute('shared'); 
 
     customElements.define((temp.getAttribute('name') || temp.nodeName).toLocaleLowerCase(), function (_Component) {
       inherits_default()(_class, _Component);
@@ -2292,7 +2288,7 @@ function rigl_create() {
       function _class() {
         classCallCheck_default()(this, _class);
 
-        return _super.call(this, content.cloneNode(true), scripts, mode, shared);
+        return _super.call(this, content.cloneNode(true), scripts, mode, isShared);
       } 
 
 
