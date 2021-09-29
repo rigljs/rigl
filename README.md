@@ -14,6 +14,7 @@
 Rigl is a framework for building reactive Web Components. In addition to a convenient way to create components and add reactive behavior to them, Rigl provides an Observer for tracking events between different components and a simple Router.
 
 <br>
+<br>
 
 1. [Beginning of work](#beginning-of-work)
 2. [External components](#external-components)
@@ -25,7 +26,7 @@ Rigl is a framework for building reactive Web Components. In addition to a conve
 8. [Styles](#styles)
 9. [Classes](#classes)
 10. [Hide/Show](#hide-show)
-11. [~~Cycles~~](#cycles)
+11. [Cycles](#cycles)
 12. [~~Parameters~~](#parameters)
 13. [~~Service properties~~](#service-properties)
 14. [~~Events~~](#events)
@@ -773,4 +774,64 @@ To display the component on the screen again, enter in the browser console:
 
 ```
 > header.$data.display = 'block'
+```
+<br>
+<br>
+
+<h2 id="cycles"># Cycles</h2>
+
+<br>
+
+There are three types of loops in Rigl, which are specified using the special attribute ***$for***. The content of the container element in which this attribute is specified will be repeated as many times as necessary to iterate over the loop completely.
+
+The *for-of* loop is used to iterate over iterable objects, such as arrays: 
+
+```html
+<r-header>
+  <ul $for="item of arr">
+    <li>Element: ${ item }</li>
+  </ul>
+
+  <script>
+    this.arr = [1,2,3]
+  </script>
+</r-header>
+```
+
+The *for-in* loop is used to iterate over objects:
+
+```html
+<r-header>
+  <ul $for="prop in user">
+    <li>Property: ${ prop } - Value: ${ user[prop] }</li>
+  </ul>
+
+  <script>
+    this.user = {
+      name: 'Alex',
+      age: 29,
+    }
+  </script>
+</r-header>
+```
+
+The *for* loop can be used to iterate over numbers:
+
+```html
+<r-header>
+  <ul $for="i = 0; i < 5; i++">
+    <li>Number: ${ i }</li>
+  </ul>
+</r-header>
+```
+
+You cannot use the following keywords in any loop: *var*, *let* or *const*:
+
+```html
+<r-header>
+  <!-- Error! The keyword "var" is used -->
+  <ul $for="var i = 0; i < 5; i++">
+    <li>Number: ${ i }</li>
+  </ul>
+</r-header>
 ```
