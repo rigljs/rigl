@@ -869,3 +869,35 @@ Rigl позволяет динамически переопределять кл
   </script>
 </r-header>
 ```
+
+В Rigl доступны все операции с циклами, например:
+
+```html
+<r-header>
+  <ul $for="item of arr">
+    <li>Элемент: ${ item }</li>
+  </ul>
+
+  <script>
+    this.arr = [1,2,3]
+  </script>
+</r-header>
+```
+
+Добавьте в массив новый элемент:
+
+```
+> header.$data.arr.push(4)
+```
+
+Сделайте реверс массива:
+
+```
+> header.$data.arr.reverse()
+```
+
+Отсортируйте массив:
+
+```
+> header.$data.arr.sort()
+```

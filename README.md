@@ -869,3 +869,35 @@ Loops can be nested:
   </script>
 </r-header>
 ```
+
+All operations with cycles are available in Rigl, for example:
+
+```html
+<r-header>
+  <ul $for="item of arr">
+    <li>Element: ${ item }</li>
+  </ul>
+
+  <script>
+    this.arr = [1,2,3]
+  </script>
+</r-header>
+```
+
+Add a new element to the array:
+
+```
+> header.$data.arr.push(4)
+```
+
+Reverse the array:
+
+```
+> header.$data.arr.reverse()
+```
+
+Sort the array:
+
+```
+> header.$data.arr.sort()
+```
