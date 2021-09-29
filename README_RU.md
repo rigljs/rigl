@@ -834,3 +834,37 @@ Rigl позволяет динамически переопределять кл
   </ul>
 </r-header>
 ```
+
+Циклы могут быть вложенными:
+
+```html
+<r-header>
+  <ul $for="user of users">
+    <li>
+      <p>Name: ${ user.name }</p>
+      <p>Age: ${ user.age }</p>
+      <p>Friends:
+        <!-- вложенный цикл -->
+        <ol $for="friend of user.friends">
+          <li>${ friend }</li>
+        </ol>
+      </p>
+    </li>
+  </ul>
+
+  <script>
+    this.users = [
+      {
+        name: 'Alex',
+        age: 29,
+        friends: ['Mark', 'Helena']
+      },
+      {
+        name: 'Anna',
+        age: 32,
+        friends: ['Robert', 'Michael', 'Britney']
+      }
+    ]
+  </script>
+</r-header>
+```

@@ -834,3 +834,37 @@ You cannot use the following keywords in any loop: *var*, *let* or *const*:
   </ul>
 </r-header>
 ```
+
+Loops can be nested:
+
+```html
+<r-header>
+  <ul $for="user of users">
+    <li>
+      <p>Name: ${ user.name }</p>
+      <p>Age: ${ user.age }</p>
+      <p>Friends:
+        <!-- nested loop -->
+        <ol $for="friend of user.friends">
+          <li>${ friend }</li>
+        </ol>
+      </p>
+    </li>
+  </ul>
+
+  <script>
+    this.users = [
+      {
+        name: 'Alex',
+        age: 29,
+        friends: ['Mark', 'Helena']
+      },
+      {
+        name: 'Anna',
+        age: 32,
+        friends: ['Robert', 'Michael', 'Britney']
+      }
+    ]
+  </script>
+</r-header>
+```
