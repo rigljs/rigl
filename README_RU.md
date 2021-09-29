@@ -843,12 +843,13 @@ Rigl позволяет динамически переопределять кл
     <li>
       <p>Name: ${ user.name }</p>
       <p>Age: ${ user.age }</p>
-      <p>Friends:
+      <div>
+        <p>Friends:</p>
         <!-- вложенный цикл -->
         <ol $for="friend of user.friends">
           <li>${ friend }</li>
         </ol>
-      </p>
+      </div>
     </li>
   </ul>
 

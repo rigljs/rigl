@@ -843,12 +843,13 @@ Loops can be nested:
     <li>
       <p>Name: ${ user.name }</p>
       <p>Age: ${ user.age }</p>
-      <p>Friends:
+      <div>
+        <p>Friends:</p>
         <!-- nested loop -->
         <ol $for="friend of user.friends">
           <li>${ friend }</li>
         </ol>
-      </p>
+      </div>
     </li>
   </ul>
 
