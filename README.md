@@ -781,7 +781,7 @@ To display the component on the screen again, enter in the browser console:
 
 <br>
 
-There are three types of loops in Rigl, which are specified using the special attribute ***$for***. Let's start with a *for-of* loop, which is used to iterate over iterable objects, such as arrays:
+There are three types of loops in Rigl, which are specified using the special attribute ***$for***. Let's start with a *For-Of* loop, which is used to iterate over iterable objects, such as arrays:
 
 ```html
 <r-header>
@@ -803,9 +803,7 @@ The content of the container element in which this attribute is specified will b
   <li>Element: 3</li>
 </ul>
 
-<br>
-
-The *for-in* loop is used to iterate over objects:
+The *For-In* loop is used to iterate over objects:
 
 ```html
 <r-header>
@@ -822,7 +820,7 @@ The *for-in* loop is used to iterate over objects:
 </r-header>
 ```
 
-The *for* loop can be used to iterate over numbers:
+The *For* loop can be used to iterate over numbers:
 
 ```html
 <r-header>
