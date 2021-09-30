@@ -1,5 +1,5 @@
 /*!
- * Rigl.js v1.3.0 | A framework for building reactive web components
+ * Rigl.js v1.4.0 | A framework for building reactive web components
  * https://github.com/rigljs/rigl | https://www.npmjs.com/package/rigl
  * Released under the MIT License
  */
@@ -53,6 +53,21 @@
  	return __webpack_require__(__webpack_require__.s = 26);
  })
  ([
+ (function(module, exports, __webpack_require__) {
+
+var classApplyDescriptorGet = __webpack_require__(20);
+
+var classExtractFieldDescriptor = __webpack_require__(13);
+
+function _classPrivateFieldGet(receiver, privateMap) {
+  var descriptor = classExtractFieldDescriptor(receiver, privateMap, "get");
+  return classApplyDescriptorGet(receiver, descriptor);
+}
+
+module.exports = _classPrivateFieldGet;
+module.exports["default"] = module.exports, module.exports.__esModule = true;
+
+ }),
  (function(module, exports) {
 
 function _assertThisInitialized(self) {
@@ -64,21 +79,6 @@ function _assertThisInitialized(self) {
 }
 
 module.exports = _assertThisInitialized;
-module.exports["default"] = module.exports, module.exports.__esModule = true;
-
- }),
- (function(module, exports, __webpack_require__) {
-
-var classApplyDescriptorGet = __webpack_require__(23);
-
-var classExtractFieldDescriptor = __webpack_require__(13);
-
-function _classPrivateFieldGet(receiver, privateMap) {
-  var descriptor = classExtractFieldDescriptor(receiver, privateMap, "get");
-  return classApplyDescriptorGet(receiver, descriptor);
-}
-
-module.exports = _classPrivateFieldGet;
 module.exports["default"] = module.exports, module.exports.__esModule = true;
 
  }),
@@ -154,6 +154,22 @@ module.exports["default"] = module.exports, module.exports.__esModule = true;
  }),
  (function(module, exports, __webpack_require__) {
 
+var classApplyDescriptorSet = __webpack_require__(21);
+
+var classExtractFieldDescriptor = __webpack_require__(13);
+
+function _classPrivateFieldSet(receiver, privateMap, value) {
+  var descriptor = classExtractFieldDescriptor(receiver, privateMap, "set");
+  classApplyDescriptorSet(receiver, descriptor, value);
+  return value;
+}
+
+module.exports = _classPrivateFieldSet;
+module.exports["default"] = module.exports, module.exports.__esModule = true;
+
+ }),
+ (function(module, exports, __webpack_require__) {
+
 var setPrototypeOf = __webpack_require__(10);
 
 function _inherits(subClass, superClass) {
@@ -179,7 +195,7 @@ module.exports["default"] = module.exports, module.exports.__esModule = true;
 
 var _typeof = __webpack_require__(5)["default"];
 
-var assertThisInitialized = __webpack_require__(0);
+var assertThisInitialized = __webpack_require__(1);
 
 function _possibleConstructorReturn(self, call) {
   if (call && (_typeof(call) === "object" || typeof call === "function")) {
@@ -214,22 +230,6 @@ function _createClass(Constructor, protoProps, staticProps) {
 }
 
 module.exports = _createClass;
-module.exports["default"] = module.exports, module.exports.__esModule = true;
-
- }),
- (function(module, exports, __webpack_require__) {
-
-var classApplyDescriptorSet = __webpack_require__(24);
-
-var classExtractFieldDescriptor = __webpack_require__(13);
-
-function _classPrivateFieldSet(receiver, privateMap, value) {
-  var descriptor = classExtractFieldDescriptor(receiver, privateMap, "set");
-  classApplyDescriptorSet(receiver, descriptor, value);
-  return value;
-}
-
-module.exports = _classPrivateFieldSet;
 module.exports["default"] = module.exports, module.exports.__esModule = true;
 
  }),
@@ -291,9 +291,9 @@ var getPrototypeOf = __webpack_require__(2);
 
 var setPrototypeOf = __webpack_require__(10);
 
-var isNativeFunction = __webpack_require__(20);
+var isNativeFunction = __webpack_require__(22);
 
-var construct = __webpack_require__(21);
+var construct = __webpack_require__(23);
 
 function _wrapNativeSuper(Class) {
   var _cache = typeof Map === "function" ? new Map() : undefined;
@@ -406,6 +406,38 @@ module.exports["default"] = module.exports, module.exports.__esModule = true;
  }),
  (function(module, exports) {
 
+function _classApplyDescriptorGet(receiver, descriptor) {
+  if (descriptor.get) {
+    return descriptor.get.call(receiver);
+  }
+
+  return descriptor.value;
+}
+
+module.exports = _classApplyDescriptorGet;
+module.exports["default"] = module.exports, module.exports.__esModule = true;
+
+ }),
+ (function(module, exports) {
+
+function _classApplyDescriptorSet(receiver, descriptor, value) {
+  if (descriptor.set) {
+    descriptor.set.call(receiver, value);
+  } else {
+    if (!descriptor.writable) {
+      throw new TypeError("attempted to set read only private field");
+    }
+
+    descriptor.value = value;
+  }
+}
+
+module.exports = _classApplyDescriptorSet;
+module.exports["default"] = module.exports, module.exports.__esModule = true;
+
+ }),
+ (function(module, exports) {
+
 function _isNativeFunction(fn) {
   return Function.toString.call(fn).indexOf("[native code]") !== -1;
 }
@@ -418,7 +450,7 @@ module.exports["default"] = module.exports, module.exports.__esModule = true;
 
 var setPrototypeOf = __webpack_require__(10);
 
-var isNativeReflectConstruct = __webpack_require__(22);
+var isNativeReflectConstruct = __webpack_require__(24);
 
 function _construct(Parent, args, Class) {
   if (isNativeReflectConstruct()) {
@@ -460,38 +492,6 @@ function _isNativeReflectConstruct() {
 }
 
 module.exports = _isNativeReflectConstruct;
-module.exports["default"] = module.exports, module.exports.__esModule = true;
-
- }),
- (function(module, exports) {
-
-function _classApplyDescriptorGet(receiver, descriptor) {
-  if (descriptor.get) {
-    return descriptor.get.call(receiver);
-  }
-
-  return descriptor.value;
-}
-
-module.exports = _classApplyDescriptorGet;
-module.exports["default"] = module.exports, module.exports.__esModule = true;
-
- }),
- (function(module, exports) {
-
-function _classApplyDescriptorSet(receiver, descriptor, value) {
-  if (descriptor.set) {
-    descriptor.set.call(receiver, value);
-  } else {
-    if (!descriptor.writable) {
-      throw new TypeError("attempted to set read only private field");
-    }
-
-    descriptor.value = value;
-  }
-}
-
-module.exports = _classApplyDescriptorSet;
 module.exports["default"] = module.exports, module.exports.__esModule = true;
 
  }),
@@ -1125,10 +1125,10 @@ __webpack_require__.d(__webpack_exports__, "create", function() { return  rigl_c
 var classCallCheck = __webpack_require__(4);
 var classCallCheck_default = __webpack_require__.n(classCallCheck);
 
-var inherits = __webpack_require__(6);
+var inherits = __webpack_require__(7);
 var inherits_default = __webpack_require__.n(inherits);
 
-var possibleConstructorReturn = __webpack_require__(7);
+var possibleConstructorReturn = __webpack_require__(8);
 var possibleConstructorReturn_default = __webpack_require__.n(possibleConstructorReturn);
 
 var getPrototypeOf = __webpack_require__(2);
@@ -1137,23 +1137,23 @@ var getPrototypeOf_default = __webpack_require__.n(getPrototypeOf);
 var toConsumableArray = __webpack_require__(3);
 var toConsumableArray_default = __webpack_require__.n(toConsumableArray);
 
-var assertThisInitialized = __webpack_require__(0);
+var createClass = __webpack_require__(9);
+var createClass_default = __webpack_require__.n(createClass);
+
+var assertThisInitialized = __webpack_require__(1);
 var assertThisInitialized_default = __webpack_require__.n(assertThisInitialized);
 
-var createClass = __webpack_require__(8);
-var createClass_default = __webpack_require__.n(createClass);
+var classPrivateFieldGet = __webpack_require__(0);
+var classPrivateFieldGet_default = __webpack_require__.n(classPrivateFieldGet);
+
+var classPrivateFieldSet = __webpack_require__(6);
+var classPrivateFieldSet_default = __webpack_require__.n(classPrivateFieldSet);
 
 var wrapNativeSuper = __webpack_require__(14);
 var wrapNativeSuper_default = __webpack_require__.n(wrapNativeSuper);
 
 var helpers_typeof = __webpack_require__(5);
 var typeof_default = __webpack_require__.n(helpers_typeof);
-
-var classPrivateFieldGet = __webpack_require__(1);
-var classPrivateFieldGet_default = __webpack_require__.n(classPrivateFieldGet);
-
-var classPrivateFieldSet = __webpack_require__(9);
-var classPrivateFieldSet_default = __webpack_require__.n(classPrivateFieldSet);
 
 
 
@@ -1465,32 +1465,22 @@ var methods_Methods = function (_HTMLElement) {
 
 
   createClass_default()(Methods, [{
-    key: "connectedCallback",
-    value: function connectedCallback() {
-      var _this = this;
-
-      STORE.get(this.$root.host).connected.forEach(function (callback) {
-        return callback.call(_this.$data);
-      });
-    } 
-
-  }, {
     key: "disconnectedCallback",
     value: function disconnectedCallback() {
-      var _this2 = this;
+      var _this = this;
 
-      STORE.get(this.$root.host).disconnected.forEach(function (callback) {
-        return callback.call(_this2.$data);
+      STORE.get(this.$host).disconnected.forEach(function (callback) {
+        return callback.call(_this.$data);
       });
     } 
 
   }, {
     key: "adoptedCallback",
     value: function adoptedCallback() {
-      var _this3 = this;
+      var _this2 = this;
 
-      STORE.get(this.$root.host).adopted.forEach(function (callback) {
-        return callback.call(_this3.$data);
+      STORE.get(this.$host).adopted.forEach(function (callback) {
+        return callback.call(_this2.$data);
       });
     }
   }]);
@@ -1509,41 +1499,28 @@ methods_Methods.prototype.$$ = function (selector) {
 }; 
 
 
-methods_Methods.prototype.$connected = function () {
-  var _this4 = this;
+methods_Methods.prototype.$disconnected = function () {
+  var _this3 = this;
 
   for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
     args[_key] = arguments[_key];
   }
 
   args.forEach(function (callback) {
-    return typeof callback === 'function' ? STORE.get(_this4.$root.host).connected.add(callback) : null;
+    return typeof callback === 'function' ? STORE.get(_this3.$host).disconnected.add(callback) : null;
   });
 }; 
 
 
-methods_Methods.prototype.$disconnected = function () {
-  var _this5 = this;
+methods_Methods.prototype.$adopted = function () {
+  var _this4 = this;
 
   for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
     args[_key2] = arguments[_key2];
   }
 
   args.forEach(function (callback) {
-    return typeof callback === 'function' ? STORE.get(_this5.$root.host).disconnected.add(callback) : null;
-  });
-}; 
-
-
-methods_Methods.prototype.$adopted = function () {
-  var _this6 = this;
-
-  for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-    args[_key3] = arguments[_key3];
-  }
-
-  args.forEach(function (callback) {
-    return typeof callback === 'function' ? STORE.get(_this6.$root.host).adopted.add(callback) : null;
+    return typeof callback === 'function' ? STORE.get(_this4.$host).adopted.add(callback) : null;
   });
 }; 
 
@@ -2036,9 +2013,17 @@ function clear(node) {
 
 
 
+
+
+
+
 function component_createSuper(Derived) { var hasNativeReflectConstruct = component_isNativeReflectConstruct(); return function _createSuperInternal() { var Super = getPrototypeOf_default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = getPrototypeOf_default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return possibleConstructorReturn_default()(this, result); }; }
 
 function component_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function component_classPrivateFieldInitSpec(obj, privateMap, value) { component_checkPrivateRedeclaration(obj, privateMap); privateMap.set(obj, value); }
+
+function component_checkPrivateRedeclaration(obj, privateCollection) { if (privateCollection.has(obj)) { throw new TypeError("Cannot initialize the same private elements twice on an object"); } }
 
 
 
@@ -2060,9 +2045,23 @@ var compKeys = "$root,$host,$outer,$outers,$data,$timer,".concat(Object.keys(met
 
 var mapNames = ['sources', 'values', 'depends', 'callbacks', 'nodes']; 
 
-var arrayOuterComponents = []; 
+var outerComponents = []; 
 
-var sharedComponents = {};
+var sharedComponents = {}; 
+
+function setMapShared() {
+  sharedComponents[this.nodeName] = STORE.get(this); 
+
+  sharedComponents[this.nodeName].data = observable.call(this, STORE.get(this).object);
+}
+
+var _content = new WeakMap();
+
+var _scripts = new WeakMap();
+
+var _mode = new WeakMap();
+
+var _isShared = new WeakMap();
 
 var component_default = function (_Methods) {
   inherits_default()(_default, _Methods);
@@ -2076,6 +2075,35 @@ var component_default = function (_Methods) {
 
     _this = _super.call(this); 
 
+    component_classPrivateFieldInitSpec(assertThisInitialized_default()(_this), _content, {
+      writable: true,
+      value: void 0
+    });
+
+    component_classPrivateFieldInitSpec(assertThisInitialized_default()(_this), _scripts, {
+      writable: true,
+      value: void 0
+    });
+
+    component_classPrivateFieldInitSpec(assertThisInitialized_default()(_this), _mode, {
+      writable: true,
+      value: void 0
+    });
+
+    component_classPrivateFieldInitSpec(assertThisInitialized_default()(_this), _isShared, {
+      writable: true,
+      value: void 0
+    });
+
+    classPrivateFieldSet_default()(assertThisInitialized_default()(_this), _content, content);
+
+    classPrivateFieldSet_default()(assertThisInitialized_default()(_this), _scripts, scripts);
+
+    classPrivateFieldSet_default()(assertThisInitialized_default()(_this), _mode, mode);
+
+    classPrivateFieldSet_default()(assertThisInitialized_default()(_this), _isShared, isShared); 
+
+
     STORE.set(assertThisInitialized_default()(_this), {}); 
 
     STORE.get(assertThisInitialized_default()(_this)).object = Object.assign({}, mixins); 
@@ -2086,112 +2114,120 @@ var component_default = function (_Methods) {
 
     STORE.get(assertThisInitialized_default()(_this)).disconnected = new Set(); 
 
-    STORE.get(assertThisInitialized_default()(_this)).adopted = new Set(); 
+    STORE.get(assertThisInitialized_default()(_this)).adopted = new Set();
+    return _this;
+  } 
 
-    var outerComponent = arrayOuterComponents.length ? arrayOuterComponents[arrayOuterComponents.length - 1] : null; 
 
-    if (!outerComponent) {
-      if (sharedComponents[_this.nodeName]) mapNames.forEach(function (prop) {
-        return STORE.get(assertThisInitialized_default()(_this))[prop] = sharedComponents[_this.nodeName][prop];
-      }); 
+  createClass_default()(_default, [{
+    key: "connectedCallback",
+    value: function connectedCallback() {
+      var _this2 = this;
+
+      var outerComponent = outerComponents.length ? outerComponents[outerComponents.length - 1] : null; 
+
+      var outerProxyData = outerComponent ? getproxy.call(this, outerComponent.$data, true) : outerComponent; 
+
+      var outerProxyObject = outerComponent ? getproxy.call(this, STORE.get(outerComponent).object) : outerComponent; 
+
+      if (sharedComponents[this.nodeName]) {
+        mapNames.forEach(function (prop) {
+          return STORE.get(_this2)[prop] = sharedComponents[_this2.nodeName][prop];
+        });
+      } 
+      else if (outerComponent) {
+        mapNames.forEach(function (prop) {
+          return STORE.get(_this2)[prop] = STORE.get(outerComponent)[prop];
+        }); 
+
+        if (classPrivateFieldGet_default()(this, _isShared)) setMapShared.call(this);
+      } 
       else {
-        STORE.get(assertThisInitialized_default()(_this)).sources = new WeakMap(); 
+        STORE.get(this).sources = new WeakMap(); 
 
-        STORE.get(assertThisInitialized_default()(_this)).values = new WeakMap(); 
+        STORE.get(this).values = new WeakMap(); 
 
-        STORE.get(assertThisInitialized_default()(_this)).depends = new WeakMap(); 
+        STORE.get(this).depends = new WeakMap(); 
 
-        STORE.get(assertThisInitialized_default()(_this)).callbacks = new WeakMap(); 
+        STORE.get(this).callbacks = new WeakMap(); 
 
-        STORE.get(assertThisInitialized_default()(_this)).nodes = []; 
+        STORE.get(this).nodes = []; 
 
-        if (isShared) {
-          sharedComponents[_this.nodeName] = STORE.get(assertThisInitialized_default()(_this)); 
+        if (classPrivateFieldGet_default()(this, _isShared)) setMapShared.call(this);
+      } 
 
-          sharedComponents[_this.nodeName].data = observable.call(assertThisInitialized_default()(_this), STORE.get(assertThisInitialized_default()(_this)).object);
+
+      Object.defineProperties(this, {
+        $root: {
+          value: classPrivateFieldGet_default()(this, _content),
+          configurable: true
+        },
+        $host: {
+          value: this
+        },
+        $data: {
+          value: sharedComponents[this.nodeName] ? sharedComponents[this.nodeName].data : observable.call(this, STORE.get(this).object)
+        },
+        $outer: {
+          value: outerProxyData
+        },
+        $outers: {
+          value: outerComponent ? [].concat(toConsumableArray_default()(outerComponent.$outers), [outerComponent]) : []
+        },
+        $timer: {
+          value: function value(val) {
+            return STORE.get(_this2).timer = val ? typeof val === 'string' ? val : 'Update' : false;
+          }
         }
-      }
-    } 
-    else mapNames.forEach(function (prop) {
-      return STORE.get(assertThisInitialized_default()(_this))[prop] = STORE.get(outerComponent)[prop];
-    }); 
+      }); 
+
+      STORE.get(this).eval = Generator("{".concat(compKeys, "}=this"), "with(this){while(true)arguments[0]=yield\teval(arguments[0])}").call(this.$data); 
+
+      STORE.get(this).eval.next();
+      setTimeout(function () {
+        outerComponents.push(_this2); 
+
+        Function(classPrivateFieldGet_default()(_this2, _scripts)).call(new Proxy(_this2.$data, {
+          get: function get(target, key) {
+            return outerComponent && key === '$outer' ? outerProxyObject : Reflect.get(target, key);
+          }
+        })); 
+
+        Object.defineProperty(_this2, '$root', {
+          value: _this2.attachShadow({
+            mode: classPrivateFieldGet_default()(_this2, _mode)
+          })
+        }); 
+
+        while (classPrivateFieldGet_default()(_this2, _content).childNodes.length) {
+          _this2.$root.append(classPrivateFieldGet_default()(_this2, _content).firstChild);
+        } 
 
 
-    var outerProxyData = outerComponent ? getproxy.call(assertThisInitialized_default()(_this), outerComponent.$data, true) : outerComponent; 
+        create.call(_this2, _this2.$root); 
 
-    Object.defineProperties(assertThisInitialized_default()(_this), {
-      $root: {
-        value: content,
-        configurable: true
-      },
-      $host: {
-        value: assertThisInitialized_default()(_this)
-      },
-      $data: {
-        value: sharedComponents[_this.nodeName] ? sharedComponents[_this.nodeName].data : observable.call(assertThisInitialized_default()(_this), STORE.get(assertThisInitialized_default()(_this)).object)
-      },
-      $outer: {
-        value: outerProxyData
-      },
-      $outers: {
-        value: [].concat(arrayOuterComponents)
-      },
-      $timer: {
-        value: function value(val) {
-          return STORE.get(assertThisInitialized_default()(_this)).timer = val ? typeof val === 'string' ? val : 'Update' : false;
-        }
-      }
-    }); 
+        outerComponents.pop(); 
 
-    arrayOuterComponents.push(assertThisInitialized_default()(_this)); 
+        new MutationObserver(function (mutationRecords, observer) {
+          observer.disconnect(); 
 
-    var outerProxyObject = outerComponent ? getproxy.call(assertThisInitialized_default()(_this), STORE.get(outerComponent).object) : outerComponent; 
+          mutationRecords.forEach(function (record) {
+            if (!record.target.attributes || !record.target.attributes['data-rigl-for']) {
+              record.removedNodes.forEach(function (node) {
+                return remove.call(_this2, node);
+              }); 
 
-    Function(scripts).call(new Proxy(_this.$data, {
-      get: function get(target, key) {
-        return outerComponent && key === '$outer' ? outerProxyObject : Reflect.get(target, key);
-      }
-    })); 
-
-    Object.defineProperty(assertThisInitialized_default()(_this), '$root', {
-      value: _this.attachShadow({
-        mode: mode
-      })
-    }); 
-
-    while (content.childNodes.length) {
-      _this.$root.append(content.firstChild);
-    } 
-
-
-    STORE.get(assertThisInitialized_default()(_this)).eval = Generator("{".concat(compKeys, "}=this"), "with(this){while(true)arguments[0]=yield\teval(arguments[0])}").call(_this.$data); 
-
-    STORE.get(assertThisInitialized_default()(_this)).eval.next(); 
-
-    create.call(assertThisInitialized_default()(_this), _this.$root); 
-
-    arrayOuterComponents.pop(); 
-
-    new MutationObserver(function (mutationRecords, observer) {
-      observer.disconnect(); 
-
-      mutationRecords.forEach(function (record) {
-        if (!record.target.attributes || !record.target.attributes['data-rigl-for']) {
-          record.removedNodes.forEach(function (node) {
-            return remove.call(assertThisInitialized_default()(_this), node);
+              record.addedNodes.forEach(function (node) {
+                return create.call(_this2, clear(node));
+              });
+            }
           }); 
 
-          record.addedNodes.forEach(function (node) {
-            return create.call(assertThisInitialized_default()(_this), clear(node));
-          });
-        }
-      }); 
-
-      observer.observe(_this.$root, configMutations);
-    }).observe(_this.$root, configMutations); 
-
-    return _this;
-  }
+          observer.observe(_this2.$root, configMutations);
+        }).observe(_this2.$root, configMutations);
+      }, 0);
+    }
+  }]);
 
   return _default;
 }(methods);

@@ -7,7 +7,7 @@
 
 <br>
 
-**Current version: 1.3.0**
+**Current version: 1.4.0**
 
 <br>
 
@@ -26,7 +26,7 @@ Rigl is a framework for building reactive Web Components. In addition to a conve
 9. [Classes](#classes)
 10. [Hide/Show](#hide-show)
 11. [Cycles](#cycles)
-12. [~~Parameters~~](#parameters)
+12. [~~Attributes~~](#attributes)
 13. [~~Service properties~~](#service-properties)
 14. [~~Events~~](#events)
 15. [~~Closed components~~](#closed-components)
@@ -781,9 +781,7 @@ To display the component on the screen again, enter in the browser console:
 
 <br>
 
-There are three types of loops in Rigl, which are specified using the special attribute ***$for***. The content of the container element in which this attribute is specified will be repeated as many times as necessary to iterate over the loop completely.
-
-The *for-of* loop is used to iterate over iterable objects, such as arrays: 
+There are three types of loops in Rigl, which are specified using the special attribute ***$for***. Let's start with a *for-of* loop, which is used to iterate over iterable objects, such as arrays:
 
 ```html
 <r-header>
@@ -796,6 +794,14 @@ The *for-of* loop is used to iterate over iterable objects, such as arrays:
   </script>
 </r-header>
 ```
+
+The content of the container element in which this attribute is specified will be repeated as many times as necessary to iterate over the loop completely:
+
+<ul>
+  <li>Element: 1</li>
+  <li>Element: 2</li>
+  <li>Element: 3</li>
+</ul>
 
 The *for-in* loop is used to iterate over objects:
 
