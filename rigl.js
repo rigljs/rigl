@@ -1,5 +1,5 @@
 /*!
- * Rigl.js v1.4.0 | A framework for building reactive web components
+ * Rigl.js v1.5.0 | A framework for building reactive web components
  * https://github.com/rigljs/rigl | https://www.npmjs.com/package/rigl
  * Released under the MIT License
  */
@@ -50,24 +50,9 @@
  	};
  	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
  	__webpack_require__.p = "";
- 	return __webpack_require__(__webpack_require__.s = 26);
+ 	return __webpack_require__(__webpack_require__.s = 30);
  })
  ([
- (function(module, exports, __webpack_require__) {
-
-var classApplyDescriptorGet = __webpack_require__(20);
-
-var classExtractFieldDescriptor = __webpack_require__(13);
-
-function _classPrivateFieldGet(receiver, privateMap) {
-  var descriptor = classExtractFieldDescriptor(receiver, privateMap, "get");
-  return classApplyDescriptorGet(receiver, descriptor);
-}
-
-module.exports = _classPrivateFieldGet;
-module.exports["default"] = module.exports, module.exports.__esModule = true;
-
- }),
  (function(module, exports) {
 
 function _assertThisInitialized(self) {
@@ -79,6 +64,21 @@ function _assertThisInitialized(self) {
 }
 
 module.exports = _assertThisInitialized;
+module.exports["default"] = module.exports, module.exports.__esModule = true;
+
+ }),
+ (function(module, exports, __webpack_require__) {
+
+var classApplyDescriptorGet = __webpack_require__(24);
+
+var classExtractFieldDescriptor = __webpack_require__(15);
+
+function _classPrivateFieldGet(receiver, privateMap) {
+  var descriptor = classExtractFieldDescriptor(receiver, privateMap, "get");
+  return classApplyDescriptorGet(receiver, descriptor);
+}
+
+module.exports = _classPrivateFieldGet;
 module.exports["default"] = module.exports, module.exports.__esModule = true;
 
  }),
@@ -98,13 +98,13 @@ module.exports["default"] = module.exports, module.exports.__esModule = true;
  }),
  (function(module, exports, __webpack_require__) {
 
-var arrayWithoutHoles = __webpack_require__(16);
+var arrayWithoutHoles = __webpack_require__(18);
 
-var iterableToArray = __webpack_require__(17);
+var iterableToArray = __webpack_require__(19);
 
-var unsupportedIterableToArray = __webpack_require__(18);
+var unsupportedIterableToArray = __webpack_require__(14);
 
-var nonIterableSpread = __webpack_require__(19);
+var nonIterableSpread = __webpack_require__(20);
 
 function _toConsumableArray(arr) {
   return arrayWithoutHoles(arr) || iterableToArray(arr) || unsupportedIterableToArray(arr) || nonIterableSpread();
@@ -154,23 +154,7 @@ module.exports["default"] = module.exports, module.exports.__esModule = true;
  }),
  (function(module, exports, __webpack_require__) {
 
-var classApplyDescriptorSet = __webpack_require__(21);
-
-var classExtractFieldDescriptor = __webpack_require__(13);
-
-function _classPrivateFieldSet(receiver, privateMap, value) {
-  var descriptor = classExtractFieldDescriptor(receiver, privateMap, "set");
-  classApplyDescriptorSet(receiver, descriptor, value);
-  return value;
-}
-
-module.exports = _classPrivateFieldSet;
-module.exports["default"] = module.exports, module.exports.__esModule = true;
-
- }),
- (function(module, exports, __webpack_require__) {
-
-var setPrototypeOf = __webpack_require__(10);
+var setPrototypeOf = __webpack_require__(11);
 
 function _inherits(subClass, superClass) {
   if (typeof superClass !== "function" && superClass !== null) {
@@ -195,7 +179,7 @@ module.exports["default"] = module.exports, module.exports.__esModule = true;
 
 var _typeof = __webpack_require__(5)["default"];
 
-var assertThisInitialized = __webpack_require__(1);
+var assertThisInitialized = __webpack_require__(0);
 
 function _possibleConstructorReturn(self, call) {
   if (call && (_typeof(call) === "object" || typeof call === "function")) {
@@ -233,6 +217,43 @@ module.exports = _createClass;
 module.exports["default"] = module.exports, module.exports.__esModule = true;
 
  }),
+ (function(module, exports, __webpack_require__) {
+
+var classApplyDescriptorSet = __webpack_require__(25);
+
+var classExtractFieldDescriptor = __webpack_require__(15);
+
+function _classPrivateFieldSet(receiver, privateMap, value) {
+  var descriptor = classExtractFieldDescriptor(receiver, privateMap, "set");
+  classApplyDescriptorSet(receiver, descriptor, value);
+  return value;
+}
+
+module.exports = _classPrivateFieldSet;
+module.exports["default"] = module.exports, module.exports.__esModule = true;
+
+ }),
+ (function(module, exports) {
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+module.exports = _defineProperty;
+module.exports["default"] = module.exports, module.exports.__esModule = true;
+
+ }),
  (function(module, exports) {
 
 function _setPrototypeOf(o, p) {
@@ -251,7 +272,7 @@ module.exports["default"] = module.exports, module.exports.__esModule = true;
  }),
  (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(25);
+module.exports = __webpack_require__(29);
 
 
  }),
@@ -271,6 +292,23 @@ module.exports = _arrayLikeToArray;
 module.exports["default"] = module.exports, module.exports.__esModule = true;
 
  }),
+ (function(module, exports, __webpack_require__) {
+
+var arrayLikeToArray = __webpack_require__(13);
+
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return arrayLikeToArray(o, minLen);
+}
+
+module.exports = _unsupportedIterableToArray;
+module.exports["default"] = module.exports, module.exports.__esModule = true;
+
+ }),
  (function(module, exports) {
 
 function _classExtractFieldDescriptor(receiver, privateMap, action) {
@@ -287,13 +325,31 @@ module.exports["default"] = module.exports, module.exports.__esModule = true;
  }),
  (function(module, exports, __webpack_require__) {
 
+var arrayWithHoles = __webpack_require__(21);
+
+var iterableToArrayLimit = __webpack_require__(22);
+
+var unsupportedIterableToArray = __webpack_require__(14);
+
+var nonIterableRest = __webpack_require__(23);
+
+function _slicedToArray(arr, i) {
+  return arrayWithHoles(arr) || iterableToArrayLimit(arr, i) || unsupportedIterableToArray(arr, i) || nonIterableRest();
+}
+
+module.exports = _slicedToArray;
+module.exports["default"] = module.exports, module.exports.__esModule = true;
+
+ }),
+ (function(module, exports, __webpack_require__) {
+
 var getPrototypeOf = __webpack_require__(2);
 
-var setPrototypeOf = __webpack_require__(10);
+var setPrototypeOf = __webpack_require__(11);
 
-var isNativeFunction = __webpack_require__(22);
+var isNativeFunction = __webpack_require__(26);
 
-var construct = __webpack_require__(23);
+var construct = __webpack_require__(27);
 
 function _wrapNativeSuper(Class) {
   var _cache = typeof Map === "function" ? new Map() : undefined;
@@ -334,30 +390,9 @@ module.exports = _wrapNativeSuper;
 module.exports["default"] = module.exports, module.exports.__esModule = true;
 
  }),
- (function(module, exports) {
-
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-
-module.exports = _defineProperty;
-module.exports["default"] = module.exports, module.exports.__esModule = true;
-
- }),
  (function(module, exports, __webpack_require__) {
 
-var arrayLikeToArray = __webpack_require__(12);
+var arrayLikeToArray = __webpack_require__(13);
 
 function _arrayWithoutHoles(arr) {
   if (Array.isArray(arr)) return arrayLikeToArray(arr);
@@ -377,23 +412,6 @@ module.exports = _iterableToArray;
 module.exports["default"] = module.exports, module.exports.__esModule = true;
 
  }),
- (function(module, exports, __webpack_require__) {
-
-var arrayLikeToArray = __webpack_require__(12);
-
-function _unsupportedIterableToArray(o, minLen) {
-  if (!o) return;
-  if (typeof o === "string") return arrayLikeToArray(o, minLen);
-  var n = Object.prototype.toString.call(o).slice(8, -1);
-  if (n === "Object" && o.constructor) n = o.constructor.name;
-  if (n === "Map" || n === "Set") return Array.from(o);
-  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return arrayLikeToArray(o, minLen);
-}
-
-module.exports = _unsupportedIterableToArray;
-module.exports["default"] = module.exports, module.exports.__esModule = true;
-
- }),
  (function(module, exports) {
 
 function _nonIterableSpread() {
@@ -401,6 +419,62 @@ function _nonIterableSpread() {
 }
 
 module.exports = _nonIterableSpread;
+module.exports["default"] = module.exports, module.exports.__esModule = true;
+
+ }),
+ (function(module, exports) {
+
+function _arrayWithHoles(arr) {
+  if (Array.isArray(arr)) return arr;
+}
+
+module.exports = _arrayWithHoles;
+module.exports["default"] = module.exports, module.exports.__esModule = true;
+
+ }),
+ (function(module, exports) {
+
+function _iterableToArrayLimit(arr, i) {
+  var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+
+  if (_i == null) return;
+  var _arr = [];
+  var _n = true;
+  var _d = false;
+
+  var _s, _e;
+
+  try {
+    for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
+      _arr.push(_s.value);
+
+      if (i && _arr.length === i) break;
+    }
+  } catch (err) {
+    _d = true;
+    _e = err;
+  } finally {
+    try {
+      if (!_n && _i["return"] != null) _i["return"]();
+    } finally {
+      if (_d) throw _e;
+    }
+  }
+
+  return _arr;
+}
+
+module.exports = _iterableToArrayLimit;
+module.exports["default"] = module.exports, module.exports.__esModule = true;
+
+ }),
+ (function(module, exports) {
+
+function _nonIterableRest() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+
+module.exports = _nonIterableRest;
 module.exports["default"] = module.exports, module.exports.__esModule = true;
 
  }),
@@ -448,9 +522,9 @@ module.exports["default"] = module.exports, module.exports.__esModule = true;
  }),
  (function(module, exports, __webpack_require__) {
 
-var setPrototypeOf = __webpack_require__(10);
+var setPrototypeOf = __webpack_require__(11);
 
-var isNativeReflectConstruct = __webpack_require__(24);
+var isNativeReflectConstruct = __webpack_require__(28);
 
 function _construct(Parent, args, Class) {
   if (isNativeReflectConstruct()) {
@@ -1125,10 +1199,10 @@ __webpack_require__.d(__webpack_exports__, "create", function() { return  rigl_c
 var classCallCheck = __webpack_require__(4);
 var classCallCheck_default = __webpack_require__.n(classCallCheck);
 
-var inherits = __webpack_require__(7);
+var inherits = __webpack_require__(6);
 var inherits_default = __webpack_require__.n(inherits);
 
-var possibleConstructorReturn = __webpack_require__(8);
+var possibleConstructorReturn = __webpack_require__(7);
 var possibleConstructorReturn_default = __webpack_require__.n(possibleConstructorReturn);
 
 var getPrototypeOf = __webpack_require__(2);
@@ -1137,19 +1211,25 @@ var getPrototypeOf_default = __webpack_require__.n(getPrototypeOf);
 var toConsumableArray = __webpack_require__(3);
 var toConsumableArray_default = __webpack_require__.n(toConsumableArray);
 
-var createClass = __webpack_require__(9);
+var slicedToArray = __webpack_require__(16);
+var slicedToArray_default = __webpack_require__.n(slicedToArray);
+
+var defineProperty = __webpack_require__(10);
+var defineProperty_default = __webpack_require__.n(defineProperty);
+
+var createClass = __webpack_require__(8);
 var createClass_default = __webpack_require__.n(createClass);
 
-var assertThisInitialized = __webpack_require__(1);
+var assertThisInitialized = __webpack_require__(0);
 var assertThisInitialized_default = __webpack_require__.n(assertThisInitialized);
 
-var classPrivateFieldGet = __webpack_require__(0);
+var classPrivateFieldGet = __webpack_require__(1);
 var classPrivateFieldGet_default = __webpack_require__.n(classPrivateFieldGet);
 
-var classPrivateFieldSet = __webpack_require__(6);
+var classPrivateFieldSet = __webpack_require__(9);
 var classPrivateFieldSet_default = __webpack_require__.n(classPrivateFieldSet);
 
-var wrapNativeSuper = __webpack_require__(14);
+var wrapNativeSuper = __webpack_require__(17);
 var wrapNativeSuper_default = __webpack_require__.n(wrapNativeSuper);
 
 var helpers_typeof = __webpack_require__(5);
@@ -1534,10 +1614,7 @@ methods_Methods.prototype.$router = rigl_router;
 methods_Methods.prototype.$emitter = emitter; 
 
  var methods = (methods_Methods);
-var defineProperty = __webpack_require__(15);
-var defineProperty_default = __webpack_require__.n(defineProperty);
-
-var regenerator = __webpack_require__(11);
+var regenerator = __webpack_require__(12);
 var regenerator_default = __webpack_require__.n(regenerator);
 
 
@@ -2017,6 +2094,8 @@ function clear(node) {
 
 
 
+
+
 function component_createSuper(Derived) { var hasNativeReflectConstruct = component_isNativeReflectConstruct(); return function _createSuperInternal() { var Super = getPrototypeOf_default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = getPrototypeOf_default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return possibleConstructorReturn_default()(this, result); }; }
 
 function component_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
@@ -2034,6 +2113,8 @@ function component_checkPrivateRedeclaration(obj, privateCollection) { if (priva
 
 var STORE = new WeakMap(); 
 
+var sAttr = Symbol(); 
+
 var Generator = Function('return function*(){}')().constructor; 
 
 var configMutations = {
@@ -2041,7 +2122,7 @@ var configMutations = {
   subtree: true
 }; 
 
-var compKeys = "$root,$host,$outer,$outers,$data,$timer,".concat(Object.keys(methods.prototype)); 
+var compKeys = "$root,$host,$data,$outer,$outers,$timer,$attr,".concat(Object.keys(methods.prototype)); 
 
 var mapNames = ['sources', 'values', 'depends', 'callbacks', 'nodes']; 
 
@@ -2056,12 +2137,6 @@ function setMapShared() {
 }
 
 var _content = new WeakMap();
-
-var _scripts = new WeakMap();
-
-var _mode = new WeakMap();
-
-var _isShared = new WeakMap();
 
 var component_default = function (_Methods) {
   inherits_default()(_default, _Methods);
@@ -2080,33 +2155,28 @@ var component_default = function (_Methods) {
       value: void 0
     });
 
-    component_classPrivateFieldInitSpec(assertThisInitialized_default()(_this), _scripts, {
-      writable: true,
-      value: void 0
-    });
+    classPrivateFieldSet_default()(assertThisInitialized_default()(_this), _content, content); 
 
-    component_classPrivateFieldInitSpec(assertThisInitialized_default()(_this), _mode, {
-      writable: true,
-      value: void 0
-    });
 
-    component_classPrivateFieldInitSpec(assertThisInitialized_default()(_this), _isShared, {
-      writable: true,
-      value: void 0
-    });
+    var attributes = new Proxy(Object.values(_this.attributes).reduce(function (obj, attr) {
+      obj[attr.name] = attr;
+      return obj;
+    }, {}), {
+      get: function get(target, key, receiver) {
+        if (!target.hasOwnProperty(key)) return Reflect.get(target, key, receiver); 
 
-    classPrivateFieldSet_default()(assertThisInitialized_default()(_this), _content, content);
+        return Reflect.get(target, key, receiver).value;
+      },
+      set: function set(target, key, value, receiver) {
+        Reflect.get(target, key, receiver).value = value; 
 
-    classPrivateFieldSet_default()(assertThisInitialized_default()(_this), _scripts, scripts);
-
-    classPrivateFieldSet_default()(assertThisInitialized_default()(_this), _mode, mode);
-
-    classPrivateFieldSet_default()(assertThisInitialized_default()(_this), _isShared, isShared); 
-
+        return true;
+      }
+    }); 
 
     STORE.set(assertThisInitialized_default()(_this), {}); 
 
-    STORE.get(assertThisInitialized_default()(_this)).object = Object.assign({}, mixins); 
+    STORE.get(assertThisInitialized_default()(_this)).object = Object.assign(defineProperty_default()({}, sAttr, attributes), mixins); 
 
     STORE.get(assertThisInitialized_default()(_this)).timer = null; 
 
@@ -2114,7 +2184,86 @@ var component_default = function (_Methods) {
 
     STORE.get(assertThisInitialized_default()(_this)).disconnected = new Set(); 
 
-    STORE.get(assertThisInitialized_default()(_this)).adopted = new Set();
+    STORE.get(assertThisInitialized_default()(_this)).adopted = new Set(); 
+
+    var outerComponent = outerComponents[outerComponents.length - 1]; 
+
+    var _ref = outerComponent ? [getproxy.call(assertThisInitialized_default()(_this), STORE.get(outerComponent).object), getproxy.call(assertThisInitialized_default()(_this), outerComponent.$data, true)] : [],
+        _ref2 = slicedToArray_default()(_ref, 2),
+        outerProxyObject = _ref2[0],
+        outerProxyData = _ref2[1]; 
+
+
+    if (sharedComponents[_this.nodeName]) {
+      mapNames.forEach(function (prop) {
+        return STORE.get(assertThisInitialized_default()(_this))[prop] = sharedComponents[_this.nodeName][prop];
+      });
+    } 
+    else if (outerComponent) {
+      mapNames.forEach(function (prop) {
+        return STORE.get(assertThisInitialized_default()(_this))[prop] = STORE.get(outerComponent)[prop];
+      }); 
+
+      if (isShared) setMapShared.call(assertThisInitialized_default()(_this));
+    } 
+    else {
+      STORE.get(assertThisInitialized_default()(_this)).sources = new WeakMap(); 
+
+      STORE.get(assertThisInitialized_default()(_this)).values = new WeakMap(); 
+
+      STORE.get(assertThisInitialized_default()(_this)).depends = new WeakMap(); 
+
+      STORE.get(assertThisInitialized_default()(_this)).callbacks = new WeakMap(); 
+
+      STORE.get(assertThisInitialized_default()(_this)).nodes = []; 
+
+      if (isShared) setMapShared.call(assertThisInitialized_default()(_this));
+    } 
+
+
+    Object.defineProperties(assertThisInitialized_default()(_this), {
+      $root: {
+        value: content,
+        configurable: true
+      },
+      $host: {
+        value: assertThisInitialized_default()(_this)
+      },
+      $data: {
+        value: sharedComponents[_this.nodeName] ? sharedComponents[_this.nodeName].data : observable.call(assertThisInitialized_default()(_this), STORE.get(assertThisInitialized_default()(_this)).object)
+      },
+      $outer: {
+        value: outerProxyData
+      },
+      $outers: {
+        value: outerComponent ? [].concat(toConsumableArray_default()(outerComponent.$outers), [outerComponent]) : []
+      },
+      $timer: {
+        value: function value(val) {
+          return STORE.get(assertThisInitialized_default()(_this)).timer = val ? typeof val === 'string' ? val : 'Update' : false;
+        }
+      }
+    }); 
+
+    Object.defineProperty(assertThisInitialized_default()(_this), '$attr', {
+      value: _this.$data[sAttr]
+    }); 
+
+    STORE.get(assertThisInitialized_default()(_this)).eval = Generator("{".concat(compKeys, "}=this"), "with(this){while(true)arguments[0]=yield\teval(arguments[0])}").call(_this.$data); 
+
+    STORE.get(assertThisInitialized_default()(_this)).eval.next(); 
+
+    Function(scripts).call(new Proxy(_this.$data, {
+      get: function get(target, key) {
+        return outerComponent && key === '$outer' ? outerProxyObject : Reflect.get(target, key);
+      }
+    })); 
+
+    Object.defineProperty(assertThisInitialized_default()(_this), '$root', {
+      value: _this.attachShadow({
+        mode: mode
+      })
+    });
     return _this;
   } 
 
@@ -2124,80 +2273,8 @@ var component_default = function (_Methods) {
     value: function connectedCallback() {
       var _this2 = this;
 
-      var outerComponent = outerComponents.length ? outerComponents[outerComponents.length - 1] : null; 
-
-      var outerProxyData = outerComponent ? getproxy.call(this, outerComponent.$data, true) : outerComponent; 
-
-      var outerProxyObject = outerComponent ? getproxy.call(this, STORE.get(outerComponent).object) : outerComponent; 
-
-      if (sharedComponents[this.nodeName]) {
-        mapNames.forEach(function (prop) {
-          return STORE.get(_this2)[prop] = sharedComponents[_this2.nodeName][prop];
-        });
-      } 
-      else if (outerComponent) {
-        mapNames.forEach(function (prop) {
-          return STORE.get(_this2)[prop] = STORE.get(outerComponent)[prop];
-        }); 
-
-        if (classPrivateFieldGet_default()(this, _isShared)) setMapShared.call(this);
-      } 
-      else {
-        STORE.get(this).sources = new WeakMap(); 
-
-        STORE.get(this).values = new WeakMap(); 
-
-        STORE.get(this).depends = new WeakMap(); 
-
-        STORE.get(this).callbacks = new WeakMap(); 
-
-        STORE.get(this).nodes = []; 
-
-        if (classPrivateFieldGet_default()(this, _isShared)) setMapShared.call(this);
-      } 
-
-
-      Object.defineProperties(this, {
-        $root: {
-          value: classPrivateFieldGet_default()(this, _content),
-          configurable: true
-        },
-        $host: {
-          value: this
-        },
-        $data: {
-          value: sharedComponents[this.nodeName] ? sharedComponents[this.nodeName].data : observable.call(this, STORE.get(this).object)
-        },
-        $outer: {
-          value: outerProxyData
-        },
-        $outers: {
-          value: outerComponent ? [].concat(toConsumableArray_default()(outerComponent.$outers), [outerComponent]) : []
-        },
-        $timer: {
-          value: function value(val) {
-            return STORE.get(_this2).timer = val ? typeof val === 'string' ? val : 'Update' : false;
-          }
-        }
-      }); 
-
-      STORE.get(this).eval = Generator("{".concat(compKeys, "}=this"), "with(this){while(true)arguments[0]=yield\teval(arguments[0])}").call(this.$data); 
-
-      STORE.get(this).eval.next();
       setTimeout(function () {
         outerComponents.push(_this2); 
-
-        Function(classPrivateFieldGet_default()(_this2, _scripts)).call(new Proxy(_this2.$data, {
-          get: function get(target, key) {
-            return outerComponent && key === '$outer' ? outerProxyObject : Reflect.get(target, key);
-          }
-        })); 
-
-        Object.defineProperty(_this2, '$root', {
-          value: _this2.attachShadow({
-            mode: classPrivateFieldGet_default()(_this2, _mode)
-          })
-        }); 
 
         while (classPrivateFieldGet_default()(_this2, _content).childNodes.length) {
           _this2.$root.append(classPrivateFieldGet_default()(_this2, _content).firstChild);
