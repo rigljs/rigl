@@ -1,5 +1,5 @@
 /*!
- * Rigl.js v1.5.0 | A framework for building reactive web components
+ * Rigl.js v1.6.0 | A framework for building reactive web components
  * https://github.com/rigljs/rigl | https://www.npmjs.com/package/rigl
  * Released under the MIT License
  */
@@ -2009,7 +2009,7 @@ function observable(obj, dep) {
   return proxy;
 }
 
- var getproxy = (function (obj, isData) {
+ var getouter = (function (obj, isData) {
   var _this = this;
 
   return new Proxy(obj, {
@@ -2025,6 +2025,23 @@ function observable(obj, dep) {
 
 
       return Reflect.get(target, key);
+    }
+  });
+});
+ var getattrs = (function (attributes) {
+  return new Proxy(Object.values(attributes).reduce(function (obj, attr) {
+    obj[attr.name] = attr;
+    return obj;
+  }, {}), {
+    get: function get(target, key, receiver) {
+      if (!target.hasOwnProperty(key)) return Reflect.get(target, key, receiver); 
+
+      return Reflect.get(target, key, receiver).value;
+    },
+    set: function set(target, key, value, receiver) {
+      Reflect.get(target, key, receiver).value = value; 
+
+      return true;
     }
   });
 });
@@ -2111,6 +2128,7 @@ function component_checkPrivateRedeclaration(obj, privateCollection) { if (priva
 
 
 
+
 var STORE = new WeakMap(); 
 
 var sAttr = Symbol(); 
@@ -2158,21 +2176,7 @@ var component_default = function (_Methods) {
     classPrivateFieldSet_default()(assertThisInitialized_default()(_this), _content, content); 
 
 
-    var attributes = new Proxy(Object.values(_this.attributes).reduce(function (obj, attr) {
-      obj[attr.name] = attr;
-      return obj;
-    }, {}), {
-      get: function get(target, key, receiver) {
-        if (!target.hasOwnProperty(key)) return Reflect.get(target, key, receiver); 
-
-        return Reflect.get(target, key, receiver).value;
-      },
-      set: function set(target, key, value, receiver) {
-        Reflect.get(target, key, receiver).value = value; 
-
-        return true;
-      }
-    }); 
+    var attributes = getattrs(_this.attributes); 
 
     STORE.set(assertThisInitialized_default()(_this), {}); 
 
@@ -2188,7 +2192,7 @@ var component_default = function (_Methods) {
 
     var outerComponent = outerComponents[outerComponents.length - 1]; 
 
-    var _ref = outerComponent ? [getproxy.call(assertThisInitialized_default()(_this), STORE.get(outerComponent).object), getproxy.call(assertThisInitialized_default()(_this), outerComponent.$data, true)] : [],
+    var _ref = outerComponent ? [getouter.call(assertThisInitialized_default()(_this), STORE.get(outerComponent).object), getouter.call(assertThisInitialized_default()(_this), outerComponent.$data, true)] : [],
         _ref2 = slicedToArray_default()(_ref, 2),
         outerProxyObject = _ref2[0],
         outerProxyData = _ref2[1]; 
