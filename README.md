@@ -27,7 +27,7 @@ Rigl is a framework for building reactive Web Components. In addition to a conve
 10. [Hide/Show](#hide-show)
 11. [Cycles](#cycles)
 12. [Attributes](#attributes)
-13. [Slots](#slots)
+13. [~~Slots~~](#slots)
 14. [~~Service properties~~](#service-properties)
 15. [~~Events~~](#events)
 16. [~~Closed components~~](#closed-components)
@@ -369,7 +369,7 @@ Expressions in Rigl use the template string syntax *${ expression }*. Expression
 
 <br>
 
-Any custom properties of a component are defined in its *SCRIPT* tag using the *.this* keyword. There can be any number of these tags in a component. In addition to defining custom properties, they can contain arbitrary JavaScript:
+Any custom properties of a component are defined in its *SCRIPT* tag using the *this* keyword. There can be any number of these tags in a component. In addition to defining custom properties, they can contain arbitrary JavaScript:
 
 ```html
 <r-header>
@@ -915,7 +915,7 @@ Sort the array:
 
 <br>
 
-To work with attributes, Rigl uses the **$attr** utility property. Using this property, you can get and set values for the attributes of the component. Suppose we have a component with the ***id*** attribute, for example:
+To work with attributes, Rigl uses the **$attr** service property. Using this property, you can get and set values for the attributes of the component. Suppose we have a component with the ***id*** attribute, for example:
 
 ```html
 <!DOCTYPE html>
@@ -940,7 +940,7 @@ To work with attributes, Rigl uses the **$attr** utility property. Using this pr
 </html>
 ```
 
-To get its value in the component template, the **$attr** utility property is applied:
+To get its value in the component template, the **$attr** service property is applied:
 
 ```html
 <r-header>
@@ -985,7 +985,7 @@ Inside the component template, we convert the attribute value to an array and lo
 ```html
 <r-header>
   <!-- convert value from attribute to array and loop over it -->
-  <nav $for="item of JSON.parse(this.$attr['data-menu'])">
+  <nav $for="item of JSON.parse($attr['data-menu'])">
     <a href="/${ item[0] !== 'home' ? item[0] : '' }">${ item[1].toUpperCase() }</a>
   </nav>
 
@@ -995,5 +995,28 @@ Inside the component template, we convert the attribute value to an array and lo
       justify-content: space-around;
     }
   </style>
+</r-header>
+```
+
+Access to service properties in scripts is carried out using the *this* keyword, for example:
+
+```html
+<r-header>
+  <!-- iterate over the menu array in a loop -->
+  <nav $for="item of menu">
+    <a href="/${ item[0] !== 'home' ? item[0] : '' }">${ item[1].toUpperCase() }</a>
+  </nav>
+
+  <style>
+    nav {
+      display: flex;
+      justify-content: space-around;
+    }
+  </style>
+
+  <script>
+    // the "this" keyword is specified before the "$attr" property
+    this.menu = JSON.parse(this.$attr['data-menu'])
+  </script>
 </r-header>
 ```
