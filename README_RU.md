@@ -27,7 +27,7 @@ Rigl - это фреймворк для создания реактивных В
 10. [Скрыть/Показать](#hide-show)
 11. [Циклы](#cycles)
 12. [Атрибуты](#attributes)
-13. [~~Слоты~~](#slots)
+13. [Слоты](#slots)
 14. [~~Служебные свойства~~](#service-properties)
 15. [~~События~~](#events)
 16. [~~Закрытые компоненты~~](#closed-components)
@@ -968,7 +968,7 @@ Rigl позволяет динамически переопределять кл
 </head>
 <body>
   <!-- пункты меню передаются в атрибуте "data-menu" -->
-  <r-header id="header" data-menu="главная,о нас,контакты"></r-header>
+  <r-header id="header" data-menu='[["home", "главная страница"], ["about", "о компании"], ["contacts", "наши контакты"]]'></r-header>
 
   
   <script src="rigl.min.js"></script>
@@ -985,8 +985,8 @@ Rigl позволяет динамически переопределять кл
 ```html
 <r-header>
   <!-- преобразовать значение из атрибута в массив и перебрать его в цикле -->
-  <nav $for="item of $attr['data-menu'].split(',')">
-    <a href="/${ item !== 'главная' ? item : '' }">${ item.toUpperCase() }</a>
+  <nav $for="item of JSON.parse(this.$attr['data-menu'])">
+    <a href="/${ item[0] !== 'home' ? item[0] : '' }">${ item[1].toUpperCase() }</a>
   </nav>
 
   <style>
