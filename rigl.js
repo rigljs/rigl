@@ -1,5 +1,5 @@
 /*!
- * Rigl.js v1.6.0 | A framework for building reactive web components
+ * Rigl.js v1.7.0 | A framework for building reactive web components
  * https://github.com/rigljs/rigl | https://www.npmjs.com/package/rigl
  * Released under the MIT License
  */
@@ -1898,6 +1898,10 @@ function notify(deps) {
   var _this = this;
 
   setTimeout(function () {
+    STORE.get(_this).before.forEach(function (callback) {
+      return callback.call(_this.$data);
+    }); 
+
     if (STORE.get(_this).timer) console.time(STORE.get(_this).timer); 
 
     deps.forEach(function (node) {
@@ -1905,7 +1909,11 @@ function notify(deps) {
       else handler.call(_this, node);
     }); 
 
-    if (STORE.get(_this).timer) console.timeEnd(STORE.get(_this).timer);
+    if (STORE.get(_this).timer) console.timeEnd(STORE.get(_this).timer); 
+
+    STORE.get(_this).after.forEach(function (callback) {
+      return callback.call(_this.$data);
+    });
   }, 0);
 }
 
@@ -2140,7 +2148,7 @@ var configMutations = {
   subtree: true
 }; 
 
-var compKeys = "$root,$host,$data,$outer,$outers,$timer,$attr,".concat(Object.keys(methods.prototype)); 
+var compKeys = "$root,$host,$data,$attr,$outer,$outers,$timer,$before,$after,".concat(Object.keys(methods.prototype)); 
 
 var mapNames = ['sources', 'values', 'depends', 'callbacks', 'nodes']; 
 
@@ -2184,11 +2192,13 @@ var component_default = function (_Methods) {
 
     STORE.get(assertThisInitialized_default()(_this)).timer = null; 
 
-    STORE.get(assertThisInitialized_default()(_this)).connected = new Set(); 
-
     STORE.get(assertThisInitialized_default()(_this)).disconnected = new Set(); 
 
     STORE.get(assertThisInitialized_default()(_this)).adopted = new Set(); 
+
+    STORE.get(assertThisInitialized_default()(_this)).before = new Set(); 
+
+    STORE.get(assertThisInitialized_default()(_this)).after = new Set(); 
 
     var outerComponent = outerComponents[outerComponents.length - 1]; 
 
@@ -2245,6 +2255,28 @@ var component_default = function (_Methods) {
       $timer: {
         value: function value(val) {
           return STORE.get(assertThisInitialized_default()(_this)).timer = val ? typeof val === 'string' ? val : 'Update' : false;
+        }
+      },
+      $before: {
+        value: function value() {
+          for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+          }
+
+          return args.forEach(function (callback) {
+            return typeof callback === 'function' ? STORE.get(assertThisInitialized_default()(_this)).before.add(callback) : null;
+          });
+        }
+      },
+      $after: {
+        value: function value() {
+          for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+            args[_key2] = arguments[_key2];
+          }
+
+          return args.forEach(function (callback) {
+            return typeof callback === 'function' ? STORE.get(assertThisInitialized_default()(_this)).after.add(callback) : null;
+          });
         }
       }
     }); 
