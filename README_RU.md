@@ -968,7 +968,7 @@ Rigl позволяет динамически переопределять кл
 </head>
 <body>
   <!-- пункты меню передаются в атрибуте "data-menu" -->
-  <r-header id="header" data-menu="home about contacts"></r-header>
+  <r-header id="header" data-menu="главная, о нас, контакты"></r-header>
 
   
   <script src="rigl.min.js"></script>
@@ -985,8 +985,8 @@ Rigl позволяет динамически переопределять кл
 ```html
 <r-header>
   <!-- преобразовать значение из атрибута в массив и перебрать его в цикле -->
-  <nav $for="item of $attr['data-menu'].split(/\\s+/)">
-    <a href="/${ item !== 'home' ? item : '' }">${ item.toUpperCase() }</a>
+  <nav $for="item of $attr['data-menu'].split(',')">
+    <a href="/${ item !== 'главная' ? item : '' }">${ item.toUpperCase() }</a>
   </nav>
 
   <style>

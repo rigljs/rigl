@@ -968,7 +968,7 @@ Square brackets are used to access ***data-\**** attributes. Let's create a dyna
 </head>
 <body>
   <!-- menu items are passed in the "data-menu" attribute -->
-  <r-header id="header" data-menu="home about contacts"></r-header>
+  <r-header id="header" data-menu="home, about, contacts"></r-header>
 
   
   <script src="rigl.min.js"></script>
@@ -985,7 +985,7 @@ Inside the component template, we convert the attribute value to an array and lo
 ```html
 <r-header>
   <!-- convert value from attribute to array and loop over it -->
-  <nav $for="item of $attr['data-menu'].split(/\\s+/)">
+  <nav $for="item of $attr['data-menu'].split(',')">
     <a href="/${ item !== 'home' ? item : '' }">${ item.toUpperCase() }</a>
   </nav>
 
