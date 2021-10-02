@@ -968,7 +968,7 @@ Rigl позволяет динамически переопределять кл
 </head>
 <body>
   <!-- пункты меню передаются в атрибуте "data-menu" -->
-  <r-header id="header" data-menu="главная, о нас, контакты"></r-header>
+  <r-header id="header" data-menu="главная,о нас,контакты"></r-header>
 
   
   <script src="rigl.min.js"></script>
