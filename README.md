@@ -988,7 +988,7 @@ Inside the component template, we convert the attribute value to an array and lo
 
 ```html
 <r-header>
-  <!-- convert value from attribute to array and loop over it -->
+  <!-- use square brackets to access the "data-menu" attribute -->
   <nav $for="item of JSON.parse($attr['data-menu'])">
     <a href="/${ item[0] !== 'home' ? item[0] : '' }">${ item[1].toUpperCase() }</a>
   </nav>
@@ -1002,7 +1002,7 @@ Inside the component template, we convert the attribute value to an array and lo
 </r-header>
 ```
 
-Access to service properties in scripts is carried out using the *this* keyword, for example:
+Access to service properties in scripts is carried out using the *this* keyword. For example:
 
 ```html
 <r-header>
