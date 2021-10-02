@@ -1081,15 +1081,33 @@ Rigl позволяет динамически переопределять кл
 Аналогичным образом работают и именованные слоты:
 
 ```html
-<r-header id="header">
-  <!-- содержимое именованного слота -->
-  <a href="/" slot="logo">логотип</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rigl</title>
+</head>
+<body>
+  <r-header id="header">
+    <!-- содержимое именованного слота -->
+    <a href="/" slot="logo">логотип</a>
 
-  <!-- содержимое слота по умолчанию -->
-  <a href="/">главная страница</a>
-  <a href="/about">о компании</a>
-  <a href="/contacts">наши контакты</a>
-</r-header>
+    <!-- содержимое слота по умолчанию -->
+    <a href="/">главная страница</a>
+    <a href="/about">о компании</a>
+    <a href="/contacts">наши контакты</a>
+  </r-header>
+
+  
+  <script src="rigl.min.js"></script>
+
+  <script>
+    Rigl.load('components.htm')
+  </script>
+</body>
+</html>
 ```
 
 > *Как стилизуются Веб-компоненты и Слоты, можно узнать подробнее в [руководстве](https://learn.javascript.ru/shadow-dom-style)*

@@ -1081,15 +1081,33 @@ The *SLOT* tag is located in the component template in the place where we want t
 Named slots work in a similar way:
 
 ```html
-<r-header id="header">
-  <!-- named slot contents -->
-  <a href="/" slot="logo">the logo</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rigl</title>
+</head>
+<body>
+  <r-header id="header">
+    <!-- named slot contents -->
+    <a href="/" slot="logo">the logo</a>
 
-  <!-- default slot contents -->
-  <a href="/">home page</a>
-    <a href="/about">about company</a>
-    <a href="/contacts">our contacts</a>
-</r-header>
+    <!-- default slot contents -->
+    <a href="/">home page</a>
+      <a href="/about">about company</a>
+      <a href="/contacts">our contacts</a>
+  </r-header>
+
+  
+  <script src="rigl.min.js"></script>
+
+  <script>
+    Rigl.load('components.htm')
+  </script>
+</body>
+</html>
 ```
 
 > *How Web Components and Slots are styled can be found in more detail in the [manual](https://javascript.info/shadow-dom-style)*
