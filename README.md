@@ -27,7 +27,7 @@ Rigl is a framework for building reactive Web Components. In addition to a conve
 10. [Hide/Show](#hide-show)
 11. [Cycles](#cycles)
 12. [Attributes](#attributes)
-13. [~~Slots~~](#slots)
+13. [Slots](#slots)
 14. [~~Service properties~~](#service-properties)
 15. [~~Events~~](#events)
 16. [~~Closed components~~](#closed-components)
@@ -968,7 +968,11 @@ Square brackets are used to access ***data-\**** attributes. Let's create a dyna
 </head>
 <body>
   <!-- menu items are passed in the "data-menu" attribute -->
-  <r-header id="header" data-menu='[["home", "home page"], ["about", "about company"], ["contacts", "our contacts"]]'></r-header>
+  <r-header id="header" data-menu='[
+    ["home", "home page"],
+    ["about", "about company"],
+    ["contacts", "our contacts"]
+  ]'></r-header>
 
   
   <script src="rigl.min.js"></script>
@@ -1018,5 +1022,101 @@ Access to service properties in scripts is carried out using the *this* keyword,
     // the "this" keyword is specified before the "$attr" property
     this.menu = JSON.parse(this.$attr['data-menu'])
   </script>
+</r-header>
+```
+<br>
+<br>
+
+<h2 id="slots"># Slots</h2>
+
+<br>
+
+Slots in Rigl are used in the same way as they [apply](https://javascript.info/slots-composition) in Web Components. Let's pass the menu items to the default slot:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rigl</title>
+</head>
+<body>
+  <!-- the contents of the mount tag will be passed to the default slot -->
+  <r-header id="header">
+    <a href="/">home page</a>
+    <a href="/about">about company</a>
+    <a href="/contacts">our contacts</a>
+  </r-header>
+
+  
+  <script src="rigl.min.js"></script>
+
+  <script>
+    Rigl.load('components.htm')
+  </script>
+</body>
+</html>
+```
+
+The *SLOT* tag is located in the component template in the place where we want to output the content from the mount tag:
+
+```html
+<r-header>
+  <nav>
+    <!-- the SLOT tag will display menu items -->
+    <slot></slot>
+  </nav>
+
+  <style>
+    nav {
+      display: flex;
+      justify-content: space-around;
+    }
+  </style>
+</r-header>
+```
+
+Named slots work in a similar way:
+
+```html
+<r-header id="header">
+  <!-- named slot contents -->
+  <a href="/" slot="logo">the logo</a>
+
+  <!-- default slot contents -->
+  <a href="/">home page</a>
+    <a href="/about">about company</a>
+    <a href="/contacts">our contacts</a>
+</r-header>
+```
+
+> *How Web Components and Slots are styled can be found in more detail in the [manual](https://javascript.info/shadow-dom-style)*
+
+```html
+<r-header>
+  <nav>
+    <!-- named slot -->
+    <slot name="logo"></slot>
+    
+    <!-- default slot -->
+    <slot></slot>
+  </nav>
+
+  <style>
+    nav {
+      display: flex;
+    }
+    /* styling all links passed through slots */
+    ::slotted(a) {
+      margin: 10px;
+    }
+    /* styling a link that has the "slot" attribute with the value "logo" */
+    ::slotted(a[slot="logo"]) {
+      margin-right: auto;
+      color: red;
+    }
+  </style>
 </r-header>
 ```

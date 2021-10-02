@@ -27,7 +27,7 @@ Rigl - это фреймворк для создания реактивных В
 10. [Скрыть/Показать](#hide-show)
 11. [Циклы](#cycles)
 12. [Атрибуты](#attributes)
-13. [~~Слоты~~](#slots)
+13. [Слоты](#slots)
 14. [~~Служебные свойства~~](#service-properties)
 15. [~~События~~](#events)
 16. [~~Закрытые компоненты~~](#closed-components)
@@ -968,7 +968,11 @@ Rigl позволяет динамически переопределять кл
 </head>
 <body>
   <!-- пункты меню передаются в атрибуте "data-menu" -->
-  <r-header id="header" data-menu='[["home", "главная страница"], ["about", "о компании"], ["contacts", "наши контакты"]]'></r-header>
+  <r-header id="header" data-menu='[
+    ["home", "главная страница"],
+    ["about", "о компании"],
+    ["contacts", "наши контакты"]
+  ]'></r-header>
 
   
   <script src="rigl.min.js"></script>
@@ -1018,5 +1022,101 @@ Rigl позволяет динамически переопределять кл
     // ключевое слово "this" указывается перед свойством "$attr"
     this.menu = JSON.parse(this.$attr['data-menu'])
   </script>
+</r-header>
+```
+<br>
+<br>
+
+<h2 id="slots"># Слоты</h2>
+
+<br>
+
+Слоты в Rigl используются аналогично тому, как они [применяются](https://learn.javascript.ru/slots-composition) в Веб-компонентах. Передадим пункты меню в слот по умолчанию:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rigl</title>
+</head>
+<body>
+  <!-- содержимое тега монтирования будет передано в слот по умолчанию -->
+  <r-header id="header">
+    <a href="/">главная страница</a>
+    <a href="/about">о компании</a>
+    <a href="/contacts">наши контакты</a>
+  </r-header>
+
+  
+  <script src="rigl.min.js"></script>
+
+  <script>
+    Rigl.load('components.htm')
+  </script>
+</body>
+</html>
+```
+
+Тег *SLOT* располагается в шаблоне компонента в том месте, куда мы хотим вывести содержимое из тега монтирования:
+
+```html
+<r-header>
+  <nav>
+    <!-- в теге SLOT будут отображаться пункты меню -->
+    <slot></slot>
+  </nav>
+
+  <style>
+    nav {
+      display: flex;
+      justify-content: space-around;
+    }
+  </style>
+</r-header>
+```
+
+Аналогичным образом работают и именованные слоты:
+
+```html
+<r-header id="header">
+  <!-- содержимое именованного слота -->
+  <a href="/" slot="logo">логотип</a>
+
+  <!-- содержимое слота по умолчанию -->
+  <a href="/">главная страница</a>
+  <a href="/about">о компании</a>
+  <a href="/contacts">наши контакты</a>
+</r-header>
+```
+
+> *Как стилизуются Веб-компоненты и Слоты, можно узнать подробнее в [руководстве](https://learn.javascript.ru/shadow-dom-style)*
+
+```html
+<r-header>
+  <nav>
+    <!-- именованный слот -->
+    <slot name="logo"></slot>
+    
+    <!-- слот по умолчанию -->
+    <slot></slot>
+  </nav>
+
+  <style>
+    nav {
+      display: flex;
+    }
+    /* стилизация всех ссылок передаваемых через слоты */
+    ::slotted(a) {
+      margin: 10px;
+    }
+    /* стилизация ссылки имеющей атрибут "slot" со значением "logo" */
+    ::slotted(a[slot="logo"]) {
+      margin-right: auto;
+      color: red;
+    }
+  </style>
 </r-header>
 ```
