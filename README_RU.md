@@ -26,15 +26,16 @@ Rigl - это фреймворк для создания реактивных В
 9. [Классы](#classes)
 10. [Скрыть/Показать](#hide-show)
 11. [Циклы](#cycles)
-12. [~~Атрибуты~~](#attributes)
-13. [~~Служебные свойства~~](#service-properties)
-14. [~~События~~](#events)
-15. [~~Закрытые компоненты~~](#closed-components)
-16. [~~Внешние компоненты~~](#outer-components)
-17. [~~Разделяемое состояние~~](#shared-state)
-18. [~~Эмиттер~~](#emitter)
-19. [~~Маршрутизатор~~](#router)
-20. [~~API~~](#api)
+12. [Атрибуты](#attributes)
+13. [~~Слоты~~](#slots)
+14. [~~Служебные свойства~~](#service-properties)
+15. [~~События~~](#events)
+16. [~~Закрытые компоненты~~](#closed-components)
+17. [~~Внешние компоненты~~](#outer-components)
+18. [~~Разделяемое состояние~~](#shared-state)
+19. [~~Эмиттер~~](#emitter)
+20. [~~Маршрутизатор~~](#router)
+21. [~~API~~](#api)
 
 
 <br>
@@ -906,4 +907,93 @@ Rigl позволяет динамически переопределять кл
 
 ```
 > header.$data.arr.sort()
+```
+<br>
+<br>
+
+<h2 id="attributes"># Атрибуты</h2>
+
+<br>
+
+Для работы с атрибутами, в Rigl используется служебное свойство **$attr**. С помощью этого свойства можно получать и устанавливать значения атрибутам компонента. Пусть у нас имеется компонент с атрибутом ***id***, например:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rigl</title>
+</head>
+<body>
+  <!-- тегу монтирования присвоен id равный "header" -->
+  <r-header id="header"></r-header>
+
+  
+  <script src="rigl.min.js"></script>
+
+  <script>
+    Rigl.load('components.htm')
+  </script>
+</body>
+</html>
+```
+
+Чтобы получить его значение в шаблоне компонента, применяется служебное свойство **$attr**:
+
+```html
+<r-header>
+  <!-- получить значение атрибута "id" -->
+  <h1>${ $attr.id }</h1>
+</r-header>
+```
+
+Можно изменить значение атрибута и эти изменения сразу же отразятся везде, где этот атрибут указывался в шаблоне компонента. Например, введите в консоли:
+
+```
+> header.$attr.id = 'title'
+```
+
+Для доступа к  ***data-\**** атрибутам используются квадратные скобки. В качестве примера создадим динамическое меню:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rigl</title>
+</head>
+<body>
+  <!-- пункты меню передаются в атрибуте "data-menu" -->
+  <r-header id="header" data-menu="home about contacts"></r-header>
+
+  
+  <script src="rigl.min.js"></script>
+
+  <script>
+    Rigl.load('components.htm')
+  </script>
+</body>
+</html>
+```
+
+Внутри шаблона компонента, мы преобразуем значение атрибута в массив и перебираем его в цикле:
+
+```html
+<r-header>
+  <!-- преобразовать значение из атрибута в массив и перебрать его в цикле -->
+  <nav $for="item of $attr['data-menu'].split(/\\s+/)">
+    <a href="/${ item !== 'home' ? item : '' }">${ item.toUpperCase() }</a>
+  </nav>
+
+  <style>
+    nav {
+      display: flex;
+      justify-content: space-around;
+    }
+  </style>
+</r-header>
 ```

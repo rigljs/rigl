@@ -26,15 +26,16 @@ Rigl is a framework for building reactive Web Components. In addition to a conve
 9. [Classes](#classes)
 10. [Hide/Show](#hide-show)
 11. [Cycles](#cycles)
-12. [~~Attributes~~](#attributes)
-13. [~~Service properties~~](#service-properties)
-14. [~~Events~~](#events)
-15. [~~Closed components~~](#closed-components)
-16. [~~Outer components~~](#outer-components)
-17. [~~Shared state~~](#shared-state)
-18. [~~Emitter~~](#emitter)
-19. [~~Router~~](#router)
-20. [~~API~~](#api)
+12. [Attributes](#attributes)
+13. [~~Slots~~](#slots)
+14. [~~Service properties~~](#service-properties)
+15. [~~Events~~](#events)
+16. [~~Closed components~~](#closed-components)
+17. [~~Outer components~~](#outer-components)
+18. [~~Shared state~~](#shared-state)
+13. [~~Emitter~~](#emitter)
+20. [~~Router~~](#router)
+21. [~~API~~](#api)
 
 
 <br>
@@ -906,4 +907,93 @@ Sort the array:
 
 ```
 > header.$data.arr.sort()
+```
+<br>
+<br>
+
+<h2 id="attributes"># Attributes</h2>
+
+<br>
+
+To work with attributes, Rigl uses the **$attr** utility property. Using this property, you can get and set values for the attributes of the component. Suppose we have a component with the ***id*** attribute, for example:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rigl</title>
+</head>
+<body>
+  <!-- mount tag set id equal to "header" -->
+  <r-header id="header"></r-header>
+
+  
+  <script src="rigl.min.js"></script>
+
+  <script>
+    Rigl.load('components.htm')
+  </script>
+</body>
+</html>
+```
+
+To get its value in the component template, the **$attr** utility property is applied:
+
+```html
+<r-header>
+  <!-- get the value of the "id" attribute -->
+  <h1>${ $attr.id }</h1>
+</r-header>
+```
+
+You can change the value of an attribute and these changes will be immediately reflected wherever this attribute was specified in the component template. For example, enter in the console:
+
+```
+> header.$attr.id = 'title'
+```
+
+Square brackets are used to access ***data-\**** attributes. Let's create a dynamic menu as an example:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rigl</title>
+</head>
+<body>
+  <!-- menu items are passed in the "data-menu" attribute -->
+  <r-header id="header" data-menu="home about contacts"></r-header>
+
+  
+  <script src="rigl.min.js"></script>
+
+  <script>
+    Rigl.load('components.htm')
+  </script>
+</body>
+</html>
+```
+
+Inside the component template, we convert the attribute value to an array and loop over it:
+
+```html
+<r-header>
+  <!-- convert value from attribute to array and loop over it -->
+  <nav $for="item of $attr['data-menu'].split(/\\s+/)">
+    <a href="/${ item !== 'home' ? item : '' }">${ item.toUpperCase() }</a>
+  </nav>
+
+  <style>
+    nav {
+      display: flex;
+      justify-content: space-around;
+    }
+  </style>
+</r-header>
 ```
