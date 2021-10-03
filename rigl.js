@@ -1,5 +1,5 @@
 /*!
- * Rigl.js v1.7.1 | A framework for building reactive web components
+ * Rigl.js v1.7.2 | A framework for building reactive web components
  * https://github.com/rigljs/rigl | https://www.npmjs.com/package/rigl
  * Released under the MIT License
  */
@@ -1605,6 +1605,32 @@ methods_Methods.prototype.$adopted = function () {
 }; 
 
 
+methods_Methods.prototype.$before = function () {
+  var _this5 = this;
+
+  for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+    args[_key3] = arguments[_key3];
+  }
+
+  args.forEach(function (callback) {
+    return typeof callback === 'function' ? STORE.get(_this5.$host).before.add(callback) : null;
+  });
+}; 
+
+
+methods_Methods.prototype.$after = function () {
+  var _this6 = this;
+
+  for (var _len4 = arguments.length, args = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+    args[_key4] = arguments[_key4];
+  }
+
+  args.forEach(function (callback) {
+    return typeof callback === 'function' ? STORE.get(_this6.$host).after.add(callback) : null;
+  });
+}; 
+
+
 methods_Methods.prototype.$load = load; 
 
 methods_Methods.prototype.$create = rigl_create; 
@@ -2148,7 +2174,7 @@ var configMutations = {
   subtree: true
 }; 
 
-var compKeys = "$root,$host,$data,$attr,$outer,$outers,$timer,$before,$after,".concat(Object.keys(methods.prototype)); 
+var compKeys = "$root,$host,$data,$attr,$outer,$outers,$timer,".concat(Object.keys(methods.prototype)); 
 
 var mapNames = ['sources', 'values', 'depends', 'callbacks', 'nodes']; 
 
@@ -2255,28 +2281,6 @@ var component_default = function (_Methods) {
       $timer: {
         value: function value(val) {
           return STORE.get(assertThisInitialized_default()(_this)).timer = val ? typeof val === 'string' ? val : 'Update' : STORE.get(assertThisInitialized_default()(_this)).timer;
-        }
-      },
-      $before: {
-        value: function value() {
-          for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
-          }
-
-          return args.forEach(function (callback) {
-            return typeof callback === 'function' ? STORE.get(assertThisInitialized_default()(_this)).before.add(callback) : null;
-          });
-        }
-      },
-      $after: {
-        value: function value() {
-          for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-            args[_key2] = arguments[_key2];
-          }
-
-          return args.forEach(function (callback) {
-            return typeof callback === 'function' ? STORE.get(assertThisInitialized_default()(_this)).after.add(callback) : null;
-          });
         }
       }
     }); 
