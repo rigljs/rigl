@@ -7,7 +7,7 @@
 
 <br>
 
-**Current version: 1.7.2**
+**Current version: 1.7.3**
 
 <br>
 
@@ -28,7 +28,18 @@ Rigl is a framework for building reactive Web Components. In addition to a conve
 11. [Cycles](#cycles)
 12. [Attributes](#attributes)
 13. [Slots](#slots)
-14. [~~Service properties~~](#service-properties)
+14. [Service](#service)
+    - [$root](#root)
+    - [$host](#host)
+    - [$timer()](#timer)
+    - [$()](#one-element)
+    - [$$()](#all-elements)
+    - [$disconnected()](#disconnected)
+    - [$adopted()](#adopted)
+    - [$before()](#before)
+    - [$after()](#after)
+    - [$load()](#load)
+    - [$create()](#create)
 15. [~~Events~~](#events)
 16. [~~Closed components~~](#closed-components)
 17. [~~Outer components~~](#outer-components)
@@ -1138,3 +1149,409 @@ Named slots work in a similar way:
   </style>
 </r-header>
 ```
+<br>
+<br>
+
+<h2 id="service"># Service</h2>
+
+<br>
+
+Rigl provides several utility properties and methods for working with components. All utility properties begin with a dollar sign **$** and cannot be overridden in code. We've already covered two such properties, **$data** and **$attr**. Most of the available utility features in Rigl will be described here. The rest will be discussed in their respective sections of the manual.
+
+<br>
+
+<h3 id="root">$root</h3>
+
+The **$root** property provides direct access to the [Shadow DOM](https://javascript.info/shadow-dom) component. It can be used to clear or completely override the content of a component:
+
+```
+> header.$root.innerHTML = ''
+> header.$root.innerHTML = '<p>${ message }</p>'
+```
+
+<br>
+
+<h3 id="host">$host</h3>
+
+The **$host** property refers to the component itself and is mainly used in the Rigl core to refer to the component in helper functions:
+
+```
+> header === header.$host
+```
+
+<br>
+
+<h3 id="timer">$timer([true/false, string])</h3>
+
+The **$timer()** method allows you to set/get the component update timer. This can be useful for measuring the performance of the framework, for example:
+
+```html
+<r-header>
+  <ul $for="item of arr">
+    <li>Element: ${ item }</li>
+  </ul>
+
+  <script>
+    this.arr = []
+    for (let i = 0; i < 10000; i++) this.arr[i] = i
+    
+    // set a component update timer
+    this.$timer(true)
+  </script>
+</r-header>
+```
+
+Now if you run the command to reverse the array in the console:
+
+```
+> header.$data.arr.reverse()
+```
+
+then upon completion of its execution, the following message will be displayed:
+
+```
+Update: 152.40185546875 ms
+```
+
+By default, the timer is named *Update*, but you can assign an arbitrary name to the timer:
+
+```html
+<r-header>
+  <ul $for="item of arr">
+    <li>Element: ${ item }</li>
+  </ul>
+
+  <script>
+    this.arr = []
+    for (let i = 0; i < 10000; i++) this.arr[i] = i
+
+    // set a timer named "my timer"
+    this.$timer('my timer')
+  </script>
+</r-header>
+```
+
+You can completely cancel the timer by passing the False value to the **$timer** method:
+
+```html
+<r-header>
+  <ul $for="item of arr">
+    <li>Element: ${ item }</li>
+  </ul>
+
+  <script>
+    this.arr = []
+    for (let i = 0; i < 10000; i++) this.arr[i] = i
+
+    // cancel timer
+    this.$timer(false)
+  </script>
+</r-header>
+```
+
+To get the name of the current timer, just call the **$timer** method with no arguments:
+
+```html
+<r-header>
+  <ul $for="item of arr">
+    <li>Element: ${ item }</li>
+  </ul>
+
+  <script>
+    this.arr = []
+    for (let i = 0; i < 10000; i++) this.arr[i] = i
+
+    // set a timer named "my timer"
+    this.$timer('my timer')
+
+    // print the name of the current timer to the console
+    console.log(this.$timer())
+  </script>
+</r-header>
+```
+
+<br>
+
+<h3 id="one-element">$(selector)</h3>
+
+The **$()** method allows you to select one element from the DOM component by the specified selector:
+
+```html
+<r-header>
+  <h1>Hello ${ message }!</h1>
+
+  <style>
+    h1 {
+      color: orangered;
+    }
+  </style>
+
+  <script>
+    this.message = 'Rigl'
+
+    // select H1 element from DOM component
+    console.log(this.$('h1'))
+
+    // define new content for the H1 element
+    this.$('h1').innerHTML = 'Hello Web components - ${ message }!'
+  </script>
+</r-header>
+```
+
+If you then run the command in the console:
+
+```
+> header.$('h1')
+```
+
+we get the following result:
+
+```
+<   <h1>Hello Web components - Rigl!</h1>
+```
+
+<br>
+
+<h3 id="all-element">$$(selector)</h3>
+
+The **$$()** method works similarly to the **$()** method, but allows you to select multiple elements from the DOM component by the specified selector:
+
+```html
+<r-header>
+  <p>Lorem ipsum dolor sit amet.</p>
+  <p>Lorem, ipsum dolor.</p>
+  <p>Lorem ipsum dolor sit.</p>
+
+  <script>
+    // select all P elements from the DOM component
+    console.log(this.$$('p'))
+  </script>
+</r-header>
+```
+
+A collection of paragraphs will be displayed on the console:
+
+```
+NodeList(3) [p, p, p]
+```
+
+<br>
+
+<h3 id="disconnected">$disconnected(function1, function2, ...functionN)</h3>
+
+The **$disconnected()** method allows you to define functions that will be called after the [disconnectedCallback](https://javascript.info/custom-elements) event is triggered, for example:
+
+```html
+<r-header>
+  <h1>Hello ${ message }!</h1>
+
+  <style>
+    h1 {
+      color: orangered;
+    }
+  </style>
+
+  <script>
+    this.message = 'Rigl'
+    
+    // define a function that will be called after the "disconnectedCallback" event is triggered
+    this.$disconnected(() => console.log('R-HEADER component removed from document'))
+  </script>
+</r-header>
+```
+
+If we now remove the *R-HEADER* component from the document:
+
+```
+> header.remove()
+```
+
+then a message will appear in the console:
+
+```
+R-HEADER component removed from document
+```
+
+<br>
+
+<h3 id="adopted">$adopted(function1, function2, ...functionN)</h3>
+
+The **$adopted()** method works similarly to the **$disconnected()** method, but allows you to define functions that will be called after the [adoptedCallback](https://javascript.info/custom-elements) event is triggered, for example:
+
+```html
+<r-header>
+  <h1>Hello ${ message }!</h1>
+
+  <style>
+    h1 {
+      color: orangered;
+    }
+  </style>
+
+  <script>
+    this.message = 'Rigl'
+    
+    // define the function that will be called after the "adoptedCallback" event is triggered
+    this.$adopted(() => console.log('the R-HEADER component has been moved to a new document'))
+  </script>
+</r-header>
+```
+
+> In addition to the *disconnectedCallback* and *adoptedCallback* lifecycle events, there is one more event [connectedCallback](https://javascript.info/custom-elements). But it is used by Rigl itself to define the DOM of the component, so the framework does not provide any special methods for it.
+
+This event is very rare and is therefore not covered in detail in this guide.
+
+
+<br>
+
+<h3 id="before">$before(function1, function2, ...functionN)</h3>
+
+The **$before()** method allows you to define the functions that will be called before the component is updated:
+
+```html
+<r-header>
+  <h1>Hello ${ message }!</h1>
+
+  <style>
+    h1 {
+      color: orangered;
+    }
+  </style>
+
+  <script>
+    this.message = 'Rigl'
+
+    // define a function that will be called before updating the component
+    this.$before(() => this.message = 'Reactive Web components')
+  </script>
+</r-header>
+```
+
+Now if you enter the command in the console:
+
+```
+> header.$data.message = 'Simple Web components'
+```
+
+Then the contents of the *H1* element will become:
+
+<h1>Hello Reactive Web components!</h1>
+
+
+<br>
+
+<h3 id="after">$after(function1, function2, ...functionN)</h3>
+
+The **$after()** method allows you to define the functions that will be called after the component has been updated:
+
+```html
+<r-header>
+  <h1>Hello ${ message }!</h1>
+
+  <style>
+    h1 {
+      color: orangered;
+    }
+  </style>
+
+  <script>
+    this.message = 'Rigl'
+
+    // define the functions that will be called after the component is updated
+    this.$after(
+      () => this.message = 'Reactive Web components',
+      () => console.log('called after the R-HEADER component has been updated')
+    )
+  </script>
+</r-header>
+```
+
+<br>
+
+<h3 id="load">$load(path)</h3>
+
+The **$load()** method allows you to load components from files. For example, create a *test.htm* file in the project folder with the following content:
+
+```html
+<r-test>
+  <h2>${ message }</h2>
+
+  <script>
+    this.message = 'Downloadable R-TEST Component'
+  </script>
+</r-test>
+```
+
+Now change the *R-HEADER* component:
+
+```html
+<r-header>
+  <h1>Hello ${ message }!</h1>
+
+  <style>
+    h1 {
+      color: orangered;
+    }
+  </style>
+
+  <script>
+    this.message = 'Rigl'
+
+    // load R-TEST component from file
+    this.$load('test.htm')
+
+    // insert R-TEST component after H1 element
+    this.$('h1').insertAdjacentHTML('afterend', '<r-test></r-test>') 
+  </script>
+</r-header>
+```
+
+The browser will display:
+
+<h1>Hello Rigl!</h1>
+<h2>Downloadable R-TEST Component</h2>
+
+
+<br>
+
+<h3 id="element">$create(element)</h3>
+
+The **$create()** method allows you to create new components:
+
+```html
+<r-header>
+  <h1>Hello ${ message }!</h1>
+
+  <style>
+    h1 {
+      color: orangered;
+    }
+  </style>
+
+  
+  <!-- define the R-TEST component template -->
+  <template name="r-test">
+    <h2>${ message }</h2>
+
+    <script>
+      this.message = 'New R-TEST component'
+    </script>
+  </template>
+
+
+  <script>
+    this.message = 'Rigl'
+
+    // create R-TEST component from template
+    this.$create(this.$('template[name]'))
+
+    // insert R-TEST component after H1 element
+    this.$('h1').insertAdjacentHTML('afterend', '<r-test></r-test>') 
+  </script>
+</r-header>
+```
+
+The browser will display:
+
+<h1>Hello Rigl!</h1>
+<h2>New R-TEST component</h2>

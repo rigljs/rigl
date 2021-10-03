@@ -7,7 +7,7 @@
 
 <br>
 
-**Текущая версия: 1.7.2**
+**Текущая версия: 1.7.3**
 
 <br>
 
@@ -28,7 +28,18 @@ Rigl - это фреймворк для создания реактивных В
 11. [Циклы](#cycles)
 12. [Атрибуты](#attributes)
 13. [Слоты](#slots)
-14. [~~Служебные свойства~~](#service-properties)
+14. [Служебные](#service)
+    - [$root](#root)
+    - [$host](#host)
+    - [$timer()](#timer)
+    - [$()](#one-element)
+    - [$$()](#all-elements)
+    - [$disconnected()](#disconnected)
+    - [$adopted()](#adopted)
+    - [$before()](#before)
+    - [$after()](#after)
+    - [$load()](#load)
+    - [$create()](#create)
 15. [~~События~~](#events)
 16. [~~Закрытые компоненты~~](#closed-components)
 17. [~~Внешние компоненты~~](#outer-components)
@@ -1138,3 +1149,409 @@ Rigl позволяет динамически переопределять кл
   </style>
 </r-header>
 ```
+<br>
+<br>
+
+<h2 id="service"># Служебные</h2>
+
+<br>
+
+Rigl предоставляет несколько служебных свойств и методов для работы с компонентами. Все служебные свойства начинаются со знака доллара **$** и их нельзя переопределять в коде. Мы уже рассмотрели два таких свойства, это **$data** и **$attr**. Здесь будут описаны большинство имеющихся служебных свойств в Rigl. Остальные будут рассмотрены в соответствующих контексту разделах руководства.
+
+<br>
+
+<h3 id="root">$root</h3>
+
+Свойство **$root** предоставляет прямой доступ к [Теневому DOM](https://learn.javascript.ru/shadow-dom) компонента. С его помощью можно очистить или полностью переопределить содержимое компонента:
+
+```
+> header.$root.innerHTML = ''
+> header.$root.innerHTML = '<p>${ message }</p>'
+```
+
+<br>
+
+<h3 id="host">$host</h3>
+
+Свойство **$host** ссылается на сам компонент и в основном, оно используется в ядре Rigl для ссылки на компонент во вспомогательных функциях:
+
+```
+> header === header.$host
+```
+
+<br>
+
+<h3 id="timer">$timer([true/false, string])</h3>
+
+Метод **$timer()** позволяет установить/получить таймер обновления компонента. Это может пригодиться для имерения производительности фреймворка, например:
+
+```html
+<r-header>
+  <ul $for="item of arr">
+    <li>Элемент: ${ item }</li>
+  </ul>
+
+  <script>
+    this.arr = []
+    for (let i = 0; i < 10000; i++) this.arr[i] = i
+    
+    // установить таймер обновления компонента
+    this.$timer(true)
+  </script>
+</r-header>
+```
+
+Если теперь выполнить команду реверса массива в консоли:
+
+```
+> header.$data.arr.reverse()
+```
+
+то по завершению её выполнения, будет выведено следующее сообщение:
+
+```
+Update: 152.40185546875 ms
+```
+
+По умолчанию таймер называется *Update*, но можно назначить таймеру произвольное наименование:
+
+```html
+<r-header>
+  <ul $for="item of arr">
+    <li>Элемент: ${ item }</li>
+  </ul>
+
+  <script>
+    this.arr = []
+    for (let i = 0; i < 10000; i++) this.arr[i] = i
+
+    // установить таймер с именем "мой таймер"
+    this.$timer('мой таймер')
+  </script>
+</r-header>
+```
+
+Можно полностью отменить таймер, передав в метод **$timer** значение Ложь:
+
+```html
+<r-header>
+  <ul $for="item of arr">
+    <li>Элемент: ${ item }</li>
+  </ul>
+
+  <script>
+    this.arr = []
+    for (let i = 0; i < 10000; i++) this.arr[i] = i
+
+    // отменить таймер
+    this.$timer(false)
+  </script>
+</r-header>
+```
+
+Чтобы получить имя текущего таймера, достаточно вызвать метод **$timer** без аргументов:
+
+```html
+<r-header>
+  <ul $for="item of arr">
+    <li>Элемент: ${ item }</li>
+  </ul>
+
+  <script>
+    this.arr = []
+    for (let i = 0; i < 10000; i++) this.arr[i] = i
+
+    // установить таймер с именем "мой таймер"
+    this.$timer('мой таймер')
+
+    // вывести имя текущего таймера на консоль
+    console.log(this.$timer())
+  </script>
+</r-header>
+```
+
+<br>
+
+<h3 id="one-element">$(selector)</h3>
+
+Метод **$()** позволяет выбрать один элемент из DOM компонента по указанному селектору:
+
+```html
+<r-header>
+  <h1>Hello ${ message }!</h1>
+
+  <style>
+    h1 {
+      color: orangered;
+    }
+  </style>
+
+  <script>
+    this.message = 'Rigl'
+
+    // выбрать элемент H1 из DOM компонента
+    console.log(this.$('h1'))
+
+    // определить новое содержимое для элемента H1
+    this.$('h1').innerHTML = 'Hello Web components - ${ message }!'
+  </script>
+</r-header>
+```
+
+Если затем выполнить в консоли команду:
+
+```
+> header.$('h1')
+```
+
+то получим следующий результат:
+
+```
+<   <h1>Hello Web components - Rigl!</h1>
+```
+
+<br>
+
+<h3 id="all-element">$$(selector)</h3>
+
+Метод **$$()** работает аналогично методу **$()**, но позволяет выбрать несколько элементов из DOM компонента по указанному селектору:
+
+```html
+<r-header>
+  <p>Lorem ipsum dolor sit amet.</p>
+  <p>Lorem, ipsum dolor.</p>
+  <p>Lorem ipsum dolor sit.</p>
+
+  <script>
+    // выбрать все элементы P из DOM компонента
+    console.log(this.$$('p'))
+  </script>
+</r-header>
+```
+
+В консоль будет выведена коллекция параграфов:
+
+```
+NodeList(3) [p, p, p]
+```
+
+<br>
+
+<h3 id="disconnected">$disconnected(function1, function2, ...functionN)</h3>
+
+Метод **$disconnected()** позволяет определить функции, которые будут вызваны после срабатывания события [disconnectedCallback](https://learn.javascript.ru/custom-elements), например:
+
+```html
+<r-header>
+  <h1>Hello ${ message }!</h1>
+
+  <style>
+    h1 {
+      color: orangered;
+    }
+  </style>
+
+  <script>
+    this.message = 'Rigl'
+    
+    // определить функцию, которая будет вызываться после срабатывания события "disconnectedCallback"
+    this.$disconnected(() => console.log('компонент R-HEADER удалён из документа'))
+  </script>
+</r-header>
+```
+
+Если теперь удалить компонент *R-HEADER* из документа:
+
+```
+> header.remove()
+```
+
+то в консоли появится сообщение:
+
+```
+компонент R-HEADER удалён из документа
+```
+
+<br>
+
+<h3 id="adopted">$adopted(function1, function2, ...functionN)</h3>
+
+Метод **$adopted()** работает аналогично методу **$disconnected()**, но позволяет определить функции, которые будут вызваны после срабатывания события [adoptedCallback](https://learn.javascript.ru/custom-elements), например:
+
+```html
+<r-header>
+  <h1>Hello ${ message }!</h1>
+
+  <style>
+    h1 {
+      color: orangered;
+    }
+  </style>
+
+  <script>
+    this.message = 'Rigl'
+    
+    // определить функцию, которая будет вызываться после срабатывания события "adoptedCallback"
+    this.$adopted(() => console.log('компонент R-HEADER перемещён в новый документ'))
+  </script>
+</r-header>
+```
+
+> Кроме событий жизненного цикла *disconnectedCallback* и *adoptedCallback*, существует ещё одно событие [connectedCallback](https://learn.javascript.ru/custom-elements). Но оно испольуется самим Rigl для определения DOM компонента, поэтому фреймворк не предоставляет для него специальных методов.
+
+Это событие возникает очень редко, поэтому в данном руководстве оно не рассматривается подробно.
+
+
+<br>
+
+<h3 id="before">$before(function1, function2, ...functionN)</h3>
+
+Метод **$before()** позволяет определить функции, которые будут вызваны перед обновлением компонента:
+
+```html
+<r-header>
+  <h1>Hello ${ message }!</h1>
+
+  <style>
+    h1 {
+      color: orangered;
+    }
+  </style>
+
+  <script>
+    this.message = 'Rigl'
+
+    // определить функцию, которая будет вызываться перед обновлением компонента
+    this.$before(() => this.message = 'Reactive Web components')
+  </script>
+</r-header>
+```
+
+Если теперь ввести в консоли команду:
+
+```
+> header.$data.message = 'Simple Web components'
+```
+
+То содержимое элемента *H1* станет следующим:
+
+<h1>Hello Reactive Web components!</h1>
+
+
+<br>
+
+<h3 id="after">$after(function1, function2, ...functionN)</h3>
+
+Метод **$after()** позволяет определить функции, которые будут вызваны после обновления компонента:
+
+```html
+<r-header>
+  <h1>Hello ${ message }!</h1>
+
+  <style>
+    h1 {
+      color: orangered;
+    }
+  </style>
+
+  <script>
+    this.message = 'Rigl'
+
+    // определить функции, которые будет вызываться после обновления компонента
+    this.$after(
+      () => this.message = 'Reactive Web components',
+      () => console.log('вызывается после обновления компонента R-HEADER')
+    )
+  </script>
+</r-header>
+```
+
+<br>
+
+<h3 id="load">$load(path)</h3>
+
+Метод **$load()** позволяет загружать компоненты из файлов. Например, создайте в папке с проектом файл *test.htm* со следующим содержимым:
+
+```html
+<r-test>
+  <h2>${ message }</h2>
+
+  <script>
+    this.message = 'Загружаемый компонент R-TEST'
+  </script>
+</r-test>
+```
+
+Теперь измените компонент *R-HEADER*:
+
+```html
+<r-header>
+  <h1>Hello ${ message }!</h1>
+
+  <style>
+    h1 {
+      color: orangered;
+    }
+  </style>
+
+  <script>
+    this.message = 'Rigl'
+
+    // загрузить компонент R-TEST из файла
+    this.$load('test.htm')
+
+    // вставить компонент R-TEST после элемента H1
+    this.$('h1').insertAdjacentHTML('afterend', '<r-test></r-test>') 
+  </script>
+</r-header>
+```
+
+В браузере будет отображаться:
+
+<h1>Hello Rigl!</h1>
+<h2>Загружаемый компонент R-TEST</h2>
+
+
+<br>
+
+<h3 id="element">$create(element)</h3>
+
+Метод **$create()** позволяет создавать новые компоненты:
+
+```html
+<r-header>
+  <h1>Hello ${ message }!</h1>
+
+  <style>
+    h1 {
+      color: orangered;
+    }
+  </style>
+
+  
+  <!-- определить шаблон компонента R-TEST -->
+  <template name="r-test">
+    <h2>${ message }</h2>
+
+    <script>
+      this.message = 'Новый компонент R-TEST'
+    </script>
+  </template>
+
+
+  <script>
+    this.message = 'Rigl'
+
+    // создать компонент R-TEST из шаблона
+    this.$create(this.$('template[name]'))
+
+    // вставить компонент R-TEST после элемента H1
+    this.$('h1').insertAdjacentHTML('afterend', '<r-test></r-test>') 
+  </script>
+</r-header>
+```
+
+В браузере будет отображаться:
+
+<h1>Hello Rigl!</h1>
+<h2>Новый компонент R-TEST</h2>
