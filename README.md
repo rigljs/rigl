@@ -7,7 +7,7 @@
 
 <br>
 
-**Current version: 1.7.0**
+**Current version: 1.7.1**
 
 <br>
 
@@ -1006,9 +1006,9 @@ Access to service properties in scripts is carried out using the *this* keyword.
 
 ```html
 <r-header>
-  <!-- iterate over the menu array in a loop -->
-  <nav $for="item of menu">
-    <a href="/${ item[0] !== 'home' ? item[0] : '' }">${ item[1].toUpperCase() }</a>
+  <!-- the loop uses destructuring of the "menu" array -->
+  <nav $for="[href, title] of menu">
+    <a href="/${ href !== 'home' ? href : '' }">${ title.toUpperCase() }</a>
   </nav>
 
   <style>

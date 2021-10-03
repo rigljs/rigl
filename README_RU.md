@@ -7,7 +7,7 @@
 
 <br>
 
-**Текущая версия: 1.7.0**
+**Текущая версия: 1.7.1**
 
 <br>
 
@@ -1006,9 +1006,9 @@ Rigl позволяет динамически переопределять кл
 
 ```html
 <r-header>
-  <!-- перебрать массив меню в цикле -->
-  <nav $for="item of menu">
-    <a href="/${ item[0] !== 'home' ? item[0] : '' }">${ item[1].toUpperCase() }</a>
+  <!-- в цикле используется деструктуризация массива "menu" -->
+  <nav $for="[href, title] of menu">
+    <a href="/${ href !== 'home' ? href : '' }">${ title.toUpperCase() }</a>
   </nav>
 
   <style>

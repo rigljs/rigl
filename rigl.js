@@ -1,5 +1,5 @@
 /*!
- * Rigl.js v1.7.0 | A framework for building reactive web components
+ * Rigl.js v1.7.1 | A framework for building reactive web components
  * https://github.com/rigljs/rigl | https://www.npmjs.com/package/rigl
  * Released under the MIT License
  */
@@ -2190,7 +2190,7 @@ var component_default = function (_Methods) {
 
     STORE.get(assertThisInitialized_default()(_this)).object = Object.assign(defineProperty_default()({}, sAttr, attributes), mixins); 
 
-    STORE.get(assertThisInitialized_default()(_this)).timer = null; 
+    STORE.get(assertThisInitialized_default()(_this)).timer = undefined; 
 
     STORE.get(assertThisInitialized_default()(_this)).disconnected = new Set(); 
 
@@ -2254,7 +2254,7 @@ var component_default = function (_Methods) {
       },
       $timer: {
         value: function value(val) {
-          return STORE.get(assertThisInitialized_default()(_this)).timer = val ? typeof val === 'string' ? val : 'Update' : false;
+          return STORE.get(assertThisInitialized_default()(_this)).timer = val ? typeof val === 'string' ? val : 'Update' : STORE.get(assertThisInitialized_default()(_this)).timer;
         }
       },
       $before: {
