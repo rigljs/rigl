@@ -40,8 +40,8 @@ Rigl - это фреймворк для создания реактивных В
     - [$after()](#after)
     - [$load()](#load)
     - [$create()](#create)
-15. [~~События~~](#events)
-16. [~~Закрытые компоненты~~](#closed-components)
+15. [События](#events)
+16. [Закрытые компоненты](#closed-components)
 17. [~~Внешние компоненты~~](#outer-components)
 18. [~~Разделяемое состояние~~](#shared-state)
 19. [~~Наблюдатель~~](#observer)
@@ -1553,3 +1553,161 @@ NodeList(3) [p, p, p]
 
 <h1>Hello Rigl!</h1>
 <h2>Новый компонент R-TEST</h2>
+<br>
+<br>
+
+<h2 id="events"># События</h2>
+
+<br>
+
+Для создания событий, применяется специальный атрибут ***@название_события***. Например:
+
+```html
+<r-header>
+  <!-- назначить событие "click" элементу H1 -->
+  <h1 @click="titleColor = 'green'">Hello ${ message }!</h1>
+
+  <style>
+    h1 {
+      color: ${ titleColor };
+    }
+  </style>
+
+  <script>
+    this.message = 'Rigl'
+    this.titleColor = 'orangered'
+  </script>
+</r-header>
+```
+
+Cпециальные атрибуты событий начинаются со знака ***@*** и во время компиляции компонента преобразуются в ***data-\**** атрибуты. Например, атрибут ***@click*** преобразуется в ***data-rigl-onclick***:
+
+```html
+<!-- специальные атрибуты событий преобразуются в data-* атрибуты -->
+<h1 data-rigl-onclick="titleColor = 'green'">Hello Rigl!</h1>
+```
+
+Выражения в специальных атрибутах событий указываются как есть, в них нельзя применять выражения шаблонных строк *${ выражение }*, например:
+
+```html
+<!-- Ошибка! Специальные атрибуты событий не допускают выражений шаблонных строк -->
+<h1 @click="${ titleColor = 'green' }">Hello ${ message }!</h1>
+```
+
+В событии доступен объект *Event*:
+
+```html
+<r-header>
+  <!-- показать в консоли объект "event" -->
+  <h1 @click="console.log(event)">Hello ${ message }!</h1>
+
+  <script>
+    this.message = 'Rigl'
+  </script>
+</r-header>
+```
+
+Доступ к элементу, на котором произошло событие, можно получить с помощью *event.target*:
+
+```html
+<r-header>
+  <!-- показать элемент на котором произошло событие с помощью "event.target" -->
+  <h1 @click="console.log(event.target)">Hello ${ message }!</h1>
+
+  <script>
+    this.message = 'Rigl'
+  </script>
+</r-header>
+```
+
+Объект *Event* можно передать в пользовательский метод:
+
+```html
+<r-header>
+  <!-- передать объект "event" методу "printEvent" -->
+  <h1 @click="printEvent(event)">Hello ${ message }!</h1>
+
+  <script>
+    this.message = 'Rigl'
+
+    // показать в консоли объект "event"
+    this.printEvent = event => console.log(event)
+  </script>
+</r-header>
+```
+
+Сами методы в события не передаются, их можно только вызвать из событий:
+
+```html
+<r-header>
+  <!-- Ошибка! Нельзя передать метод "printEvent" в событие "click" -->
+  <h1 @click="printEvent">Hello ${ message }!</h1>
+
+  <script>
+    this.message = 'Rigl'
+
+    // показать в консоли объект "event"
+    this.printEvent = event => console.log(event)
+  </script>
+</r-header>
+```
+
+События привязываются к переменным циклов, например:
+
+```html
+<r-header>
+  <ul $for="item of arr">
+    <!-- событие "click" привязывается к переменной "item" цикла For-Of -->
+    <li @click="console.log(item)">Элемент: ${ item }</li>
+  </ul>
+
+  <script>
+    this.arr = []
+
+    for (let i = 0; i <= 5; i++) this.arr[i] = i
+  </script>
+</r-header>
+```
+
+Если сделать реверс массива, то событие будет показывать правильное значение переменной:
+
+```
+> header.$data.arr.reverse()
+```
+<br>
+<br>
+
+<h2 id="closed-components"># Закрытые компоненты</h2>
+
+<br>
+
+Для создания [закрытого](https://learn.javascript.ru/shadow-dom#tenevoe-derevo) компонента, в родительском теге его шаблона используется атрибут ***closed*** без значения:
+
+```html
+<!-- создать закрытый компонент с помощью атрибута "closed" -->
+<r-header closed>
+  <h1>Hello ${ message }!</h1>
+
+  <style>
+    h1 {
+      color: orangered;
+    }
+  </style>
+
+  <script>
+    this.message = 'Rigl'
+  </script>
+</r-header>
+```
+
+После этого будет невозможно получить доступ к его [Теневому DOM](https://learn.javascript.ru/shadow-dom) с помощью свойства **shadowRoot**, например:
+
+```
+> header.shadowRoot
+```
+
+Выведет в консоли значение:
+
+```
+< null
+```

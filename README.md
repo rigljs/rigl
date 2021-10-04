@@ -40,8 +40,8 @@ Rigl is a framework for building reactive Web Components. In addition to a conve
     - [$after()](#after)
     - [$load()](#load)
     - [$create()](#create)
-15. [~~Events~~](#events)
-16. [~~Closed components~~](#closed-components)
+15. [Events](#events)
+16. [Closed components](#closed-components)
 17. [~~Outer components~~](#outer-components)
 18. [~~Shared state~~](#shared-state)
 13. [~~Observer~~](#observer)
@@ -1553,3 +1553,161 @@ The browser will display:
 
 <h1>Hello Rigl!</h1>
 <h2>New R-TEST component</h2>
+<br>
+<br>
+
+<h2 id="events"># Events</h2>
+
+<br>
+
+To create events, a special attribute ***@event_name*** is used. For example:
+
+```html
+<r-header>
+  <!-- assign "click" event to H1 element -->
+  <h1 @click="titleColor = 'green'">Hello ${ message }!</h1>
+
+  <style>
+    h1 {
+      color: ${ titleColor };
+    }
+  </style>
+
+  <script>
+    this.message = 'Rigl'
+    this.titleColor = 'orangered'
+  </script>
+</r-header>
+```
+
+Special event attributes start with ***@*** and are converted to ***data-\**** attributes during component compilation. For example, the attribute ***@click*** is converted to ***data-rigl-onclick***:
+
+```html
+<!-- special event attributes are converted to data-* attributes -->
+<h1 data-rigl-onclick="titleColor = 'green'">Hello Rigl!</h1>
+```
+
+Expressions in special event attributes are specified as-is, they cannot use wildcard expressions *${ expression }*, for example:
+
+```html
+<!-- Error! Special event attributes do not allow wildcard expressions -->
+<h1 @click="${ titleColor = 'green' }">Hello ${ message }!</h1>
+```
+
+The *Event* object is available in the event:
+
+```html
+<r-header>
+  <!-- show the "event" object in the console -->
+  <h1 @click="console.log(event)">Hello ${ message }!</h1>
+
+  <script>
+    this.message = 'Rigl'
+  </script>
+</r-header>
+```
+
+The element on which the event occurred can be accessed using *event.target*:
+
+```html
+<r-header>
+  <!-- show the element on which the event occurred using "event.target" -->
+  <h1 @click="console.log(event.target)">Hello ${ message }!</h1>
+
+  <script>
+    this.message = 'Rigl'
+  </script>
+</r-header>
+```
+
+An *Event* object can be passed to a custom method:
+
+```html
+<r-header>
+  <!-- pass the "event" object to the "printEvent" method -->
+  <h1 @click="printEvent(event)">Hello ${ message }!</h1>
+
+  <script>
+    this.message = 'Rigl'
+
+    // show the "event" object in the console
+    this.printEvent = event => console.log(event)
+  </script>
+</r-header>
+```
+
+The methods themselves are not passed to events, they can only be called from events:
+
+```html
+<r-header>
+  <!-- Error! Cannot pass "printEvent" method to "click" event -->
+  <h1 @click="printEvent">Hello ${ message }!</h1>
+
+  <script>
+    this.message = 'Rigl'
+
+    // show the "event" object in the console
+    this.printEvent = event => console.log(event)
+  </script>
+</r-header>
+```
+
+Events are bound to loop variables, for example:
+
+```html
+<r-header>
+  <ul $for="item of arr">
+    <!-- the "click" event is bound to the "item" variable of the For-Of loop -->
+    <li @click="console.log(item)">Element: ${ item }</li>
+  </ul>
+
+  <script>
+    this.arr = []
+
+    for (let i = 0; i <= 5; i++) this.arr[i] = i
+  </script>
+</r-header>
+```
+
+If you reverse the array, then the event will show the correct value of the variable:
+
+```
+> header.$data.arr.reverse()
+```
+<br>
+<br>
+
+<h2 id="closed-components"># Closed components</h2>
+
+<br>
+
+To create a [closed](https://javascript.info/shadow-dom#shadow-tree) component, the ***closed*** attribute without value is used in the parent tag of its template:
+
+```html
+<!-- create a closed component using the "closed" attribute -->
+<r-header closed>
+  <h1>Hello ${ message }!</h1>
+
+  <style>
+    h1 {
+      color: orangered;
+    }
+  </style>
+
+  <script>
+    this.message = 'Rigl'
+  </script>
+</r-header>
+```
+
+After that, it will be impossible to access its [Shadow DOM](https://javascript.info/shadow-dom) using the **shadowRoot** property, for example:
+
+```
+> header.shadowRoot
+```
+
+Will display the value in the console:
+
+```
+< null
+```
