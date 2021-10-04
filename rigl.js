@@ -1,5 +1,5 @@
 /*!
- * Rigl.js v1.7.3 | A framework for building reactive web components
+ * Rigl.js v1.7.4 | A framework for building reactive web components
  * https://github.com/rigljs/rigl | https://www.npmjs.com/package/rigl
  * Released under the MIT License
  */
@@ -1248,7 +1248,7 @@ function _checkPrivateRedeclaration(obj, privateCollection) { if (privateCollect
 
 var rSpc = /\s+/; 
 
-var emitterElement = new DocumentFragment(); 
+var observerElement = new DocumentFragment(); 
 
 var storeEvents = new WeakMap(); 
 
@@ -1256,9 +1256,9 @@ var _element = new WeakMap();
 
 var _events = new WeakMap();
 
-var emitter_classEmitter = function () {
-  function classEmitter(element, store) {
-    classCallCheck_default()(this, classEmitter);
+var observer_Observer = function () {
+  function Observer(element, store) {
+    classCallCheck_default()(this, Observer);
 
     _classPrivateFieldInitSpec(this, _element, {
       writable: true,
@@ -1277,7 +1277,7 @@ var emitter_classEmitter = function () {
   } 
 
 
-  createClass_default()(classEmitter, [{
+  createClass_default()(Observer, [{
     key: "on",
     value: function on() {
       var _this = this;
@@ -1394,14 +1394,14 @@ var emitter_classEmitter = function () {
     }
   }]);
 
-  return classEmitter;
+  return Observer;
 }(); 
 
- var emitter = (function () {
-  var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : emitterElement;
+ var rigl_observer = (function () {
+  var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : observerElement;
   if (!storeEvents.has(element)) storeEvents.set(element, new Map()); 
 
-  return new emitter_classEmitter(element, storeEvents);
+  return new observer_Observer(element, storeEvents);
 });
 
 
@@ -1429,15 +1429,15 @@ var storeRoutes = new WeakMap();
 
 var _routes = new WeakMap();
 
-var router_classRouter = function (_classEmitter) {
-  inherits_default()(classRouter, _classEmitter);
+var router_Router = function (_Observer) {
+  inherits_default()(Router, _Observer);
 
-  var _super = _createSuper(classRouter);
+  var _super = _createSuper(Router);
 
-  function classRouter(element, store) {
+  function Router(element, store) {
     var _this;
 
-    classCallCheck_default()(this, classRouter);
+    classCallCheck_default()(this, Router);
 
     _this = _super.call(this, element, store); 
 
@@ -1452,7 +1452,7 @@ var router_classRouter = function (_classEmitter) {
   } 
 
 
-  createClass_default()(classRouter, [{
+  createClass_default()(Router, [{
     key: "popstate",
     value: function popstate(event) {
       var _this2 = this;
@@ -1473,8 +1473,8 @@ var router_classRouter = function (_classEmitter) {
     }
   }]);
 
-  return classRouter;
-}(emitter_classEmitter); 
+  return Router;
+}(observer_Observer); 
 
 
  var rigl_router = (function (element) {
@@ -1490,7 +1490,7 @@ var router_classRouter = function (_classEmitter) {
       start = _ref.start; 
 
 
-  var router = new router_classRouter(element, storeRoutes); 
+  var router = new router_Router(element, storeRoutes); 
 
   window.addEventListener('popstate', function (event) {
     return router.popstate.call(router, event);
@@ -1637,7 +1637,7 @@ methods_Methods.prototype.$create = rigl_create;
 
 methods_Methods.prototype.$router = rigl_router; 
 
-methods_Methods.prototype.$emitter = emitter; 
+methods_Methods.prototype.$observer = rigl_observer; 
 
  var methods = (methods_Methods);
 var regenerator = __webpack_require__(12);
@@ -2376,8 +2376,8 @@ Object.defineProperties(window.Rigl = {}, {
   'router': {
     value: rigl_router
   },
-  'emitter': {
-    value: emitter
+  'observer': {
+    value: rigl_observer
   },
   'mixins': {
     value: mixins,

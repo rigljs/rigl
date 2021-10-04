@@ -7,7 +7,7 @@
 
 <br>
 
-**Текущая версия: 1.7.3**
+**Текущая версия: 1.7.4**
 
 <br>
 
@@ -44,7 +44,7 @@ Rigl - это фреймворк для создания реактивных В
 16. [~~Закрытые компоненты~~](#closed-components)
 17. [~~Внешние компоненты~~](#outer-components)
 18. [~~Разделяемое состояние~~](#shared-state)
-19. [~~Эмиттер~~](#emitter)
+19. [~~Наблюдатель~~](#observer)
 20. [~~Маршрутизатор~~](#router)
 21. [~~API~~](#api)
 
@@ -1527,7 +1527,6 @@ NodeList(3) [p, p, p]
       color: orangered;
     }
   </style>
-
   
   <!-- определить шаблон компонента R-TEST -->
   <template name="r-test">
@@ -1537,7 +1536,6 @@ NodeList(3) [p, p, p]
       this.message = 'Новый компонент R-TEST'
     </script>
   </template>
-
 
   <script>
     this.message = 'Rigl'

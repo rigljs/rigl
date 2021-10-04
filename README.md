@@ -7,7 +7,7 @@
 
 <br>
 
-**Current version: 1.7.3**
+**Current version: 1.7.4**
 
 <br>
 
@@ -44,7 +44,7 @@ Rigl is a framework for building reactive Web Components. In addition to a conve
 16. [~~Closed components~~](#closed-components)
 17. [~~Outer components~~](#outer-components)
 18. [~~Shared state~~](#shared-state)
-13. [~~Emitter~~](#emitter)
+13. [~~Observer~~](#observer)
 20. [~~Router~~](#router)
 21. [~~API~~](#api)
 
@@ -1528,7 +1528,6 @@ The **$create()** method allows you to create new components:
     }
   </style>
 
-  
   <!-- define the R-TEST component template -->
   <template name="r-test">
     <h2>${ message }</h2>
@@ -1537,7 +1536,6 @@ The **$create()** method allows you to create new components:
       this.message = 'New R-TEST component'
     </script>
   </template>
-
 
   <script>
     this.message = 'Rigl'
