@@ -7,7 +7,7 @@
 
 <br>
 
-**Текущая версия: 1.7.4**
+**Текущая версия: 1.8.0**
 
 <br>
 
@@ -1636,12 +1636,28 @@ Cпециальные атрибуты событий начинаются со 
 </r-header>
 ```
 
-Сами методы в события не передаются, их можно только вызвать из событий:
+Можно передать и сам пользовательский метод в событие:
 
 ```html
 <r-header>
-  <!-- Ошибка! Нельзя передать метод "printEvent" в событие "click" -->
+  <!-- передать метод "printEvent" в событие "click" -->
   <h1 @click="printEvent">Hello ${ message }!</h1>
+
+  <script>
+    this.message = 'Rigl'
+
+    // показать в консоли объект "event"
+    this.printEvent = event => console.log(event)
+  </script>
+</r-header>
+```
+
+Чтобы получить в пользовательском методе объект *Event* или переменные цикла (см. ниже), необходимо передать метод с помощью [bind](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Function/bind):
+
+```html
+<r-header>
+  <!-- передать метод "printEvent" в событие "click" с помощью "bind" -->
+  <h1 @click="printEvent.bind(this, event)">Hello ${ message }!</h1>
 
   <script>
     this.message = 'Rigl'

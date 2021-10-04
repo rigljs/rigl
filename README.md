@@ -7,7 +7,7 @@
 
 <br>
 
-**Current version: 1.7.4**
+**Current version: 1.8.0**
 
 <br>
 
@@ -1636,12 +1636,28 @@ An *Event* object can be passed to a custom method:
 </r-header>
 ```
 
-The methods themselves are not passed to events, they can only be called from events:
+You can also pass the custom method itself to the event:
 
 ```html
 <r-header>
-  <!-- Error! Cannot pass "printEvent" method to "click" event -->
+  <!-- pass the "printEvent" method to the "click" event -->
   <h1 @click="printEvent">Hello ${ message }!</h1>
+
+  <script>
+    this.message = 'Rigl'
+
+    // show the "event" object in the console
+    this.printEvent = event => console.log(event)
+  </script>
+</r-header>
+```
+
+To get an *Event* object or loop variables (see below) in a custom method, you must pass the method using [bind](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind):
+
+```html
+<r-header>
+  <!-- pass the "printEvent" method to the "click" event using "bind" -->
+  <h1 @click="printEvent.bind(this, event)">Hello ${ message }!</h1>
 
   <script>
     this.message = 'Rigl'
