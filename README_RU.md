@@ -1690,6 +1690,26 @@ Cпециальные атрибуты событий начинаются со 
 ```
 > header.$data.arr.reverse()
 ```
+
+Перепишем этот пример с передачей пользовательского метода в событие:
+
+```html
+<r-header>
+  <ul $for="item of arr">
+    <!-- событие "click" привязывается к переменной "item" цикла For-Of -->
+    <li @click="printItem.bind(this, item)">Элемент: ${ item }</li>
+  </ul>
+
+  <script>
+    this.arr = []
+
+    for (let i = 0; i <= 5; i++) this.arr[i] = i
+
+    // показать в консоли значение переменной "item"
+    this.printItem = item => console.log(item)
+  </script>
+</r-header>
+```
 <br>
 <br>
 

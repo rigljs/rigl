@@ -1690,6 +1690,26 @@ If you reverse the array, then the event will show the correct value of the vari
 ```
 > header.$data.arr.reverse()
 ```
+
+Let's rewrite this example by passing a custom method to the event:
+
+```html
+<r-header>
+  <ul $for="item of arr">
+    <!-- the "click" event is bound to the "item" variable of the For-Of loop -->
+    <li @click="printItem.bind(this, item)">Элемент: ${ item }</li>
+  </ul>
+
+  <script>
+    this.arr = []
+
+    for (let i = 0; i <= 5; i++) this.arr[i] = i
+
+    // show the value of the "item" variable in the console
+    this.printItem = item => console.log(item)
+  </script>
+</r-header>
+```
 <br>
 <br>
 
