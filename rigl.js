@@ -1733,9 +1733,9 @@ var objTemp = {
 }; 
 
 function sourced(node) {
-  var uppNode = STORE.get(this).nodes[0]; 
+  var upperNode = STORE.get(this).nodes[0]; 
 
-  var vars = uppNode && uppNode.nodeName.startsWith('data-rigl-for') ? getvars(uppNode.value) : null; 
+  var vars = upperNode && upperNode.nodeName.startsWith('data-rigl-for') ? getvars(upperNode.value) : null; 
 
   var source = vars ? "()=>((".concat(vars, ")=>event=>").concat(node.value, ")(").concat(vars, ")") : "event=>".concat(node.value); 
 
