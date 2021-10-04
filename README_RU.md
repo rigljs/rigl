@@ -1514,7 +1514,7 @@ NodeList(3) [p, p, p]
 
 <br>
 
-<h3 id="element">$create(element)</h3>
+<h3 id="create">$create(element)</h3>
 
 Метод **$create()** позволяет создавать новые компоненты:
 

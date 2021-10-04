@@ -1514,7 +1514,7 @@ The browser will display:
 
 <br>
 
-<h3 id="element">$create(element)</h3>
+<h3 id="create">$create(element)</h3>
 
 The **$create()** method allows you to create new components:
 
