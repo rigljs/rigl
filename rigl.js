@@ -1,5 +1,5 @@
 /*!
- * Rigl.js v1.8.0 | A framework for building reactive web components
+ * Rigl.js v1.8.1 | A framework for building reactive web components
  * https://github.com/rigljs/rigl | https://www.npmjs.com/package/rigl
  * Released under the MIT License
  */
@@ -1661,7 +1661,7 @@ function change(node, temp) {
       change.call(this, node.childNodes[i], temp.childNodes[i]);
     }
   } 
-  else if (STORE.get(this).sources.has(temp)) return handler.call(this, node, temp);
+  else if (STORE.get(this).sources.has(temp)) return node.nodeName.startsWith('data-rigl-') ? handler.call(this, node, temp) : node[node.nodeType === 2 ? 'value' : 'data'] = STORE.get(this).sources.get(temp)();
 }
 
 

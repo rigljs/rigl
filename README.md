@@ -7,7 +7,7 @@
 
 <br>
 
-**Current version: 1.8.0**
+**Current version: 1.8.1**
 
 <br>
 
@@ -1210,7 +1210,7 @@ Now if you run the command to reverse the array in the console:
 then upon completion of its execution, the following message will be displayed:
 
 ```
-Update: 152.40185546875 ms
+Update: 137.7529296875 ms
 ```
 
 By default, the timer is named *Update*, but you can assign an arbitrary name to the timer:
@@ -1229,6 +1229,12 @@ By default, the timer is named *Update*, but you can assign an arbitrary name to
     this.$timer('my timer')
   </script>
 </r-header>
+```
+
+The message will be displayed in the console:
+
+```
+my timer: 143.56201171875 ms
 ```
 
 You can completely cancel the timer by passing the False value to the **$timer** method:
