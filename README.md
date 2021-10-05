@@ -42,7 +42,7 @@ Rigl is a framework for building reactive Web Components. In addition to a conve
     - [$create()](#create)
 15. [Events](#events)
 16. [Closed components](#closed-components)
-17. [~~Outer components~~](#outer-components)
+17. [Outer components](#outer-components)
 18. [~~Shared state~~](#shared-state)
 13. [~~Observer~~](#observer)
 20. [~~Router~~](#router)
@@ -1747,3 +1747,220 @@ Will display the value in the console:
 ```
 < null
 ```
+<br>
+<br>
+
+<h2 id="outer-components"># Outer components</h2>
+
+<br>
+
+Using the **$outer** service property, you can access any properties of external components, for example:
+
+```html
+<!-- External component template -->
+<r-outer>
+  <!-- mount Internal component -->
+  <r-inner></r-inner>
+
+  <script>
+    this.message = 'External component'
+  </script>
+</r-outer>
+
+
+<!-- Inner component template -->
+<r-inner>
+  <!-- deduce the value of the "message" property from the External Component -->
+  <h1>${ $outer.message }</h1>
+</r-inner>
+```
+
+If we now connect the External component:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rigl</title>
+</head>
+<body>
+  <!-- mount External component -->
+  <r-outer></r-outer>
+
+
+  <script src="rigl.min.js"></script>
+
+  <script>
+    Rigl.load('components.htm')
+  </script>
+</body>
+</html>
+```
+
+Then a message will be displayed in the browser:
+
+<h1>External component</h1>
+
+The **$outer** property iterates over all outer components until it finds the first one that has the requested property, for example:
+
+```html
+<!-- Component-A template -->
+<component-a>
+  <!-- mount Component-B -->
+  <component-b></component-b>
+
+  <script>
+    this.message = 'Component-A'
+  </script>
+</component-a>
+
+
+<!-- Component-B template -->
+<component-b>
+  <!-- mount Component-C -->
+  <component-c></component-c>
+</component-b>
+
+
+<!-- Component-C template -->
+<component-c>
+  <!-- deduce the value of the "message" property from Component-A -->
+  <h1>${ $outer.message }</h1>
+</component-c>
+```
+
+If we now connect the component:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rigl</title>
+</head>
+<body>
+  <!-- mount Component-A -->
+  <component-a></component-a>
+
+
+  <script src="rigl.min.js"></script>
+
+  <script>
+    Rigl.load('components.htm')
+  </script>
+</body>
+</html>
+```
+
+Then a message will be displayed in the browser:
+
+<h1>Component-A</h1>
+
+By changing the values of the requested properties in the upper components, these changes are immediately reflected in the state of the internal ones. For example, assign the mount tag *Component-A* an identifier with the value "a", as shown below:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rigl</title>
+</head>
+<body>
+  <!-- assign an id to the Component-A mount tag -->
+  <component-a id="a"></component-a>
+
+
+  <script src="rigl.min.js"></script>
+
+  <script>
+    Rigl.load('components.htm')
+  </script>
+</body>
+</html>
+```
+
+If we now change the value of its **message** property in the console:
+
+```
+> a.$data.message = 'Topmost component'
+```
+
+then these changes will immediately be reflected in the state of the internal component. The browser will display the new value for the **message** property that was requested in the bottom component:
+
+<h1>Topmost component</h1>
+
+Another utility property, **$outers[]**, is an array of all external components that contain the internal component. It allows you to access any external component where the top-most component is stored in the **$outers[]** array at index 0.
+
+Let's rewrite *Component-C* from the previous example using this array:
+
+```html
+<!-- Component-C template -->
+<component-c>
+  <!-- print the value of the "message" property of Component-C -->
+  <h1>${ message }</h1>
+
+  <script>
+    // get the value of the "message" property from Component-A
+    this.message = this.$outers[0].$data.message
+  </script>
+</component-c>
+```
+
+But, if we now change the value of the **message** property in *Component-A*, then these changes will no longer affect the state of *Component-C*, for example:
+
+```
+> a.$data.message = 'Topmost component'
+```
+
+The browser will show the state of *Component-A*:
+
+<h1>Component-A</h1>
+
+This is because we just got the primitive value from *Component-A* directly, without using the **$outer** reactive property discussed at the very beginning. However, if the value of the **message** property of *Component-A* were an object:
+
+```html
+<!-- Component-A template -->
+<component-a>
+  <!-- mount Component-B -->
+  <component-b></component-b>
+
+  <script>
+    // property "message" is an object
+    this.message = {
+      name: 'Component-A'
+    }
+  </script>
+</component-a>
+```
+
+and we would get its value using the **$outers[]** array:
+
+```html
+<!-- Component-C template -->
+<component-c>
+  <!-- deduce the value of the "name" property from the "message" object of Component-C -->
+  <h1>${ message.name }</h1>
+
+  <script>
+    // получить значение свойства "message" из Компонента-A
+    this.message = this.$outers[0].$data.message
+  </script>
+</component-c>
+```
+
+then when changing the **name** property of the **message** object in the console:
+
+```
+> a.$data.message.name = 'Topmost component'
+```
+
+The new state of *Component-C* would be reflected in the browser as well:
+
+<h1>Topmost component</h1>
