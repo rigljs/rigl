@@ -43,7 +43,7 @@ Rigl is a framework for building reactive Web Components. In addition to a conve
 15. [Events](#events)
 16. [Closed components](#closed-components)
 17. [Outer components](#outer-components)
-18. [~~Shared state~~](#shared-state)
+18. [Shared state](#shared-state)
 13. [~~Observer~~](#observer)
 20. [~~Router~~](#router)
 21. [~~API~~](#api)
@@ -1964,3 +1964,68 @@ then when changing the **name** property of the **message** object in the consol
 The new state of *Component-C* would be reflected in the browser as well:
 
 <h1>Topmost component</h1>
+<br>
+<br>
+
+<h2 id="shared-state"># Shared state</h2>
+
+<br>
+
+Initially, each component has its own state. Let's create a *R-COUNTER* component that will increment or decrement the value of the **count** property by one:
+
+```html
+<r-counter>
+  <h2>${ count }</h2>
+  <button @click="count++">+</button>
+  <button @click="count--">-</button>
+
+  <script>
+    this.count = 0
+  </script>
+</r-counter>
+```
+
+If we use this component two times:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rigl</title>
+</head>
+<body>
+  <!-- first use of the R-COUNTER component -->
+  <r-counter></r-counter>
+
+  <!-- second use of the R-COUNTER component -->
+  <r-counter></r-counter>
+
+
+  <script src="rigl.min.js"></script>
+
+  <script>
+    Rigl.load('components.htm')
+  </script>
+</body>
+</html>
+```
+
+then when you click the **+** or **-** buttons on one component, the state of the **count** property in the other component will not change, and vice versa.
+
+If we want to make the state for all components of the same name shared, so that when the **count** property in one component changes, these changes are immediately reflected in the other, then it is necessary to specify the ***shared*** attribute in the parent tag of the component template without value:
+
+```html
+<!-- added "shared" attribute -->
+<r-counter shared>
+  <h2>${ count }</h2>
+  <button @click="count++">+</button>
+  <button @click="count--">-</button>
+
+  <script>
+    this.count = 0
+  </script>
+</r-counter>
+```

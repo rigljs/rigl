@@ -43,7 +43,7 @@ Rigl - это фреймворк для создания реактивных В
 15. [События](#events)
 16. [Закрытые компоненты](#closed-components)
 17. [Внешние компоненты](#outer-components)
-18. [~~Разделяемое состояние~~](#shared-state)
+18. [Разделяемое состояние](#shared-state)
 19. [~~Наблюдатель~~](#observer)
 20. [~~Маршрутизатор~~](#router)
 21. [~~API~~](#api)
@@ -1964,3 +1964,68 @@ Cпециальные атрибуты событий начинаются со 
 Новое состояние *Компонента-C* отразилось бы и в браузере:
 
 <h1>Самый верхний компонент</h1>
+<br>
+<br>
+
+<h2 id="shared-state"># Разделяемое состояние</h2>
+
+<br>
+
+Изначально, каждый компонент имеет своё собственное состояние. Давайте создадим компонент *R-COUNTER*, который будет увеличивать или уменьшать значение свойства **count** на единицу:
+
+```html
+<r-counter>
+  <h2>${ count }</h2>
+  <button @click="count++">+</button>
+  <button @click="count--">-</button>
+
+  <script>
+    this.count = 0
+  </script>
+</r-counter>
+```
+
+Если мы два раза задействуем этот компонент:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rigl</title>
+</head>
+<body>
+  <!-- первое использование компонента R-COUNTER -->
+  <r-counter></r-counter>
+
+  <!-- второе использование компонента R-COUNTER -->
+  <r-counter></r-counter>
+
+
+  <script src="rigl.min.js"></script>
+
+  <script>
+    Rigl.load('components.htm')
+  </script>
+</body>
+</html>
+```
+
+то при нажатии кнопок **+**  или **-** на одном компоненте, состояние свойства **count** в другом компоненте не изменится, и наоборот.
+
+Если же мы хотим сделать  состояние для всех одноимённых компонентов разделяемым, чтобы при изменении свойства **count** в одном компоненте, эти изменения сразу же отражались в другом, то необходимо в родительском теге шаблона компонента указать атрибут ***shared*** без значения:
+
+```html
+<!-- добавлен атрибут "shared" -->
+<r-counter shared>
+  <h2>${ count }</h2>
+  <button @click="count++">+</button>
+  <button @click="count--">-</button>
+
+  <script>
+    this.count = 0
+  </script>
+</r-counter>
+```
