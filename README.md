@@ -7,7 +7,7 @@
 
 <br>
 
-**Current version: 1.8.3**
+**Current version: 1.8.4**
 
 <br>
 
