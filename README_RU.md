@@ -7,7 +7,7 @@
 
 <br>
 
-**Текущая версия: 1.8.2**
+**Текущая версия: 1.8.3**
 
 <br>
 
@@ -44,7 +44,7 @@ Rigl - это фреймворк для создания реактивных В
 16. [Закрытые компоненты](#closed-components)
 17. [Внешние компоненты](#outer-components)
 18. [Разделяемое состояние](#shared-state)
-19. [~~Наблюдатель~~](#observer)
+19. [Наблюдатель](#observer)
 20. [~~Маршрутизатор~~](#router)
 21. [~~API~~](#api)
 
@@ -2034,4 +2034,509 @@ Cпециальные атрибуты событий начинаются со 
     this.count = 0
   </script>
 </r-counter>
+```
+<br>
+<br>
+
+<h2 id="observer"># Наблюдатель</h2>
+
+<br>
+
+В Rigl имеется *Наблюдатель*, который предназначен для создания [пользовательских событий](https://learn.javascript.ru/dispatch-events#polzovatelskie-sobytiya) с целью взаимодействия различных компонентов между собой. Он основан на объекте [CustomEvent](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent) и полностью соответсвует этому стандарту.
+
+В самом простом случае, *Наблюдатель* может выглядеть так:
+
+```html
+<r-header>
+  <h1>Hello Rigl!</h1>
+
+  <style>
+    h1 {
+      color: ${ titleColor };
+    }
+  </style>
+
+  <script>
+    this.titleColor = 'orangered'
+
+    // определить новый объект Наблюдателя
+    const obs = this.$observer()
+
+    // определить новое событие "change-color" и функцию обратного вызова
+    obs.on('change-color', () => this.titleColor = 'green')
+    
+    // вызвать событие "change-color" через одну секунду
+    setTimeout(() => obs.trigger('change-color'), 1000)
+  </script>
+</r-header>
+```
+
+Служебный метод **$observer()** возвращает новый объект *Наблюдателя*. Метод **on()** этого объекта, позволяет определить событие и функцию обратного вызова для него. Функций обратного вызова может быть несколько:
+
+```html
+<script>
+  this.titleColor = 'orangered'
+
+  // определить новый объект Наблюдателя
+  const obs = this.$observer()
+
+  // определить новое событие "change-color" и функции обратного вызова
+  obs.on('change-color', () => this.titleColor = 'green', () => console.log('Цвет заголовка стал зелёным'))
+  
+  // вызвать событие "change-color" через одну секунду
+  setTimeout(() => obs.trigger('change-color'), 1000)
+</script>
+```
+
+Этот метод позволяет определять сразу несколько событий, разделяя их названия пробелом между собой, например:
+
+```html
+<r-header>
+  <h1>Hello Rigl!</h1>
+  
+  <!-- вызвать событие "change-color-click" -->
+  <button @click="changeColor">Изменить цвет</button>
+
+  <style>
+    h1 {
+      color: rgb(${ titleColor });
+    }
+  </style>
+
+  <script>
+    this.titleColor = '255,69,0' // RGB orangered
+
+    // определить новый объект Наблюдателя
+    const obs = this.$observer()
+
+    // определить новые события "change-color-timer" и "change-color-click", которые присваивает свойству "titleColor" случайный цвет
+    obs.on('change-color-timer change-color-click', () => this.titleColor = Array.from({ length: 3 }, () => Math.round(Math.random() * 255)).join())
+
+    // определить метод для вызова события "change-color-click" при нажатии на кнопку
+    this.changeColor = () => obs.trigger('change-color-click')
+    
+    // вызвать событие "change-color-timer" через одну секунду из таймера
+    setTimeout(() => obs.trigger('change-color-timer'), 1000)
+  </script>
+</r-header>
+```
+
+Метод **trigger()** нового объекта *Наблюдателя*, позволяет запустить созданное ранее событие. Чтобы удалить событие, применяется метод **off()**. В примере ниже, событие *change-color* никогда не будет выполнено:
+
+```html
+<script>
+  this.titleColor = 'orangered'
+
+  // определить новый объект Наблюдателя
+  const obs = this.$observer()
+
+  // определить новое событие "change-color" и функцию обратного вызова
+  obs.on('change-color', () => this.titleColor = 'green')
+
+  // удалить событие "change-color"
+  obs.off('change-color')
+  
+  // вызвать событие "change-color" через одну секунду
+  setTimeout(() => obs.trigger('change-color'), 1000)
+</script>
+```
+
+Если необходимо удалить не всё событие целиком, а лишь определённую функцию обратного вызова, то эту функцию необходимо прежде сохранить и затем передать методу **off()** во втором аргументе:
+
+```html
+<script>
+  this.titleColor = 'orangered'
+
+  // определить новый объект Наблюдателя
+  const obs = this.$observer()
+
+  // сохранить функцию обратного вызова
+  const f = () => this.titleColor = 'green'
+
+  // определить новое событие "change-color" и передать ему функции обратного вызова
+  obs.on('change-color', f, () => console.log('Событие change-color'))
+
+  // удалить функцию обратного вызова "f" из события "change-color"
+  obs.off('change-color', f)
+  
+  // вызвать событие "change-color" через одну секунду
+  setTimeout(() => obs.trigger('change-color'), 1000)
+</script>
+```
+
+Событиями могут быть регулярные выражения. Это особенно полезно при работе с *Маршрутизатором*, который будет рассмотрен в следующей части руководства. В этом случае, необходимо сохранить объект регулярного выражения, а затем передать его методам **on()** и **trigger()**, например:
+
+```html
+<script>
+  this.titleColor = 'orangered'
+
+  // определить новый объект Наблюдателя
+  const obs = this.$observer()
+
+  // сохранить объект регулярного выражения
+  const eEvent = /change-color/
+
+  // определить новое событие "change-color" и функцию обратного вызова
+  obs.on(eEvent, () => this.titleColor = 'green')
+  
+  // вызвать событие "change-color" через одну секунду
+  setTimeout(() => obs.trigger(eEvent), 1000)
+</script>
+```
+
+Чтобы удалить такое событие, необходимо сохранить объект регулярного выражения и передать его методу **off()**, как показано ниже:
+
+```html
+<script>
+  this.titleColor = 'orangered'
+
+  // определить новый объект Наблюдателя
+  const obs = this.$observer()
+
+  // сохранить объект регулярного выражения
+  const eEvent = /change-color/
+
+  // определить новое событие "change-color" и функцию обратного вызова
+  obs.on(eEvent, () => this.titleColor = 'green')
+
+  // удалить событие "change-color"
+  obs.off(eEvent)
+  
+  // вызвать событие "change-color" через одну секунду
+  setTimeout(() => obs.trigger(eEvent), 1000)
+</script>
+```
+
+Можно передать в событие объект параметров во втором аргументе метода **on()**, сдвинув функцию обратного вызова в третий аргумент, например:
+
+```html
+<r-header>
+  <h1>Hello Rigl!</h1>
+
+  <style>
+    h1 {
+      color: ${ titleColor };
+    }
+  </style>
+
+  <script>
+    this.titleColor = 'orangered'
+
+    // определить новый объект Наблюдателя
+    const obs = this.$observer()
+
+    // определить новое событие "change-color", объект параметров и функцию обратного вызова
+    obs.on('change-color', { detail: 'green' }, event => this.titleColor = event.detail)
+    
+    // вызвать событие "change-color" через одну секунду
+    setTimeout(() => obs.trigger('change-color'), 1000)
+  </script>
+</r-header>
+```
+
+В свойстве [detail](https://learn.javascript.ru/dispatch-events#polzovatelskie-sobytiya) можно перадавать любые данные в обработчики событий. В самих же обработчиках, это свойство доступно через объект *Event*, как показано выше.
+
+Кроме свойства **detail**, можно ещё передать свойство **once** со значением Истина, чтобы обработчик выполнился всего один раз. Например, без этого параметра, событие ниже будет каждую секунду присваивать заголовку новый цвет:
+
+```html
+<r-header>
+  <h1>Hello Rigl!</h1>
+
+  <style>
+    h1 {
+      color: rgb(${ titleColor });
+    }
+  </style>
+
+  <script>
+    this.titleColor = '255,69,0' // RGB orangered
+
+    // определить новый объект Наблюдателя
+    const obs = this.$observer()
+
+    // определить новое событие "change-color", которое присваивает свойству "titleColor" случайный цвет
+    obs.on('change-color', () => this.titleColor = Array.from({ length: 3 }, () => Math.round(Math.random() * 255)).join())
+    
+    // вызывать событие "change-color" каждую секунду
+    setInterval(() => obs.trigger('change-color'), 1000)
+  </script>
+</r-header>
+```
+
+Но, если передать свойство **once** со значением Истина, то эта операция будет выполнена всего один раз:
+
+```html
+<script>
+  this.titleColor = '255,69,0' // RGB orangered
+
+  // определить новый объект Наблюдателя
+  const obs = this.$observer()
+
+  // определить новое событие "change-color", которое присваивает свойству "titleColor" случайный цвет всего один раз
+  obs.on('change-color', { once: true }, () => this.titleColor = Array.from({ length: 3 }, () => Math.round(Math.random() * 255)).join())
+  
+  // вызывать событие "change-color" каждую секунду
+  setInterval(() => obs.trigger('change-color'), 1000)
+</script>
+```
+
+Последее, что осталось рассмотреть, это взаимодействие между различными компонентами посредством событий. Создайте два новых компонента, как показано ниже:
+
+```html
+<!-- шаблон компонента R-ONE -->
+<r-one>
+  <h2>Компонент R-ONE</h2>
+  <pre>${ arr }</pre>
+
+  <script>
+    this.arr = [1, 2, 3]
+
+    // определить новый объект Наблюдателя
+    const obs = this.$observer()
+
+    // определить новое событие "reverse-arr" и функцию обратного вызова
+    obs.on('reverse-arr', () => this.arr.reverse())
+  </script>
+</r-one>
+
+
+<!-- шаблон компонента R-TWO -->
+<r-two>
+  <h2>Компонент R-TWO</h2>
+  <!-- вызвать событие "reverse-arr" -->
+  <button @click="reverseArr">Обратить массив</button>
+
+  <script>
+    // определить новый объект Наблюдателя
+    const obs = this.$observer()
+
+    // определить метод для вызова события "reverse-arr" при нажатии на кнопку
+    this.reverseArr = () => obs.trigger('reverse-arr')
+  </script>
+</r-two>
+```
+
+Подключите компоненты на главной странице:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rigl</title>
+</head>
+<body>
+  <!-- монтировать компонент R-ONE -->
+  <r-one></r-one>
+
+  <!-- монтировать компонент R-TWO -->
+  <r-two></r-two>
+
+
+  <script src="rigl.min.js"></script>
+
+  <script>
+    Rigl.load('components.htm')
+  </script>
+</body>
+</html>
+```
+
+В первом компоненте определяется массив **arr[]**, новый объект *Наблюдателя* и событие *reverse-arr*:
+
+```html
+<!-- шаблон компонента R-ONE -->
+<r-one>
+  <h2>Компонент R-ONE</h2>
+  <pre>${ arr }</pre>
+
+  <script>
+    this.arr = [1, 2, 3]
+
+    // определить новый объект Наблюдателя
+    const obs = this.$observer()
+
+    // определить новое событие "reverse-arr" и функцию обратного вызова
+    obs.on('reverse-arr', () => this.arr.reverse())
+  </script>
+</r-one>
+```
+
+Это событие вызывается во втором компоненте, после нажатия на кнопку *Обратить массив*. Для этого, во втором компоненте также создётся новый объект *Наблюдателя* и метод **reverseArr()**, который вызывает триггер этого события:
+
+```html
+<!-- шаблон компонента R-TWO -->
+<r-two>
+  <h2>Компонент R-TWO</h2>
+  <!-- вызвать событие "reverse-arr" -->
+  <button @click="reverseArr">Обратить массив</button>
+
+  <script>
+    // определить новый объект Наблюдателя
+    const obs = this.$observer()
+
+    // определить метод для вызова события "reverse-arr" при нажатии на кнопку
+    this.reverseArr = () => obs.trigger('reverse-arr')
+  </script>
+</r-two>
+```
+
+Предыдущий пример можно переписать, используя свойство **detail** в объекте параметров, который передаётся во втором аргументе методу **on()**, например:
+
+```html
+<!-- шаблон компонента R-ONE -->
+<r-one>
+  <h2>Компонент R-ONE</h2>
+  <pre>${ arr }</pre>
+
+  <script>
+    this.arr = [1, 2, 3]
+
+    // определить новый объект Наблюдателя
+    const obs = this.$observer()
+
+    // определить новое событие "reverse-arr" и функцию обратного вызова
+    obs.on('reverse-arr', { detail: this.arr }, event => event.detail.reverse())
+  </script>
+</r-one>
+```
+
+Можно передать текущий компонент в свойство **currentTarget** объекта *Event* функции обработчика события. Для этого, во втором аргументе метода **trigger()** указывается ключевое слово *this*. Такая необходимость может возникнуть, когда мы хотим присвоить данные компонента, в котором объявлен обработчик, компоненту, в котором вызывается событие, связанное с этим обработчиком:
+
+```html
+<!-- шаблон компонента R-ONE -->
+<r-one>
+  <h2>Компонент R-ONE</h2>
+  <script>
+    this.arrOne = [1, 2, 3]
+
+    // определить новый объект Наблюдателя
+    const obs = this.$observer()
+
+    // определить новое событие "get-arr" и функцию обратного вызова
+    obs.on('get-arr', event => event.currentTarget.arrTwo = this.arrOne)
+  </script>
+</r-one>
+
+
+<!-- шаблон компонента R-TWO -->
+<r-two>
+  <h2>Компонент R-TWO</h2>
+  <pre>${ arrTwo }</pre>
+
+  <script>
+    this.arrTwo = []
+
+    // создать Наблюдателя и запустить событие "get-arr" с передачай ключевого слова "this"
+    this.$observer().trigger('get-arr', this)
+  </script>
+</r-two>
+```
+
+Но это не сработает, если вызвать событие до того, как оно будет определено. Для примера, просто поменяем компоненты местами в файле *components.htm*:
+
+```html
+<!-- шаблон компонента R-TWO -->
+<r-two>
+  <h2>Компонент R-TWO</h2>
+  <pre>${ arrTwo }</pre>
+
+  <script>
+    this.arrTwo = []
+
+    // создать Наблюдателя и запустить событие "get-arr" с передачай ключевого слова "this"
+    this.$observer().trigger('get-arr', this)
+  </script>
+</r-two>
+
+
+<!-- шаблон компонента R-ONE -->
+<r-one>
+  <h2>Компонент R-ONE</h2>
+  <script>
+    this.arrOne = [1, 2, 3]
+
+    // определить новый объект Наблюдателя
+    const obs = this.$observer()
+
+    // определить новое событие "get-arr" и функцию обратного вызова
+    obs.on('get-arr', event => event.currentTarget.arrTwo = this.arrOne)
+  </script>
+</r-one>
+```
+
+Чтобы событие в компоненте *R-TWO* запускалось после того, как оно будет определено в компоненте *R-ONE*, необходимо использовать метод [whenDefined()](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/whenDefined), как показано ниже:
+
+```html
+<!-- шаблон компонента R-TWO -->
+<r-two>
+  <h2>Компонент R-TWO</h2>
+  <pre>${ arrTwo }</pre>
+
+  <script>
+    this.arrTwo = []
+
+    // создать Наблюдателя и запустить событие "get-arr", когда компонент R-ONE будет определён
+    customElements.whenDefined('r-one').then(() => this.$observer().trigger('get-arr', this))
+  </script>
+</r-two>
+```
+
+По умолчанию, все события *Наблюдателя* являются глобальными, т.е. доступными из любого его объекта. Для создания локального *Наблюдателя* , необходимо его привязать к *HTML-элементу*, передав его в первом аргументе методу **$observer()**, например:
+
+```html
+<!-- шаблон компонента R-ONE -->
+<r-one>
+  <h2>Компонент R-ONE</h2>
+  <pre>${ arr }</pre>
+
+  <script>
+    this.arr = [1, 2, 3]
+
+    // определить новый объект локального Наблюдателя
+    const obs = this.$observer(this.$('h2'))
+
+    // определить новое событие "reverse-arr" и функцию обратного вызова
+    obs.on('reverse-arr', () => this.arr.reverse())
+
+    // вызвать событие "reverse-arr" через одну секунду
+    setTimeout(() => obs.trigger('reverse-arr'), 1000)
+  </script>
+</r-one>
+```
+
+Событие *reverse-arr* будет доступно только внутри компонента *R-ONE*, поскольку *Наблюдатель* привзян к его элементу *H2*.
+
+Кроме этого, Rigl позволялет работать с *Наблюдателем* не только между своими компонентами. Он может быть доступен как внешняя функция, через метод **observer()** самого фреймворка, например:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rigl</title>
+</head>
+<body>
+  <!-- HTML содержимое -->
+
+
+  <!-- подключить Rigl -->
+  <script src="rigl.min.js"></script>
+
+  <script>
+    // определить новый объект Наблюдателя
+    const obs = Rigl.observer()
+    
+    // определить новое событие "test" и функцию обратного вызова
+    obs.on('test', console.log('TEST'))
+
+    // вызвать событие "test"
+    obs.trigger('test')
+  </script>
+</body>
+</html>
 ```

@@ -1,5 +1,5 @@
 /*!
- * Rigl.js v1.8.2 | A framework for building reactive web components
+ * Rigl.js v1.8.3 | A framework for building reactive web components
  * https://github.com/rigljs/rigl | https://www.npmjs.com/package/rigl
  * Released under the MIT License
  */
@@ -1375,7 +1375,7 @@ var observer_Observer = function () {
           } : Boolean(props));
         }); 
 
-        classPrivateFieldGet_default()(_this2, _events).delete(event);
+        if (!args.length) classPrivateFieldGet_default()(_this2, _events).delete(event);
       });
     } 
 
@@ -1385,11 +1385,21 @@ var observer_Observer = function () {
       var _this3 = this;
 
       var events = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+      var context = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
       if (typeof events === 'string') events = events.trim().split(rSpc); 
       else if (events instanceof RegExp) events = [events]; 
 
       events.forEach(function (event) {
-        if (classPrivateFieldGet_default()(_this3, _events).has(event)) classPrivateFieldGet_default()(_this3, _element).dispatchEvent(classPrivateFieldGet_default()(_this3, _events).get(event));
+        if (classPrivateFieldGet_default()(_this3, _events).has(event)) {
+          Object.defineProperty(classPrivateFieldGet_default()(_this3, _events).get(event), 'currentTarget', {
+            value: context,
+            writable: true,
+            configurable: true,
+            enumerable: true
+          }); 
+
+          classPrivateFieldGet_default()(_this3, _element).dispatchEvent(classPrivateFieldGet_default()(_this3, _events).get(event));
+        }
       });
     }
   }]);

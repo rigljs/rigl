@@ -7,7 +7,7 @@
 
 <br>
 
-**Current version: 1.8.2**
+**Current version: 1.8.3**
 
 <br>
 
@@ -44,7 +44,7 @@ Rigl is a framework for building reactive Web Components. In addition to a conve
 16. [Closed components](#closed-components)
 17. [Outer components](#outer-components)
 18. [Shared state](#shared-state)
-13. [~~Observer~~](#observer)
+19. [Observer](#observer)
 20. [~~Router~~](#router)
 21. [~~API~~](#api)
 
@@ -2034,4 +2034,509 @@ If we want to make the state for all components of the same name shared, so that
     this.count = 0
   </script>
 </r-counter>
+```
+<br>
+<br>
+
+<h2 id="observer"># Observer</h2>
+
+<br>
+
+Rigl has an *Observer*, which is designed to create [custom events](https://javascript.info/dispatch-events#custom-events) for the purpose of interaction between various components. It is based on the [CustomEvent](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent) object and is fully compliant with this standard.
+
+In the simplest case, the *Observer* might look like this:
+
+```html
+<r-header>
+  <h1>Hello Rigl!</h1>
+
+  <style>
+    h1 {
+      color: ${ titleColor };
+    }
+  </style>
+
+  <script>
+    this.titleColor = 'orangered'
+
+    // define a new Observer object
+    const obs = this.$observer()
+
+    // define a new event "change-color" and a callback function
+    obs.on('change-color', () => this.titleColor = 'green')
+    
+    // trigger the "change-color" event after one second
+    setTimeout(() => obs.trigger('change-color'), 1000)
+  </script>
+</r-header>
+```
+
+The **$observer()** service method returns a new *Observer* object. The **on()** method of this object allows you to define an event and a callback function for it. There can be several callback functions:
+
+```html
+<script>
+  this.titleColor = 'orangered'
+
+  // define a new Observer object
+  const obs = this.$observer()
+
+  // define new event "change-color" and callback functions
+  obs.on('change-color', () => this.titleColor = 'green', () => console.log('Header color turns green'))
+  
+  // trigger the "change-color" event after one second
+  setTimeout(() => obs.trigger('change-color'), 1000)
+</script>
+```
+
+This method allows you to define several events at once, separating their names with a space between themselves, for example:
+
+```html
+<r-header>
+  <h1>Hello Rigl!</h1>
+  
+  <!-- trigger the "change-color-click" event" -->
+  <button @click="changeColor">Изменить цвет</button>
+
+  <style>
+    h1 {
+      color: rgb(${ titleColor });
+    }
+  </style>
+
+  <script>
+    this.titleColor = '255,69,0' // RGB orangered
+
+    // define a new Observer object
+    const obs = this.$observer()
+
+    // define new events "change-color-timer" and "change-color-click", which assigns the property "titleColor" a random color
+    obs.on('change-color-timer change-color-click', () => this.titleColor = Array.from({ length: 3 }, () => Math.round(Math.random() * 255)).join())
+
+    // define a method to call the "change-color-click" event when the button is clicked
+    this.changeColor = () => obs.trigger('change-color-click')
+    
+    // trigger the "change-color-timer" event after one second from the timer
+    setTimeout(() => obs.trigger('change-color-timer'), 1000)
+  </script>
+</r-header>
+```
+
+The **trigger()** method of the new *Observer* object, allows you to trigger the previously created event. To remove an event, the **off()** method is applied. In the example below, the * change-color * event will never be executed:
+
+```html
+<script>
+  this.titleColor = 'orangered'
+
+  // define a new Observer object
+  const obs = this.$observer()
+
+  // define a new event "change-color" and a callback function
+  obs.on('change-color', () => this.titleColor = 'green')
+
+  // remove the "change-color" event
+  obs.off('change-color')
+  
+  // trigger the "change-color" event after one second
+  setTimeout(() => obs.trigger('change-color'), 1000)
+</script>
+```
+
+If you need to delete not the entire event entirely, but only a specific callback function, then this function must be saved first and then passed to the **off()** method in the second argument:
+
+```html
+<script>
+  this.titleColor = 'orangered'
+
+  // define a new Observer object
+  const obs = this.$observer()
+
+  // save callback function
+  const f = () => this.titleColor = 'green'
+
+  // define a new event "change-color" and pass it to callback functions
+  obs.on('change-color', f, () => console.log('Событие change-color'))
+
+  // remove callback function "f" from "change-color" event
+  obs.off('change-color', f)
+  
+  // trigger the "change-color" event after one second
+  setTimeout(() => obs.trigger('change-color'), 1000)
+</script>
+```
+
+Regular expressions can be events. This is especially useful when dealing with a *Router*, which will be covered in the next part of the tutorial. In this case, you need to store the regex object and then pass it to the **on()** and **trigger()** methods, for example:
+
+```html
+<script>
+  this.titleColor = 'orangered'
+
+  // define a new Observer object
+  const obs = this.$observer()
+
+  // save regex object
+  const eEvent = /change-color/
+
+  // define a new event "change-color" and a callback function
+  obs.on(eEvent, () => this.titleColor = 'green')
+  
+  // trigger the "change-color" event after one second
+  setTimeout(() => obs.trigger(eEvent), 1000)
+</script>
+```
+
+To remove such an event, you need to save the regex object and pass it to the **off()** method as shown below:
+
+```html
+<script>
+  this.titleColor = 'orangered'
+
+  // define a new Observer object
+  const obs = this.$observer()
+
+  // save regex object
+  const eEvent = /change-color/
+
+  // define a new event "change-color" and a callback function
+  obs.on(eEvent, () => this.titleColor = 'green')
+
+  // remove the "change-color" event
+  obs.off(eEvent)
+  
+  // trigger the "change-color" event after one second
+  setTimeout(() => obs.trigger(eEvent), 1000)
+</script>
+```
+
+You can pass a parameter object to the event in the second argument of the **on()** method by sliding the callback into the third argument, for example:
+
+```html
+<r-header>
+  <h1>Hello Rigl!</h1>
+
+  <style>
+    h1 {
+      color: ${ titleColor };
+    }
+  </style>
+
+  <script>
+    this.titleColor = 'orangered'
+
+    // define a new Observer object
+    const obs = this.$observer()
+
+    // define a new event "change-color", a parameters object and a callback function
+    obs.on('change-color', { detail: 'green' }, event => this.titleColor = event.detail)
+    
+    // trigger the "change-color" event after one second
+    setTimeout(() => obs.trigger('change-color'), 1000)
+  </script>
+</r-header>
+```
+
+In the [detail](https://javascript.info/dispatch-events#custom-events) property, you can pass any data to event handlers. In the handlers themselves, this property is available through the * Event * object, as shown above.
+
+In addition to the **detail** property, you can also pass the **once** property with the True value so that the handler is executed only once. For example, without this parameter, the event below will assign a new color to the title every second:
+
+```html
+<r-header>
+  <h1>Hello Rigl!</h1>
+
+  <style>
+    h1 {
+      color: rgb(${ titleColor });
+    }
+  </style>
+
+  <script>
+    this.titleColor = '255,69,0' // RGB orangered
+
+    // define a new Observer object
+    const obs = this.$observer()
+
+    // define a new "change-color" event that assigns a random color to the "titleColor" property
+    obs.on('change-color', () => this.titleColor = Array.from({ length: 3 }, () => Math.round(Math.random() * 255)).join())
+    
+    // fire the "change-color" event every second
+    setInterval(() => obs.trigger('change-color'), 1000)
+  </script>
+</r-header>
+```
+
+But, if you pass the **once** property with the value True, then this operation will be performed only once:
+
+```html
+<script>
+  this.titleColor = '255,69,0' // RGB orangered
+
+  // define a new Observer object
+  const obs = this.$observer()
+
+  // define a new "change-color" event that assigns a random color to the "titleColor" property just once
+  obs.on('change-color', { once: true }, () => this.titleColor = Array.from({ length: 3 }, () => Math.round(Math.random() * 255)).join())
+  
+  // fire the "change-color" event every second
+  setInterval(() => obs.trigger('change-color'), 1000)
+</script>
+```
+
+The last thing left to consider is the interaction between the various components through events. Create two new components as shown below:
+
+```html
+<!-- R-ONE component template -->
+<r-one>
+  <h2>R-ONE component</h2>
+  <pre>${ arr }</pre>
+
+  <script>
+    this.arr = [1, 2, 3]
+
+    // define a new Observer object
+    const obs = this.$observer()
+
+    // define a new event "reverse-arr" and a callback function
+    obs.on('reverse-arr', () => this.arr.reverse())
+  </script>
+</r-one>
+
+
+<!-- R-TWO component template -->
+<r-two>
+  <h2>R-TWO component</h2>
+  <!-- trigger the "reverse-arr" event -->
+  <button @click="reverseArr">Invert an array</button>
+
+  <script>
+    // define a new Observer object
+    const obs = this.$observer()
+
+    // define a method to call the "reverse-arr" event when the button is clicked
+    this.reverseArr = () => obs.trigger('reverse-arr')
+  </script>
+</r-two>
+```
+
+Connect the components on the main page:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rigl</title>
+</head>
+<body>
+  <!-- mount the R-ONE component -->
+  <r-one></r-one>
+
+  <!-- mount the R-TWO component -->
+  <r-two></r-two>
+
+
+  <script src="rigl.min.js"></script>
+
+  <script>
+    Rigl.load('components.htm')
+  </script>
+</body>
+</html>
+```
+
+The first component defines an array **arr[]**, a new *Observer* object and an *reverse-arr* event:
+
+```html
+<!-- R-ONE component template -->
+<r-one>
+  <h2>R-ONE component</h2>
+  <pre>${ arr }</pre>
+
+  <script>
+    this.arr = [1, 2, 3]
+
+    // define a new Observer object
+    const obs = this.$observer()
+
+    // define a new event "reverse-arr" and a callback function
+    obs.on('reverse-arr', () => this.arr.reverse())
+  </script>
+</r-one>
+```
+
+This event is called in the second component after pressing the button *Invert an array*. For this, a new *Observer* object and a **reverseArr()** method will also be created in the second component, which will trigger this event:
+
+```html
+<!-- R-TWO component template -->
+<r-two>
+  <h2>R-TWO component</h2>
+  <!-- trigger the "reverse-arr" event -->
+  <button @click="reverseArr">Invert an array</button>
+
+  <script>
+    // define a new Observer object
+    const obs = this.$observer()
+
+    // define a method to call the "reverse-arr" event when the button is clicked
+    this.reverseArr = () => obs.trigger('reverse-arr')
+  </script>
+</r-two>
+```
+
+The previous example can be rewritten using the **detail** property on the parameters object, which is passed in the second argument to the **on()** method, for example:
+
+```html
+<!-- R-ONE component template -->
+<r-one>
+  <h2>R-ONE component</h2>
+  <pre>${ arr }</pre>
+
+  <script>
+    this.arr = [1, 2, 3]
+
+    // define a new Observer object
+    const obs = this.$observer()
+
+    // define a new event "reverse-arr" and a callback function
+    obs.on('reverse-arr', { detail: this.arr }, event => event.detail.reverse())
+  </script>
+</r-one>
+```
+
+You can pass the current component to the **currentTarget** property of an *Event* object to an event handler function. To do this, the keyword *this* is specified in the second argument of the **trigger()** method. Such a need may arise when we want to assign the data of the component in which the handler is declared to the component in which the event associated with this handler is raised:
+
+```html
+<!-- R-ONE component template -->
+<r-one>
+  <h2>R-ONE component</h2>
+  <script>
+    this.arrOne = [1, 2, 3]
+
+    // define a new Observer object
+    const obs = this.$observer()
+
+    // define a new event "get-arr" and a callback function
+    obs.on('get-arr', event => event.currentTarget.arrTwo = this.arrOne)
+  </script>
+</r-one>
+
+
+<!-- R-TWO component template -->
+<r-two>
+  <h2>R-TWO component</h2>
+  <pre>${ arrTwo }</pre>
+
+  <script>
+    this.arrTwo = []
+
+    // create an Observer and fire the "get-arr" event with the keyword "this"
+    this.$observer().trigger('get-arr', this)
+  </script>
+</r-two>
+```
+
+But it won't work if the event is called before it is defined. For example, let's just swap the components in the *components.htm* file:
+
+```html
+<!-- R-TWO component template -->
+<r-two>
+  <h2>R-TWO component</h2>
+  <pre>${ arrTwo }</pre>
+
+  <script>
+    this.arrTwo = []
+
+    // create an Observer and fire the "get-arr" event with the keyword "this"
+    this.$observer().trigger('get-arr', this)
+  </script>
+</r-two>
+
+
+<!-- R-ONE component template -->
+<r-one>
+  <h2>R-ONE component</h2>
+  <script>
+    this.arrOne = [1, 2, 3]
+
+    // define a new Observer object
+    const obs = this.$observer()
+
+    // define a new event "get-arr" and a callback function
+    obs.on('get-arr', event => event.currentTarget.arrTwo = this.arrOne)
+  </script>
+</r-one>
+```
+
+For an event in the *R-TWO* component to be triggered after it is defined in the *R-ONE* component, you must use the [whenDefined()](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/whenDefined) method as shown below:
+
+```html
+<!-- R-TWO component template -->
+<r-two>
+  <h2>R-TWO component</h2>
+  <pre>${ arrTwo }</pre>
+
+  <script>
+    this.arrTwo = []
+
+    // create an Observer and fire the "get-arr" event when the R-ONE component is defined
+    customElements.whenDefined('r-one').then(() => this.$observer().trigger('get-arr', this))
+  </script>
+</r-two>
+```
+
+By default, all *Observer* events are global, i.e. accessible from any of its objects. To create a local *Observer*, you need to bind it to an *HTML element* by passing it in the first argument to the **$observer()** method, for example:
+
+```html
+<!-- R-ONE component template -->
+<r-one>
+  <h2>R-ONE component</h2>
+  <pre>${ arr }</pre>
+
+  <script>
+    this.arr = [1, 2, 3]
+
+    // define a new local Observer object
+    const obs = this.$observer(this.$('h2'))
+
+    // define a new event "reverse-arr" and a callback function
+    obs.on('reverse-arr', () => this.arr.reverse())
+
+    // fire the "reverse-arr" event after one second
+    setTimeout(() => obs.trigger('reverse-arr'), 1000)
+  </script>
+</r-one>
+```
+
+The *reverse-arr* event will only be available inside the *R-ONE* component, since the *Observer* is bound to its *H2* element.
+
+Besides, Rigl allows you to work with *Observer* not only between its components. It can be accessed as an external function via the **observer()** method of the framework itself, for example:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rigl</title>
+</head>
+<body>
+  <!-- HTML content -->
+
+
+  <!-- connect Rigl -->
+  <script src="rigl.min.js"></script>
+
+  <script>
+    // define a new Observer object
+    const obs = Rigl.observer()
+    
+    // define a new event "test" and a callback function
+    obs.on('test', console.log('TEST'))
+
+    // trigger the "test" event
+    obs.trigger('test')
+  </script>
+</body>
+</html>
 ```
