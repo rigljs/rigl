@@ -46,8 +46,6 @@ Rigl is a framework for building reactive Web Components. In addition to a conve
 18. [Shared state](#shared-state)
 19. [Observer](#observer)
 20. [~~Router~~](#router)
-21. [~~API~~](#api)
-
 
 <br>
 <hr>
@@ -2095,7 +2093,7 @@ This method allows you to define several events at once, separating their names 
   <h1>Hello Rigl!</h1>
   
   <!-- trigger the "change-color-click" event" -->
-  <button @click="changeColor">Изменить цвет</button>
+  <button @click="changeColor">Change color</button>
 
   <style>
     h1 {
@@ -2154,7 +2152,7 @@ If you need to delete not the entire event entirely, but only a specific callbac
   const f = () => this.titleColor = 'green'
 
   // define a new event "change-color" and pass it to callback functions
-  obs.on('change-color', f, () => console.log('Событие change-color'))
+  obs.on('change-color', f, () => console.log('Change-color event'))
 
   // remove callback function "f" from "change-color" event
   obs.off('change-color', f)
