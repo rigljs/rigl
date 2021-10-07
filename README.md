@@ -2632,6 +2632,34 @@ It remains to define the *R-CONTENT* component, which will contain the *Router* 
 </r-content>
 ```
 
+And connect on the main page:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rigl</title>
+</head>
+<body>
+  <!-- mount the R-HEADER component -->
+  <r-header></r-header>
+
+  <!-- mount the R-CONTENT component -->
+  <r-content></r-content>
+
+
+  <script src="rigl.min.js"></script>
+
+  <script>
+    Rigl.load('components.htm')
+  </script>
+</body>
+</html>
+```
+
 This code is similar to the one in which we set events for the *Observer*, but there are some peculiarities. At the very beginning, we define a custom property **page**, which can contain a string with the name of the component or an object with three fields: the name of the component, its attributes and the content passed to the slot. 
 
 Like events, routes can be regular expressions, for example:

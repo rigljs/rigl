@@ -2632,6 +2632,34 @@ Cпециальные атрибуты событий начинаются со 
 </r-content>
 ```
 
+И подключить на главной странице:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rigl</title>
+</head>
+<body>
+  <!-- монтировать компонент R-HEADER -->
+  <r-header></r-header>
+
+  <!-- монтировать компонент R-CONTENT -->
+  <r-content></r-content>
+
+
+  <script src="rigl.min.js"></script>
+
+  <script>
+    Rigl.load('components.htm')
+  </script>
+</body>
+</html>
+```
+
 Этот код похож на тот, в котором мы задавали события для *Наблюдателя*, но есть некоторые особенности. В самом начале, мы определяем пользовательское свойство **page**, которое может содержать строку с названием компонента или объект с тремя полями: названием компонента, его атрибутами и содержимым передаваемым в слот. 
 
 Как и события, маршруты могут быть регулярными выражениями, например:
