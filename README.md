@@ -2,12 +2,12 @@
 
 ![rigl](https://raw.githubusercontent.com/rigljs/rigl/main/img/logo.png)
 
-- **[github](https://github.com/rigljs/rigl)**
-- **[npmjs](https://www.npmjs.com/package/rigl)**
+- [github](https://github.com/rigljs/rigl)
+- [npmjs](https://www.npmjs.com/package/rigl)
 
 <br>
 
-**Current version: 1.8.5**
+[**Current version: 1.8.5**](https://raw.githubusercontent.com/rigljs/rigl/main/rigl.min.js)
 
 <br>
 
