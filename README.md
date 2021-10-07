@@ -2748,7 +2748,7 @@ Another point worth noting is that since the **$router()** method uses the *Docu
 </r-menu>
 ```
 
-Since the details of the *Shadow DOM* will not be available for processing by the *Router*. [More ...](https://javascript.info/shadow-dom-events)
+Since the details of the *Shadow DOM* will not be available for processing by the *Router*. [More...](https://javascript.info/shadow-dom-events)
 
 If you still need to create a closed component, you will need to transfer the *Router* to it, and assign the element containing links instead of the *Document* object by default:
 
