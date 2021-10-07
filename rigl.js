@@ -1,5 +1,5 @@
 /*!
- * Rigl.js v1.8.4 | A framework for building reactive web components
+ * Rigl.js v1.8.5 | A framework for building reactive web components
  * https://github.com/rigljs/rigl | https://www.npmjs.com/package/rigl
  * Released under the MIT License
  */
@@ -116,18 +116,6 @@ module.exports["default"] = module.exports, module.exports.__esModule = true;
  }),
  (function(module, exports) {
 
-function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-}
-
-module.exports = _classCallCheck;
-module.exports["default"] = module.exports, module.exports.__esModule = true;
-
- }),
- (function(module, exports) {
-
 function _typeof(obj) {
   "@babel/helpers - typeof";
 
@@ -149,6 +137,18 @@ function _typeof(obj) {
 }
 
 module.exports = _typeof;
+module.exports["default"] = module.exports, module.exports.__esModule = true;
+
+ }),
+ (function(module, exports) {
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+module.exports = _classCallCheck;
 module.exports["default"] = module.exports, module.exports.__esModule = true;
 
  }),
@@ -177,7 +177,7 @@ module.exports["default"] = module.exports, module.exports.__esModule = true;
  }),
  (function(module, exports, __webpack_require__) {
 
-var _typeof = __webpack_require__(5)["default"];
+var _typeof = __webpack_require__(4)["default"];
 
 var assertThisInitialized = __webpack_require__(0);
 
@@ -1196,7 +1196,7 @@ __webpack_require__.d(__webpack_exports__, "mixins", function() { return  mixins
 __webpack_require__.d(__webpack_exports__, "load", function() { return  load; });
 __webpack_require__.d(__webpack_exports__, "create", function() { return  rigl_create; });
 
-var classCallCheck = __webpack_require__(4);
+var classCallCheck = __webpack_require__(5);
 var classCallCheck_default = __webpack_require__.n(classCallCheck);
 
 var inherits = __webpack_require__(6);
@@ -1232,7 +1232,7 @@ var classPrivateFieldSet_default = __webpack_require__.n(classPrivateFieldSet);
 var wrapNativeSuper = __webpack_require__(17);
 var wrapNativeSuper_default = __webpack_require__.n(wrapNativeSuper);
 
-var helpers_typeof = __webpack_require__(5);
+var helpers_typeof = __webpack_require__(4);
 var typeof_default = __webpack_require__.n(helpers_typeof);
 
 
@@ -1869,6 +1869,7 @@ function create(node) {
 }
 
 
+
  var handler = (function (node) {
   var temp = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : objTemp;
   STORE.get(this).nodes.push(node); 
@@ -1916,6 +1917,24 @@ function create(node) {
   } 
   else if (node.nodeName.startsWith('data-rigl-show')) {
     STORE.get(this).sources.get(knot)() ? node.ownerElement.removeAttribute('hidden') : node.ownerElement.setAttribute('hidden', '');
+  } 
+  else if (node.nodeName.startsWith('data-rigl-view')) {
+    var view = STORE.get(this).sources.get(knot)(); 
+
+    if (typeof view === 'string') node.ownerElement.innerHTML = "<".concat(view, "/>");else if (typeof_default()(view) === 'object') {
+      var component = view.component; 
+
+      if (component) {
+        var attrs = view.attributes ? Object.keys(view.attributes).reduce(function (arr, attr) {
+          arr.push("".concat(attr, "=\"").concat(view.attributes[attr], "\""));
+          return arr;
+        }, []) : []; 
+
+        var content = view.content || ''; 
+
+        node.ownerElement.innerHTML = "<".concat(component, " ").concat(attrs.join(' '), ">").concat(content, "</").concat(component, ">");
+      }
+    }
   } 
   else if (node.nodeName.startsWith('on')) {
     var _objCallback = STORE.get(this).sources.get(knot); 

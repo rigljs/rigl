@@ -7,7 +7,7 @@
 
 <br>
 
-**Current version: 1.8.4**
+**Current version: 1.8.5**
 
 <br>
 
@@ -45,7 +45,7 @@ Rigl is a framework for building reactive Web Components. In addition to a conve
 17. [Outer components](#outer-components)
 18. [Shared state](#shared-state)
 19. [Observer](#observer)
-20. [~~Router~~](#router)
+20. [Router](#router)
 
 <br>
 <hr>
@@ -2537,4 +2537,299 @@ Besides, Rigl allows you to work with *Observer* not only between its components
   </script>
 </body>
 </html>
+```
+<br>
+<br>
+
+<h2 id="router"># Router</h2>
+
+<br>
+
+The router in Rigl is based on the [Observer](#observer) and almost completely repeats all the methods and principles of working with it. Therefore, you need to familiarize yourself with the *Observer* to understand the operation of the *Router*. Let's create three components that will represent the application pages:
+
+```html
+<!-- Home page -->
+<r-home>
+  <h2>Home</h2>
+  <p>Lorem ipsum dolor sit amet consectetur adipisicing.</p>
+</r-home>
+
+<!-- page About us -->
+<r-about>
+  <h2>About</h2>
+  <p>Lorem ipsum dolor sit amet consectetur.</p>
+
+  <!-- content slot -->
+  <slot></slot>
+</r-about>
+
+<!-- Contacts page -->
+<r-contacts>
+  <h2>Contacts</h2>
+  <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
+</r-contacts>
+```
+
+Now let's create an *R-HEADER* component that represents the site's header, and an *R-MENU* component that contains its navigation menu:
+
+```html
+<!-- R-HEADER component -->
+<r-header>
+  <r-menu></r-menu>
+  <h1>Header</h1>
+</r-header>
+
+<!-- R-MENU component -->
+<r-menu>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="/contacts">Contacts</a>
+  </nav>
+
+  <style>
+    a { margin-right: 10px; }
+  </style>
+</r-menu>
+```
+
+It remains to define the *R-CONTENT* component, which will contain the *Router* and display the contents of the pages:
+
+```html
+<!-- R-CONTENT component -->
+<r-content>
+  <!-- page components will be displayed in the DIV tag -->
+  <div $view="page"></div>
+
+  <script>
+    // define default page
+    this.page = 'r-home'
+
+    // define a new Router
+    const router = this.$router()
+
+    // determine the route "/"
+    router.on('/', () => this.page = 'r-home')
+
+    // determine the route "/about"
+    router.on('/about', () => 
+      this.page = {
+        // component name
+        component: 'r-about',
+        // component attributes
+        attributes: {
+          id: 'about',
+          title: 'About Us Page'
+        },
+        // content passed to the slot
+        content: '<i>Lorem ipsum dolor</i> sit amet.'
+      }
+    )
+
+    // determine the route "/contacts"
+    router.on('/contacts', () => this.page = 'r-contacts')
+  </script>
+</r-content>
+```
+
+This code is similar to the one in which we set events for the *Observer*, but there are some peculiarities. At the very beginning, we define a custom property **page**, which can contain a string with the name of the component or an object with three fields: the name of the component, its attributes and the content passed to the slot. 
+
+Like events, routes can be regular expressions, for example:
+
+```html
+<script>
+  // define default page
+  this.page = 'r-home'
+
+  // define a new Router
+  const router = this.$router()
+
+  // determine the route "/"
+  router.on(/\//, () => this.page = 'r-home')
+
+  // determine the route "/about"
+  router.on(/\/abo.+/, () => 
+    this.page = {
+      // component name
+      component: 'r-about',
+      // component attributes
+      attributes: {
+        id: 'about',
+        title: 'About Us Page'
+      },
+      // content passed to the slot
+      content: '<i>Lorem ipsum dolor</i> sit amet.'
+    }
+  )
+
+  // determine the route "/contacts"
+  router.on(/\/contacts$/, () => this.page = 'r-contacts')
+</script>
+```
+
+In addition, a special attribute ***$view*** appears here, which contains the custom property **page**:
+
+```html
+<!-- page components will be displayed in the DIV tag -->
+<div $view="page"></div>
+```
+
+Based on the value of this property, the ***$view*** attribute loads the corresponding component into the tag in which it is indicated. As mentioned earlier, the **page** property can contain either a string with the name of the component:
+
+```js
+// determine the route "/"
+router.on(/\//, () => this.page = 'r-home')
+```
+
+Or an object containing the name, attributes and content passed to the component's slot:
+
+```js
+// determine the route "/about"
+router.on('/about', () => 
+  this.page = {
+    // component name
+    component: 'r-about',
+    // component attributes
+    attributes: {
+      id: 'about',
+      title: 'About Us Page'
+    },
+    // content passed to the slot
+    content: '<i>Lorem ipsum dolor</i> sit amet.'
+  }
+)
+```
+
+At the same time, attributes and content are not required fields, unlike the **component** field!
+
+Let's take a closer look at the *Event* object passed to the route event handler. To do this, define another route event for the master page, as shown below:
+
+```js
+// determine the route "/"
+router.on('/', event => console.log(event))
+```
+
+If we restart the browser now, we will not see anything in the console. Only by clicking on the corresponding link in the *R-MENU* component, the information from the *Event* object will be displayed in the console. For the router to start working immediately, it needs to pass an object with the **start** property equal to True, in the second argument of the **$router()** method, for example:
+
+```js
+// define a new Router and start it right away
+const router = this.$router(null, { start: true })
+```
+
+As you can see, the first argument is *null*. This is done so that the *Router* by default uses the global [document](https://developer.mozilla.org/en/docs/Web/API/Document) object as the element on which to catch and process events. The same object is used by default when we call the **$router()** method with no arguments.
+
+Let's go back to the *Event* object. It has several predefined, in JavaScript itself, properties for custom events. We will get to know only a few of them:
+
+- **target** - always refers to the element that raised the event. When you click on the link, it will be an *A* element, and when navigating using the browser buttons *Forward/Back*, it will become the *Window* object
+- **type** - contains the name of the route event
+- **url** - contains the [URL](https://javascript.info/url) object with the address of the loaded page
+
+Let's print all three of these values to the browser console:
+
+```js
+// determine route "/" and show properties in console
+router.on('/', event => ['target', 'type', 'url'].forEach(prop => console.log(prop, event[prop])))
+```
+
+Another point worth noting is that since the **$router()** method uses the *Document* object by default as a place where route events are caught, you cannot make the component containing links closed:
+
+```html
+<!-- closed component R-MENU -->
+<r-menu closed>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="/contacts">Contacts</a>
+  </nav>
+
+  <style>
+    a { margin-right: 10px; }
+  </style>
+</r-menu>
+```
+
+Since the details of the *Shadow DOM* will not be available for processing by the *Router*. [More ...](https://javascript.info/shadow-dom-events)
+
+If you still need to create a closed component, you will need to transfer the *Router* to it, and assign the element containing links instead of the *Document* object by default:
+
+```html
+<!-- closed component R-MENU -->
+<r-menu closed>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="/contacts">Contacts</a>
+  </nav>
+
+  <style>
+    a { margin-right: 10px; }
+  </style>
+
+  <script>
+    // define a new Router with a NAV element
+    const router = this.$router(this.$('nav'))
+
+    // define a new Observer object
+    const obs = this.$observer()
+
+    // determine the route "/"
+    router.on('/', () => {
+      // set the "path" property to a string
+      this.path = 'r-home'
+
+      /* fire the "change-page" event passing the keyword "this"
+        to the "currentTarget" property of the Event object */
+      obs.trigger('change-page', this)
+    })
+
+    // determine the route "/about"
+    router.on('/about', () => {
+      // set property "path" to object
+      this.path = {
+        // component name
+        component: 'r-about',
+        // component attributes
+        attributes: {
+          id: 'about',
+          title: 'About Us Page'
+        },
+        // content passed to the slot
+        content: '<i>Lorem ipsum dolor</i> sit amet.'
+      }
+
+      /* fire the "change-page" event passing the keyword "this"
+        to the "currentTarget" property of the Event object */
+      obs.trigger('change-page', this)
+    })
+
+    // determine the route "/contacts"
+    router.on('/contacts', () => {
+      // set the "path" property to a string
+      this.path = 'r-contacts'
+
+      /* fire the "change-page" event passing the keyword "this"
+        to the "currentTarget" property of the Event object */
+      obs.trigger('change-page', this)
+    })
+  </script>
+</r-menu>
+
+
+<!-- R-CONTENT component -->
+<r-content>
+  <!-- page components will be displayed in the DIV tag -->
+  <div $view="page"></div>
+
+  <script>
+    // define default page
+    this.page = 'r-home'
+
+    // define a new Observer object
+    const obs = this.$observer()
+
+    /* define a new "change-page" event and a callback function in which the value of the "path"
+      property from the R-MENU component is assigned to the "page" property from the R-CONTENT component */
+    obs.on('change-page', event => this.page = event.currentTarget.path)
+  </script>
+</r-content>
 ```
