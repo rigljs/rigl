@@ -1611,12 +1611,12 @@ The *Event* object is available in the event:
 </r-header>
 ```
 
-The element on which the event occurred can be accessed using *event.target*:
+The element on which the event occurred can be accessed using *this*:
 
 ```html
 <r-header>
-  <!-- show the element on which the event occurred using "event.target" -->
-  <h1 @click="console.log(event.target)">Hello ${ message }!</h1>
+  <!-- show the element on which the event occurred using "this" -->
+  <h1 @click="console.log(this)">Hello ${ message }!</h1>
 
   <script>
     this.message = 'Rigl'

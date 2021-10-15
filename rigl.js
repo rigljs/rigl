@@ -1,5 +1,5 @@
 /*!
- * Rigl.js v1.8.5 | A framework for building reactive web components
+ * Rigl.js v1.8.6 | A framework for building reactive web components
  * https://github.com/rigljs/rigl | https://www.npmjs.com/package/rigl
  * Released under the MIT License
  */
@@ -1747,7 +1747,7 @@ function sourced(node) {
 
   var vars = upperNode && upperNode.nodeName.startsWith('data-rigl-for') ? getvars(upperNode.value) : null; 
 
-  var source = vars ? "()=>((".concat(vars, ")=>event=>{try{(").concat(node.value, ")()}catch{}})(").concat(vars, ")") : "event=>{try{(".concat(node.value, ")()}catch{}}"); 
+  var source = vars ? "()=>((".concat(vars, ")=>function(event){if(typeof\n(arguments[1]=").concat(node.value, ")==='function')arguments[1]()})(").concat(vars, ")") : "(function(event){if(typeof\n(arguments[1]=".concat(node.value, ")==='function')arguments[1]()})"); 
 
   return {
     vars: vars,
