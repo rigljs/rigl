@@ -1598,12 +1598,12 @@ Expressions in special event attributes are specified as-is, they cannot use wil
 <h1 @click="${ titleColor = 'green' }">Hello ${ message }!</h1>
 ```
 
-The *Event* object is available in the event:
+The element on which the event occurred can be accessed using *this*:
 
 ```html
 <r-header>
-  <!-- show the "event" object in the console -->
-  <h1 @click="console.log(event)">Hello ${ message }!</h1>
+  <!-- show the element on which the event occurred using "this" -->
+  <h1 @click="console.log(this)">Hello ${ message }!</h1>
 
   <script>
     this.message = 'Rigl'
@@ -1611,12 +1611,12 @@ The *Event* object is available in the event:
 </r-header>
 ```
 
-The element on which the event occurred can be accessed using *this*:
+The *Event* object is available in the event:
 
 ```html
 <r-header>
-  <!-- show the element on which the event occurred using "this" -->
-  <h1 @click="console.log(this)">Hello ${ message }!</h1>
+  <!-- show the "event" object in the console -->
+  <h1 @click="console.log(event)">Hello ${ message }!</h1>
 
   <script>
     this.message = 'Rigl'

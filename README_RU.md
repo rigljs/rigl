@@ -1598,12 +1598,12 @@ Cпециальные атрибуты событий начинаются со 
 <h1 @click="${ titleColor = 'green' }">Hello ${ message }!</h1>
 ```
 
-В событии доступен объект *Event*:
+Доступ к элементу, на котором произошло событие, можно получить с помощью *this*:
 
 ```html
 <r-header>
-  <!-- показать в консоли объект "event" -->
-  <h1 @click="console.log(event)">Hello ${ message }!</h1>
+  <!-- показать элемент на котором произошло событие с помощью "this" -->
+  <h1 @click="console.log(this)">Hello ${ message }!</h1>
 
   <script>
     this.message = 'Rigl'
@@ -1611,12 +1611,12 @@ Cпециальные атрибуты событий начинаются со 
 </r-header>
 ```
 
-Доступ к элементу, на котором произошло событие, можно получить с помощью *this*:
+В событии доступен объект *Event*:
 
 ```html
 <r-header>
-  <!-- показать элемент на котором произошло событие с помощью "this" -->
-  <h1 @click="console.log(this)">Hello ${ message }!</h1>
+  <!-- показать в консоли объект "event" -->
+  <h1 @click="console.log(event)">Hello ${ message }!</h1>
 
   <script>
     this.message = 'Rigl'
