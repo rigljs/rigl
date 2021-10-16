@@ -7,7 +7,7 @@
 
 <br>
 
-**[Текущая версия: 1.8.6](https://raw.githubusercontent.com/rigljs/rigl/main/rigl.min.js)**
+**[Текущая версия: 1.8.7](https://raw.githubusercontent.com/rigljs/rigl/main/rigl.min.js)**
 
 <br>
 
