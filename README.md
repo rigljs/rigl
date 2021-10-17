@@ -7,7 +7,7 @@
 
 <br>
 
-**[Current version: 1.8.7](https://raw.githubusercontent.com/rigljs/rigl/main/rigl.min.js)**
+**[Current version: 2.0.0](https://raw.githubusercontent.com/rigljs/rigl/main/rigl.min.js)**
 
 <br>
 
@@ -2401,7 +2401,9 @@ The previous example can be rewritten using the **detail** property on the param
 </r-one>
 ```
 
-You can pass the current component to the **currentTarget** property of an *Event* object to an event handler function. To do this, the keyword *this* is specified in the second argument of the **trigger()** method. Such a need may arise when we want to assign the data of the component in which the handler is declared to the component in which the event associated with this handler is raised:
+You can pass any number of arguments to the **trigger()** method after the event name, which is always specified in its first argument. In this case, all passed arguments will be available in the handler for this event, starting with the second parameter in its callback function. In this function, the first parameter is always the *Event* object.
+
+Such a need may arise when we want to assign the data of the component in which the handler is declared to the component in which the event associated with this handler is raised. For example:
 
 ```html
 <!-- R-ONE component template -->
@@ -2413,8 +2415,9 @@ You can pass the current component to the **currentTarget** property of an *Even
     // define a new Observer object
     const obs = this.$observer()
 
-    // define a new event "get-arr" and a callback function
-    obs.on('get-arr', event => event.currentTarget.arrTwo = this.arrOne)
+    /* define a new event "get-arr" and a callback function where the keyword is "this"
+      from the R-TWO component is available through the second parameter, which is called "self" */
+    obs.on('get-arr', (event, self) => self.arrTwo = this.arrOne)
   </script>
 </r-one>
 
@@ -2426,8 +2429,9 @@ You can pass the current component to the **currentTarget** property of an *Even
 
   <script>
     this.arrTwo = []
-
-    // create an Observer and fire the "get-arr" event with the keyword "this"
+    
+    /* create an Observer and fire the "get-arr" event with the passing of the "this" keyword,
+      which will be available in the second parameter of the event handler */
     this.$observer().trigger('get-arr', this)
   </script>
 </r-two>
@@ -2443,8 +2447,9 @@ But it won't work if the event is called before it is defined. For example, let'
 
   <script>
     this.arrTwo = []
-
-    // create an Observer and fire the "get-arr" event with the keyword "this"
+    
+    /* create an Observer and fire the "get-arr" event with the passing of the "this" keyword,
+      which will be available in the second parameter of the event handler */
     this.$observer().trigger('get-arr', this)
   </script>
 </r-two>
@@ -2459,8 +2464,9 @@ But it won't work if the event is called before it is defined. For example, let'
     // define a new Observer object
     const obs = this.$observer()
 
-    // define a new event "get-arr" and a callback function
-    obs.on('get-arr', event => event.currentTarget.arrTwo = this.arrOne)
+    /* define a new event "get-arr" and a callback function where the keyword is "this"
+      from the R-TWO component is available through the second parameter, which is called "self" */
+    obs.on('get-arr', (event, self) => self.arrTwo = this.arrOne)
   </script>
 </r-one>
 ```
@@ -2475,8 +2481,9 @@ For an event in the *R-TWO* component to be triggered after it is defined in the
 
   <script>
     this.arrTwo = []
-
-    // create an Observer and fire the "get-arr" event when the R-ONE component is defined
+    
+    /* create an Observer and fire the "get-arr" event with the passing of the "this" keyword,
+      which will be available in the second parameter of the event handler */
     customElements.whenDefined('r-one').then(() => this.$observer().trigger('get-arr', this))
   </script>
 </r-two>
@@ -2778,7 +2785,7 @@ Another point worth noting is that since the **$router()** method uses the *Docu
 
 Since the details of the *Shadow DOM* will not be available for processing by the *Router*. [More...](https://javascript.info/shadow-dom-events)
 
-If you still need to create a closed component, you will need to transfer the *Router* to it, and assign the element containing links instead of the *Document* object by default:
+If you still need to create a closed component, you will need to transfer the *Router* to it, and assign the * NAV * element containing links instead of the default *Document* object. In addition, here you need to pass an additional argument in the **trigger()** method, where it will be available in the second parameter of the event handler:
 
 ```html
 <!-- closed component R-MENU -->
@@ -2802,18 +2809,16 @@ If you still need to create a closed component, you will need to transfer the *R
 
     // determine the route "/"
     router.on('/', () => {
-      // set the "path" property to a string
-      this.path = 'r-home'
-
-      /* fire the "change-page" event passing the keyword "this"
-        to the "currentTarget" property of the Event object */
-      obs.trigger('change-page', this)
+      /* fire the "change-page" event with passing the name of the component to the handler,
+        where this name will be available in the second parameter called "path" */
+      obs.trigger('change-page', 'r-home')
     })
 
     // determine the route "/about"
     router.on('/about', () => {
-      // set property "path" to object
-      this.path = {
+      /* fire the "change-page" event with the transfer of the object to the handler,
+        where this object will be available in the second parameter called "path" */
+      obs.trigger('change-page', {
         // component name
         component: 'r-about',
         // component attributes
@@ -2823,21 +2828,14 @@ If you still need to create a closed component, you will need to transfer the *R
         },
         // content passed to the slot
         content: '<i>Lorem ipsum dolor</i> sit amet.'
-      }
-
-      /* fire the "change-page" event passing the keyword "this"
-        to the "currentTarget" property of the Event object */
-      obs.trigger('change-page', this)
+      })
     })
 
     // determine the route "/contacts"
     router.on('/contacts', () => {
-      // set the "path" property to a string
-      this.path = 'r-contacts'
-
-      /* fire the "change-page" event passing the keyword "this"
-        to the "currentTarget" property of the Event object */
-      obs.trigger('change-page', this)
+      /* fire the "change-page" event with passing the name of the component to the handler,
+        where this name will be available in the second parameter called "path" */
+      obs.trigger('change-page', 'r-contacts')
     })
   </script>
 </r-menu>
@@ -2855,9 +2853,9 @@ If you still need to create a closed component, you will need to transfer the *R
     // define a new Observer object
     const obs = this.$observer()
 
-    /* define a new "change-page" event and a callback function in which the value of the "path"
-      property from the R-MENU component is assigned to the "page" property from the R-CONTENT component */
-    obs.on('change-page', event => this.page = event.currentTarget.path)
+    /* define a new event "change-page" and a callback function, in which the value
+      of the "path" parameter is assigned to the "page" property from the R-CONTENT component */
+    obs.on('change-page', (event, path) => this.page = path)
   </script>
 </r-content>
 ```

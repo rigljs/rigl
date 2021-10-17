@@ -1,6 +1,5 @@
 /*!
- * Rigl.js v1.8.7 | A framework for building reactive web components
- * https://github.com/rigljs/rigl | https://www.npmjs.com/package/rigl
+ * Rigl.js v2.0.0 | https://github.com/rigljs/rigl
  * Released under the MIT License
  */
  (function(modules) { 
@@ -82,20 +81,6 @@ module.exports = _classPrivateFieldGet;
 module.exports["default"] = module.exports, module.exports.__esModule = true;
 
  }),
- (function(module, exports) {
-
-function _getPrototypeOf(o) {
-  module.exports = _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
-    return o.__proto__ || Object.getPrototypeOf(o);
-  };
-  module.exports["default"] = module.exports, module.exports.__esModule = true;
-  return _getPrototypeOf(o);
-}
-
-module.exports = _getPrototypeOf;
-module.exports["default"] = module.exports, module.exports.__esModule = true;
-
- }),
  (function(module, exports, __webpack_require__) {
 
 var arrayWithoutHoles = __webpack_require__(18);
@@ -111,6 +96,20 @@ function _toConsumableArray(arr) {
 }
 
 module.exports = _toConsumableArray;
+module.exports["default"] = module.exports, module.exports.__esModule = true;
+
+ }),
+ (function(module, exports) {
+
+function _getPrototypeOf(o) {
+  module.exports = _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+    return o.__proto__ || Object.getPrototypeOf(o);
+  };
+  module.exports["default"] = module.exports, module.exports.__esModule = true;
+  return _getPrototypeOf(o);
+}
+
+module.exports = _getPrototypeOf;
 module.exports["default"] = module.exports, module.exports.__esModule = true;
 
  }),
@@ -343,7 +342,7 @@ module.exports["default"] = module.exports, module.exports.__esModule = true;
  }),
  (function(module, exports, __webpack_require__) {
 
-var getPrototypeOf = __webpack_require__(2);
+var getPrototypeOf = __webpack_require__(3);
 
 var setPrototypeOf = __webpack_require__(11);
 
@@ -1205,10 +1204,10 @@ var inherits_default = __webpack_require__.n(inherits);
 var possibleConstructorReturn = __webpack_require__(7);
 var possibleConstructorReturn_default = __webpack_require__.n(possibleConstructorReturn);
 
-var getPrototypeOf = __webpack_require__(2);
+var getPrototypeOf = __webpack_require__(3);
 var getPrototypeOf_default = __webpack_require__.n(getPrototypeOf);
 
-var toConsumableArray = __webpack_require__(3);
+var toConsumableArray = __webpack_require__(2);
 var toConsumableArray_default = __webpack_require__.n(toConsumableArray);
 
 var slicedToArray = __webpack_require__(16);
@@ -1249,6 +1248,8 @@ function _checkPrivateRedeclaration(obj, privateCollection) { if (privateCollect
 var rSpc = /\s+/; 
 
 var observerElement = new DocumentFragment(); 
+
+var storeCallbacks = new WeakMap(); 
 
 var storeEvents = new WeakMap(); 
 
@@ -1305,11 +1306,22 @@ var observer_Observer = function () {
 
       events.forEach(function (event) {
         args.forEach(function (callback) {
-          return classPrivateFieldGet_default()(_this, _element).addEventListener(event, callback, typeof_default()(props) === 'object' ? {
+          var proxyCallback = new Proxy(callback, {
+            apply: function apply(target, thisArg, args) {
+              args.push.apply(args, toConsumableArray_default()(args[0].arguments)); 
+
+              target.apply(thisArg, args);
+            }
+          }); 
+
+          classPrivateFieldGet_default()(_this, _element).addEventListener(event, proxyCallback, typeof_default()(props) === 'object' ? {
             once: once,
             capture: capture,
             passive: passive
-          } : Boolean(props));
+          } : Boolean(props)); 
+
+
+          storeCallbacks.set(callback, proxyCallback);
         }); 
 
         if (!classPrivateFieldGet_default()(_this, _events).has(event)) {
@@ -1368,11 +1380,14 @@ var observer_Observer = function () {
 
       events.forEach(function (event) {
         args.forEach(function (callback) {
-          return classPrivateFieldGet_default()(_this2, _element).removeEventListener(event, callback, typeof_default()(props) === 'object' ? {
+          classPrivateFieldGet_default()(_this2, _element).removeEventListener(event, storeCallbacks.get(callback), typeof_default()(props) === 'object' ? {
             once: once,
             capture: capture,
             passive: passive
-          } : Boolean(props));
+          } : Boolean(props)); 
+
+
+          storeCallbacks.delete(callback);
         }); 
 
         if (!args.length) classPrivateFieldGet_default()(_this2, _events).delete(event);
@@ -1385,14 +1400,18 @@ var observer_Observer = function () {
       var _this3 = this;
 
       var events = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-      var context = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
+      for (var _len3 = arguments.length, args = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+        args[_key3 - 1] = arguments[_key3];
+      }
+
       if (typeof events === 'string') events = events.trim().split(rSpc); 
       else if (events instanceof RegExp) events = [events]; 
 
       events.forEach(function (event) {
         if (classPrivateFieldGet_default()(_this3, _events).has(event)) {
-          Object.defineProperty(classPrivateFieldGet_default()(_this3, _events).get(event), 'currentTarget', {
-            value: context,
+          Object.defineProperty(classPrivateFieldGet_default()(_this3, _events).get(event), 'arguments', {
+            value: args,
             writable: true,
             configurable: true,
             enumerable: true
