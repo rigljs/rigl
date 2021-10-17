@@ -2785,7 +2785,7 @@ Another point worth noting is that since the **$router()** method uses the *Docu
 
 Since the details of the *Shadow DOM* will not be available for processing by the *Router*. [More...](https://javascript.info/shadow-dom-events)
 
-If you still need to create a closed component, you will need to transfer the *Router* to it, and assign the * NAV * element containing links instead of the default *Document* object. In addition, here you need to pass an additional argument in the **trigger()** method, where it will be available in the second parameter of the event handler:
+If you still need to create a closed component, you will need to transfer the *Router* to it, and assign the *NAV* element containing links instead of the default *Document* object. In addition, here you need to pass an additional argument in the **trigger()** method, where it will be available in the second parameter of the event handler:
 
 ```html
 <!-- closed component R-MENU -->
