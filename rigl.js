@@ -1,5 +1,5 @@
 /*!
- * Rigl.js v2.0.0 | https://github.com/rigljs/rigl
+ * Rigl.js v2.1.0 | https://github.com/rigljs/rigl
  * Released under the MIT License
  */
  (function(modules) { 
@@ -68,7 +68,7 @@ module.exports["default"] = module.exports, module.exports.__esModule = true;
  }),
  (function(module, exports, __webpack_require__) {
 
-var classApplyDescriptorGet = __webpack_require__(24);
+var classApplyDescriptorGet = __webpack_require__(27);
 
 var classExtractFieldDescriptor = __webpack_require__(15);
 
@@ -218,7 +218,7 @@ module.exports["default"] = module.exports, module.exports.__esModule = true;
  }),
  (function(module, exports, __webpack_require__) {
 
-var classApplyDescriptorSet = __webpack_require__(25);
+var classApplyDescriptorSet = __webpack_require__(28);
 
 var classExtractFieldDescriptor = __webpack_require__(15);
 
@@ -346,9 +346,9 @@ var getPrototypeOf = __webpack_require__(3);
 
 var setPrototypeOf = __webpack_require__(11);
 
-var isNativeFunction = __webpack_require__(26);
+var isNativeFunction = __webpack_require__(24);
 
-var construct = __webpack_require__(27);
+var construct = __webpack_require__(25);
 
 function _wrapNativeSuper(Class) {
   var _cache = typeof Map === "function" ? new Map() : undefined;
@@ -479,38 +479,6 @@ module.exports["default"] = module.exports, module.exports.__esModule = true;
  }),
  (function(module, exports) {
 
-function _classApplyDescriptorGet(receiver, descriptor) {
-  if (descriptor.get) {
-    return descriptor.get.call(receiver);
-  }
-
-  return descriptor.value;
-}
-
-module.exports = _classApplyDescriptorGet;
-module.exports["default"] = module.exports, module.exports.__esModule = true;
-
- }),
- (function(module, exports) {
-
-function _classApplyDescriptorSet(receiver, descriptor, value) {
-  if (descriptor.set) {
-    descriptor.set.call(receiver, value);
-  } else {
-    if (!descriptor.writable) {
-      throw new TypeError("attempted to set read only private field");
-    }
-
-    descriptor.value = value;
-  }
-}
-
-module.exports = _classApplyDescriptorSet;
-module.exports["default"] = module.exports, module.exports.__esModule = true;
-
- }),
- (function(module, exports) {
-
 function _isNativeFunction(fn) {
   return Function.toString.call(fn).indexOf("[native code]") !== -1;
 }
@@ -523,7 +491,7 @@ module.exports["default"] = module.exports, module.exports.__esModule = true;
 
 var setPrototypeOf = __webpack_require__(11);
 
-var isNativeReflectConstruct = __webpack_require__(28);
+var isNativeReflectConstruct = __webpack_require__(26);
 
 function _construct(Parent, args, Class) {
   if (isNativeReflectConstruct()) {
@@ -565,6 +533,38 @@ function _isNativeReflectConstruct() {
 }
 
 module.exports = _isNativeReflectConstruct;
+module.exports["default"] = module.exports, module.exports.__esModule = true;
+
+ }),
+ (function(module, exports) {
+
+function _classApplyDescriptorGet(receiver, descriptor) {
+  if (descriptor.get) {
+    return descriptor.get.call(receiver);
+  }
+
+  return descriptor.value;
+}
+
+module.exports = _classApplyDescriptorGet;
+module.exports["default"] = module.exports, module.exports.__esModule = true;
+
+ }),
+ (function(module, exports) {
+
+function _classApplyDescriptorSet(receiver, descriptor, value) {
+  if (descriptor.set) {
+    descriptor.set.call(receiver, value);
+  } else {
+    if (!descriptor.writable) {
+      throw new TypeError("attempted to set read only private field");
+    }
+
+    descriptor.value = value;
+  }
+}
+
+module.exports = _classApplyDescriptorSet;
 module.exports["default"] = module.exports, module.exports.__esModule = true;
 
  }),
@@ -1216,23 +1216,23 @@ var slicedToArray_default = __webpack_require__.n(slicedToArray);
 var defineProperty = __webpack_require__(10);
 var defineProperty_default = __webpack_require__.n(defineProperty);
 
-var createClass = __webpack_require__(8);
-var createClass_default = __webpack_require__.n(createClass);
-
 var assertThisInitialized = __webpack_require__(0);
 var assertThisInitialized_default = __webpack_require__.n(assertThisInitialized);
 
-var classPrivateFieldGet = __webpack_require__(1);
-var classPrivateFieldGet_default = __webpack_require__.n(classPrivateFieldGet);
-
-var classPrivateFieldSet = __webpack_require__(9);
-var classPrivateFieldSet_default = __webpack_require__.n(classPrivateFieldSet);
+var createClass = __webpack_require__(8);
+var createClass_default = __webpack_require__.n(createClass);
 
 var wrapNativeSuper = __webpack_require__(17);
 var wrapNativeSuper_default = __webpack_require__.n(wrapNativeSuper);
 
 var helpers_typeof = __webpack_require__(4);
 var typeof_default = __webpack_require__.n(helpers_typeof);
+
+var classPrivateFieldGet = __webpack_require__(1);
+var classPrivateFieldGet_default = __webpack_require__.n(classPrivateFieldGet);
+
+var classPrivateFieldSet = __webpack_require__(9);
+var classPrivateFieldSet_default = __webpack_require__.n(classPrivateFieldSet);
 
 
 
@@ -1491,10 +1491,16 @@ var router_Router = function (_Observer) {
       toConsumableArray_default()(classPrivateFieldGet_default()(this, _routes).keys()).forEach(function (route) {
         var path = target.href.replace(target.origin, ''); 
 
-        if (route instanceof RegExp ? route.test(path) : path === route) {
+        var collation = route instanceof RegExp ? route.exec(path) : path.match(new RegExp('^' + route.replace(/:(\w+)/g, function (_, prop) {
+          return "(?<".concat(prop, ">\\w+)");
+        }) + '$')); 
+
+        if (collation) {
           classPrivateFieldGet_default()(_this2, _routes).get(route).target = target === location ? window : target; 
 
           classPrivateFieldGet_default()(_this2, _routes).get(route).url = new URL(target.href); 
+
+          classPrivateFieldGet_default()(_this2, _routes).get(route).params = collation.groups; 
 
           _this2.trigger(route);
         }
@@ -1574,22 +1580,32 @@ var methods_Methods = function (_HTMLElement) {
 
 
   createClass_default()(Methods, [{
-    key: "disconnectedCallback",
-    value: function disconnectedCallback() {
+    key: "connectedCallback",
+    value: function connectedCallback() {
       var _this = this;
 
-      STORE.get(this.$host).disconnected.forEach(function (callback) {
+      STORE.get(this.$host).connected.forEach(function (callback) {
         return callback.call(_this.$data);
+      });
+    } 
+
+  }, {
+    key: "disconnectedCallback",
+    value: function disconnectedCallback() {
+      var _this2 = this;
+
+      STORE.get(this.$host).disconnected.forEach(function (callback) {
+        return callback.call(_this2.$data);
       });
     } 
 
   }, {
     key: "adoptedCallback",
     value: function adoptedCallback() {
-      var _this2 = this;
+      var _this3 = this;
 
       STORE.get(this.$host).adopted.forEach(function (callback) {
-        return callback.call(_this2.$data);
+        return callback.call(_this3.$data);
       });
     }
   }]);
@@ -1608,54 +1624,67 @@ methods_Methods.prototype.$$ = function (selector) {
 }; 
 
 
-methods_Methods.prototype.$disconnected = function () {
-  var _this3 = this;
+methods_Methods.prototype.$connected = function () {
+  var _this4 = this;
 
   for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
     args[_key] = arguments[_key];
   }
 
   args.forEach(function (callback) {
-    return typeof callback === 'function' ? STORE.get(_this3.$host).disconnected.add(callback) : null;
+    return typeof callback === 'function' ? STORE.get(_this4.$host).connected.add(callback) : null;
   });
 }; 
 
 
-methods_Methods.prototype.$adopted = function () {
-  var _this4 = this;
+methods_Methods.prototype.$disconnected = function () {
+  var _this5 = this;
 
   for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
     args[_key2] = arguments[_key2];
   }
 
   args.forEach(function (callback) {
-    return typeof callback === 'function' ? STORE.get(_this4.$host).adopted.add(callback) : null;
+    return typeof callback === 'function' ? STORE.get(_this5.$host).disconnected.add(callback) : null;
   });
 }; 
 
 
-methods_Methods.prototype.$before = function () {
-  var _this5 = this;
+methods_Methods.prototype.$adopted = function () {
+  var _this6 = this;
 
   for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
     args[_key3] = arguments[_key3];
   }
 
   args.forEach(function (callback) {
-    return typeof callback === 'function' ? STORE.get(_this5.$host).before.add(callback) : null;
+    return typeof callback === 'function' ? STORE.get(_this6.$host).adopted.add(callback) : null;
   });
 }; 
 
 
-methods_Methods.prototype.$after = function () {
-  var _this6 = this;
+methods_Methods.prototype.$before = function () {
+  var _this7 = this;
 
   for (var _len4 = arguments.length, args = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
     args[_key4] = arguments[_key4];
   }
 
   args.forEach(function (callback) {
-    return typeof callback === 'function' ? STORE.get(_this6.$host).after.add(callback) : null;
+    return typeof callback === 'function' ? STORE.get(_this7.$host).before.add(callback) : null;
+  });
+}; 
+
+
+methods_Methods.prototype.$after = function () {
+  var _this8 = this;
+
+  for (var _len5 = arguments.length, args = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+    args[_key5] = arguments[_key5];
+  }
+
+  args.forEach(function (callback) {
+    return typeof callback === 'function' ? STORE.get(_this8.$host).after.add(callback) : null;
   });
 }; 
 
@@ -1940,18 +1969,20 @@ function create(node) {
   else if (node.nodeName.startsWith('data-rigl-view')) {
     var view = STORE.get(this).sources.get(knot)(); 
 
-    if (typeof view === 'string') node.ownerElement.innerHTML = "<".concat(view, "/>");else if (typeof_default()(view) === 'object') {
-      var component = view.component; 
+    if (view) {
+      if (typeof view === 'string') node.ownerElement.innerHTML = "<".concat(view, "/>");else if (typeof_default()(view) === 'object') {
+        var component = view.component; 
 
-      if (component) {
-        var attrs = view.attributes ? Object.keys(view.attributes).reduce(function (arr, attr) {
-          arr.push("".concat(attr, "=\"").concat(view.attributes[attr], "\""));
-          return arr;
-        }, []) : []; 
+        if (component) {
+          var attrs = view.attributes ? Object.keys(view.attributes).reduce(function (arr, attr) {
+            arr.push("".concat(attr, "=\"").concat(view.attributes[attr], "\""));
+            return arr;
+          }, []) : []; 
 
-        var content = view.content || ''; 
+          var content = view.content || ''; 
 
-        node.ownerElement.innerHTML = "<".concat(component, " ").concat(attrs.join(' '), ">").concat(content, "</").concat(component, ">");
+          node.ownerElement.innerHTML = "<".concat(component, " ").concat(attrs.join(' '), ">").concat(content, "</").concat(component, ">");
+        }
       }
     }
   } 
@@ -2192,16 +2223,9 @@ function clear(node) {
 
 
 
-
-
-
 function component_createSuper(Derived) { var hasNativeReflectConstruct = component_isNativeReflectConstruct(); return function _createSuperInternal() { var Super = getPrototypeOf_default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = getPrototypeOf_default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return possibleConstructorReturn_default()(this, result); }; }
 
 function component_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
-function component_classPrivateFieldInitSpec(obj, privateMap, value) { component_checkPrivateRedeclaration(obj, privateMap); privateMap.set(obj, value); }
-
-function component_checkPrivateRedeclaration(obj, privateCollection) { if (privateCollection.has(obj)) { throw new TypeError("Cannot initialize the same private elements twice on an object"); } }
 
 
 
@@ -2236,27 +2260,17 @@ function setMapShared() {
   sharedComponents[this.nodeName].data = observable.call(this, STORE.get(this).object);
 }
 
-var _content = new WeakMap();
-
 var component_default = function (_Methods) {
   inherits_default()(_default, _Methods);
 
   var _super = component_createSuper(_default);
 
-  function _default(content, scripts, mode, isShared) {
+  function _default(content, scripts, mode, isShared, resolve) {
     var _this;
 
     classCallCheck_default()(this, _default);
 
     _this = _super.call(this); 
-
-    component_classPrivateFieldInitSpec(assertThisInitialized_default()(_this), _content, {
-      writable: true,
-      value: void 0
-    });
-
-    classPrivateFieldSet_default()(assertThisInitialized_default()(_this), _content, content); 
-
 
     var attributes = getattrs(_this.attributes); 
 
@@ -2265,6 +2279,8 @@ var component_default = function (_Methods) {
     STORE.get(assertThisInitialized_default()(_this)).object = Object.assign(defineProperty_default()({}, sAttr, attributes), mixins); 
 
     STORE.get(assertThisInitialized_default()(_this)).timer = undefined; 
+
+    STORE.get(assertThisInitialized_default()(_this)).connected = new Set(); 
 
     STORE.get(assertThisInitialized_default()(_this)).disconnected = new Set(); 
 
@@ -2341,63 +2357,103 @@ var component_default = function (_Methods) {
 
     STORE.get(assertThisInitialized_default()(_this)).eval.next(); 
 
-    Function(scripts).call(new Proxy(_this.$data, {
+    Function("return(async()=>{".concat(scripts, "})()")).call(new Proxy(_this.$data, {
       get: function get(target, key) {
         return outerComponent && key === '$outer' ? outerProxyObject : Reflect.get(target, key);
       }
-    })); 
+    })) 
+    .then(function () {
+      Object.defineProperty(assertThisInitialized_default()(_this), '$root', {
+        value: _this.attachShadow({
+          mode: mode
+        })
+      }); 
 
-    Object.defineProperty(assertThisInitialized_default()(_this), '$root', {
-      value: _this.attachShadow({
-        mode: mode
-      })
+      outerComponents.push(assertThisInitialized_default()(_this)); 
+
+      while (content.childNodes.length) {
+        _this.$root.append(content.firstChild);
+      } 
+
+
+      create.call(assertThisInitialized_default()(_this), _this.$root); 
+
+      outerComponents.pop(); 
+
+      new MutationObserver(function (mutationRecords, observer) {
+        observer.disconnect(); 
+
+        mutationRecords.forEach(function (record) {
+          if (!record.target.attributes || !record.target.attributes['data-rigl-for']) {
+            record.removedNodes.forEach(function (node) {
+              return remove.call(assertThisInitialized_default()(_this), node);
+            }); 
+
+            record.addedNodes.forEach(function (node) {
+              return create.call(assertThisInitialized_default()(_this), clear(node));
+            });
+          }
+        }); 
+
+        observer.observe(_this.$root, configMutations);
+      }).observe(_this.$root, configMutations); 
+
+      if (resolve) resolve();
     });
     return _this;
-  } 
-
-
-  createClass_default()(_default, [{
-    key: "connectedCallback",
-    value: function connectedCallback() {
-      var _this2 = this;
-
-      setTimeout(function () {
-        outerComponents.push(_this2); 
-
-        while (classPrivateFieldGet_default()(_this2, _content).childNodes.length) {
-          _this2.$root.append(classPrivateFieldGet_default()(_this2, _content).firstChild);
-        } 
-
-
-        create.call(_this2, _this2.$root); 
-
-        outerComponents.pop(); 
-
-        new MutationObserver(function (mutationRecords, observer) {
-          observer.disconnect(); 
-
-          mutationRecords.forEach(function (record) {
-            if (!record.target.attributes || !record.target.attributes['data-rigl-for']) {
-              record.removedNodes.forEach(function (node) {
-                return remove.call(_this2, node);
-              }); 
-
-              record.addedNodes.forEach(function (node) {
-                return create.call(_this2, clear(node));
-              });
-            }
-          }); 
-
-          observer.observe(_this2.$root, configMutations);
-        }).observe(_this2.$root, configMutations);
-      }, 0);
-    }
-  }]);
+  }
 
   return _default;
 }(methods);
 
 
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function render(rend, node) {
+  var index = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+  if (node.nodeName === 'STYLE' || node.nodeName === 'SCRIPT' || node.nodeName === 'TEMPLATE' && !node.attributes.name || node.nodeType === 8 || node.nodeType === 3 && !node.data.trim()) return null; 
+
+  if (node.shadowRoot) {
+    var clone = render.document.createElement(node.nodeName);
+
+    var _iterator = _createForOfIteratorHelper(node.attributes),
+        _step;
+
+    try {
+      for (_iterator.s(); !(_step = _iterator.n()).done;) {
+        var attr = _step.value;
+        clone.setAttribute(attr.name, attr.value);
+      }
+    } catch (err) {
+      _iterator.e(err);
+    } finally {
+      _iterator.f();
+    }
+
+    rend.append(clone);
+  } 
+  else if (node.nodeName === 'SLOT') rend.append(document.createElement('div')); 
+  else if (rend.content) rend.content.append(node.cloneNode()); 
+  else rend.append(node.cloneNode()); 
+
+
+  var rendContent = rend.content ? rend.content.childNodes : rend.childNodes; 
+
+  var nodeContent = node.content ? node.content.childNodes : node.shadowRoot ? node.shadowRoot.childNodes : node.nodeName === 'SLOT' ? node.assignedNodes({
+    flatten: true
+  }) : node.childNodes; 
+
+  for (var i = 0, y = 0; i < nodeContent.length; i++, y++) {
+    render(rendContent[index], nodeContent[i], y) || y--;
+  } 
+
+
+  return rend;
+}
 
 
 
@@ -2412,7 +2468,12 @@ function rigl_isNativeReflectConstruct() { if (typeof Reflect === "undefined" ||
 
 
 
+
 var mixins = {}; 
+
+var elementDefined = new DocumentFragment(); 
+
+var track = new Set(); 
 
 Object.defineProperties(window.Rigl = {}, {
   'load': {
@@ -2424,6 +2485,25 @@ Object.defineProperties(window.Rigl = {}, {
   'router': {
     value: rigl_router
   },
+  'render': {
+    value: function value() {
+      var names = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+      var root = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document.body;
+      return new Promise(function (done) {
+        if (!Array.isArray(names)) return done(root); 
+
+        names.forEach(function (name) {
+          return name ? track.add(name) : null;
+        }); 
+
+        rigl_observer(elementDefined).on('defined-components', function () {
+          render.document = document.implementation.createHTMLDocument(); 
+
+          done(render(new DocumentFragment(), root).childNodes[0].outerHTML);
+        });
+      });
+    }
+  },
   'observer': {
     value: rigl_observer
   },
@@ -2434,20 +2514,56 @@ Object.defineProperties(window.Rigl = {}, {
 }); 
 
 function load() {
+  var xhr = new XMLHttpRequest();
+
   for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
     args[_key] = arguments[_key];
   }
 
   args.forEach(function (path) {
-    return typeof path === 'string' ? fetch(path).then(function (res) {
-      return res.text();
-    }).then(function (text) {
-      return rigl_create(text);
-    }) : Array.isArray(path) ? path.forEach(function (item) {
+    if (typeof path === 'string') {
+      xhr.open('GET', path);
+      xhr.send();
+
+      xhr.onload = function () {
+        return rigl_create(xhr.response);
+      };
+    } else if (Array.isArray(path)) path.forEach(function (item) {
       return load(item);
-    }) : rigl_create(path);
+    });else rigl_create(path);
   });
 } 
+
+function defineComponent(name, temp, resolve) {
+  var content = clear(temp.content ? temp.content : temp); 
+
+  var scripts = toConsumableArray_default()(content.querySelectorAll('script')).map(function (script) {
+    return content.removeChild(script).innerHTML;
+  }).join(''); 
+
+
+  var mode = temp.hasAttribute('closed') ? 'closed' : 'open'; 
+
+  var isShared = temp.hasAttribute('shared'); 
+
+  customElements.define(name, function (_Component) {
+    inherits_default()(_class, _Component);
+
+    var _super = rigl_createSuper(_class);
+
+    function _class() {
+      classCallCheck_default()(this, _class);
+
+      return _super.call(this, content.cloneNode(true), scripts, mode, isShared, resolve);
+    } 
+
+
+    return _class;
+  }(component_default), temp.hasAttribute('slot') ? {
+    extends: temp.getAttribute('slot').toLocaleLowerCase()
+  } : null);
+} 
+
 
 function rigl_create() {
   mixins = window.Rigl.mixins; 
@@ -2469,34 +2585,20 @@ function rigl_create() {
   } 
 
 
-  !toConsumableArray_default()(storeTemplate.content.children).forEach(function (temp) {
-    var content = clear(temp.content ? temp.content : temp); 
+  Promise.all(toConsumableArray_default()(storeTemplate.content.children).map(function (temp) {
+    var name = (temp.getAttribute('name') || temp.nodeName).toLocaleLowerCase(); 
 
-    var scripts = toConsumableArray_default()(content.querySelectorAll('script')).map(function (script) {
-      return content.removeChild(script).innerHTML;
-    }).join(''); 
+    if (!track.size) return new Promise(function (resolve) {
+      return defineComponent(name, temp, resolve);
+    }); 
+    else if (track.has(name)) return new Promise(function (resolve) {
+      return defineComponent(name, temp, resolve);
+    }); 
 
-
-    var mode = temp.hasAttribute('closed') ? 'closed' : 'open'; 
-
-    var isShared = temp.hasAttribute('shared'); 
-
-    customElements.define((temp.getAttribute('name') || temp.nodeName).toLocaleLowerCase(), function (_Component) {
-      inherits_default()(_class, _Component);
-
-      var _super = rigl_createSuper(_class);
-
-      function _class() {
-        classCallCheck_default()(this, _class);
-
-        return _super.call(this, content.cloneNode(true), scripts, mode, isShared);
-      } 
-
-
-      return _class;
-    }(component_default), temp.hasAttribute('slot') ? {
-      extends: temp.getAttribute('slot').toLocaleLowerCase()
-    } : null);
+    return defineComponent(name, temp);
+  })) 
+  .then(function () {
+    return rigl_observer(elementDefined).trigger('defined-components');
   });
 }
 

@@ -1,0 +1,14 @@
+{
+  "home": {
+    "title": "Home",
+    "text": "Lorem ipsum dolor sit amet consectetur adipisicing."
+  },
+  "about": {
+    "title": "About",
+    "text": "Lorem ipsum dolor sit amet consectetur."
+  },
+  "contacts": {
+    "title": "Contacts",
+    "text": "Lorem ipsum dolor sit amet consectetur, adipisicing elit."
+  }
+}

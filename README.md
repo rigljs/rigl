@@ -7,11 +7,15 @@
 
 <br>
 
-**[Current version: 2.0.0](https://raw.githubusercontent.com/rigljs/rigl/main/rigl.min.js)**
+**[Current version: 2.1.0](https://raw.githubusercontent.com/rigljs/rigl/main/rigl.min.js)**
 
 <br>
 
-Rigl is a framework for building reactive Web Components. In addition to a convenient way to create components and add reactive behavior to them, Rigl provides an Observer for tracking events between different components and a simple Router.
+Rigl is a framework for building reactive Web Components with Server Rendering [(SSR)](#ssr) support. In addition to a convenient way to create components and add reactive behavior to them, Rigl provides an Observer for tracking events between different components and a simple Router.
+
+<br>
+
+> Version **2.1.0** added support for [SSR](#ssr); operator [await](#await); events [$connected()](#connected) and [parameters](#params) routes
 
 <br>
 
@@ -34,18 +38,21 @@ Rigl is a framework for building reactive Web Components. In addition to a conve
     - [$timer()](#timer)
     - [$()](#one-element)
     - [$$()](#all-elements)
+    - [$connected()](#connected)
     - [$disconnected()](#disconnected)
     - [$adopted()](#adopted)
     - [$before()](#before)
     - [$after()](#after)
     - [$load()](#load)
     - [$create()](#create)
+    - [await](#await)
 15. [Events](#events)
 16. [Closed components](#closed-components)
 17. [Outer components](#outer-components)
 18. [Shared state](#shared-state)
 19. [Observer](#observer)
 20. [Router](#router)
+21. [SSR](#ssr)
 
 <br>
 <hr>
@@ -1341,6 +1348,37 @@ NodeList(3) [p, p, p]
 
 <br>
 
+<h3 id="connected">$connected(function1, function2, ...functionN)</h3>
+
+The **$connected()** method allows you to define functions that will be called after the [connectedCallback](https://javascript.info/custom-elements) event is triggered, for example:
+
+```html
+<r-header>
+  <h1>Hello ${ message }!</h1>
+
+  <style>
+    h1 {
+      color: orangered;
+    }
+  </style>
+
+  <script>
+    this.message = 'Rigl'
+    
+    // define a function that will be called after the "connectedCallback" event is triggered
+    this.$connected(() => console.log('R-HEADER component added to document'))
+  </script>
+</r-header>
+```
+
+After adding the component to the document, a message will be displayed in the console:
+
+```
+R-HEADER component added to document
+```
+
+<br>
+
 <h3 id="disconnected">$disconnected(function1, function2, ...functionN)</h3>
 
 The **$disconnected()** method allows you to define functions that will be called after the [disconnectedCallback](https://javascript.info/custom-elements) event is triggered, for example:
@@ -1400,8 +1438,6 @@ The **$adopted()** method works similarly to the **$disconnected()** method, but
   </script>
 </r-header>
 ```
-
-> In addition to the *disconnectedCallback* and *adoptedCallback* lifecycle events, there is one more event [connectedCallback](https://javascript.info/custom-elements). But it is used by Rigl itself to define the DOM of the component, so the framework does not provide any special methods for it.
 
 This event is very rare and is therefore not covered in detail in this guide.
 
@@ -1557,6 +1593,33 @@ The browser will display:
 
 <h1>Hello Rigl!</h1>
 <h2>New R-TEST component</h2>
+
+
+<br>
+
+<h3 id="await">await</h3>
+
+The [await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await) operator is used to wait for the end of a Promise. Starting from version **2.1.0**, all component scripts are executed inside an asynchronous function, which allows using the **await** operator inside them, for example:
+
+```html
+<r-user>
+  <p>
+    <b>Id</b>: ${ user.id }
+  </p>
+  <p>
+    <b>First name</b>: ${ user.firstName }
+  </p>
+  <p>
+    <b>Last name</b>: ${ user.lastName }
+  </p>
+  
+  <script>
+    // assign a value to the "user" property after executing "fetch"
+    this.user = await fetch('https://rem-rest-api.herokuapp.com/api/users/1')
+      .then(response => response.json())
+  </script>
+</r-user>
+```
 <br>
 <br>
 
@@ -2744,7 +2807,7 @@ Let's take a closer look at the *Event* object passed to the route event handler
 router.on('/', event => console.log(event))
 ```
 
-If we restart the browser now, we will not see anything in the console. Only by clicking on the corresponding link in the *R-MENU* component, the information from the *Event* object will be displayed in the console. For the router to start working immediately, it needs to pass an object with the **start** property equal to True, in the second argument of the **$router()** method, for example:
+If we restart the browser now, we will not see anything in the console. Only by clicking on the corresponding link in the *R-MENU* component, the information from the *Event* object will be displayed in the console. For the *Router* to start working immediately, it needs to pass an object with the **start** property equal to True, in the second argument of the **$router()** method, for example:
 
 ```js
 // define a new Router and start it right away
@@ -2753,7 +2816,7 @@ const router = this.$router(null, { start: true })
 
 As you can see, the first argument is *null*. This is done so that the *Router* by default uses the global [document](https://developer.mozilla.org/en/docs/Web/API/Document) object as the element on which to catch and process events. The same object is used by default when we call the **$router()** method with no arguments.
 
-Let's go back to the *Event* object. It has several predefined, in JavaScript itself, properties for custom events. We will get to know only a few of them:
+Let's go back to the *Event* object. It has several predefined properties for custom events. We will get to know only a few of them:
 
 - **target** - always refers to the element that raised the event. When you click on the link, it will be an *A* element, and when navigating using the browser buttons *Forward/Back*, it will become the *Window* object
 - **type** - contains the name of the route event
@@ -2858,4 +2921,727 @@ If you still need to create a closed component, you will need to transfer the *R
     obs.on('change-page', (event, path) => this.page = path)
   </script>
 </r-content>
+```
+
+In the *Event* object of the event handler, you can get the <span id="params">parameters</span> of the route. Add another link to the menu, as shown below:
+
+```html
+<nav>
+  <a href="/">Home</a>
+  <a href="/about">About</a>
+  <a href="/contacts">Contacts</a>
+
+  <!-- add product link -->
+  <a href="/products/phones/8">Products</a>
+</nav>
+```
+
+Add one more handler to the *R-MENU* component:
+
+```js
+// define route "/products" and parameters "category" and "id"
+router.on('/products/:category/:id', event => {
+  console.log(event.params.category, event.params.id)
+})
+```
+
+Route parameters are preceded by a colon in the path. We can access them in processing through the **params** property of the *Event* object. In addition, parameters can be specified not only in a string, but also in a regular expression. Let's rewrite the previous example using a regular expression as a route:
+
+```js
+// define route "/products" and parameters "category" and "id"
+router.on(/products\/(?<category>\w+)\/(?<id>\w+)/, event => {
+  console.log(event.params.category, event.params.id)
+})
+```
+
+Inside a regular expression, route parameters are enclosed in named groups like:
+
+```
+(?<name>\w+)
+```
+
+For routes defined in a string, special characters can be used: **?**, **+**, **\***, **.** and **()**
+
+```js
+// matches "/ bk" or "/ bok"
+router.on('/bo?k', event => ...)
+
+// matches "/ bok", "/ book", "/ boook" and so on
+router.on('/bo+k', event => ...)
+
+// matches "/ bork", "/ bonk", "/bor.dak", "/ bor / ok" and so on
+router.on('/bo*k', event => ...)
+
+// matches "/bok", "/bork", "/book" and so on
+router.on('/bo.*k', event => ...)
+
+// indicates that the substring "/fantastic" may or may not appear in the request
+router.on('/book(/fantastic)?', event => ...)
+```
+<br>
+<br>
+
+<h2 id="ssr"># SSR</h2>
+
+<br>
+
+Starting with version **2.1.0**, Rigl has added support for Server Side Rendering (SSR) Node.js, making it a complete framework for building Web applications. For users, the content is still displayed in the [Shadow DOM](https://javascript.info/shadow-dom), and for search bots it is served as *HTML* cleared of garbage nodes. Garbage nodes for search engines include comments, empty text nodes, *TEMPLATE* tags without the ***name*** attribute, styles and component scripts. Component tags *SLOT* are returned as *DIV* tags for search engine robots.
+
+To render Web Components, the **render()** utility method is used. This is a method of the global Rigl object:
+
+```js
+Rigl.render([array, HTMLElement])
+```
+
+This method takes two optional parameters. The first argument is an array with the names of the components whose contents need to be processed. The second argument defines the root element of the page, starting from which Rigl will process components. For example:
+
+```js
+// process the four components and print the contents of the MAIN tag to the console
+Rigl.render(['r-header', 'r-menu', 'r-home', 'r-footer'], document.querySelector('main'))
+  .then(htmlText => console.log(htmlText))
+```
+
+By default, all components are processed and the root element is the *BODY* element of the page. The **render()** method returns a Promise. After the components are rendered, their HTML content as text is passed to the first parameter of the **then()** method. In the example above, this parameter is called **htmlText**, but you can name it whatever you want.
+
+Besides, close components whose templates have the ***closed*** attribute WILL NOT RENDER! Content can only be accessed from regular, open components.
+
+As an example for rendering, we will use the previous example for *Router*. First, remove the ***closed*** attribute from the *R-MENU* component template. Then you need to pass to * Router *, in the second argument, an object with **start** property equal to True, as shown below:
+
+```js
+// define a new Router with a NAV element and start it immediately
+const router = this.$router(this.$('nav'), { start: true })
+```
+
+Since *Router* now starts immediately, the **page** property of the *R-CONTENT* component will contain an empty string as the default name for the component:
+
+```js
+// define default page
+this.page = ''
+```
+
+Before rendering the components on the server, let's render the content of the application in the browser. Modify the *index.html* file:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rigl</title>
+</head>
+<body>
+  <!-- mount the R-HEADER component -->
+  <r-header></r-header>
+
+  <!-- mount the R-CONTENT component -->
+  <r-content></r-content>
+
+
+  <script src="rigl.min.js"></script>
+
+  <script>
+    Rigl.load('components.htm')
+
+    // output the textual HTML content of the application to the console
+    Rigl.render().then(htmlText => console.log(htmlText))
+  </script>
+</body>
+</html>
+```
+
+If we launch the browser now, we will not see anything in the console. This is due to the fact that by default, the **render()** method waits until all components are connected and only then it starts processing them. To see the render of the application, you will need to click on the links *About* and *Contacts*. But, we can pass to the method the names of those components, the render of which we want to receive:
+
+> Since all examples use [external-components](# external-components), to run them you need to run the application through any server
+
+```js
+// output the textual HTML content of the application to the console
+Rigl.render(['r-header', 'r-menu', 'r-home', 'r-footer'])
+  .then(htmlText => console.log(htmlText))
+```
+This example will work, but at the same time, we will have to dynamically determine the names of the components for the remaining pages, depending on the current address at which the application is launched, for example:
+
+```js
+// output the textual HTML content of the application to the console
+Rigl.render(['r-header', 'r-menu', `r-${location.pathname.slice(1) || 'home'}`, 'r-footer'])
+  .then(htmlText => console.log(htmlText))
+```
+
+The second disadvantage of this method is that the number of pages can be in the thousands, and it is impossible to create its own component for each page. Instead of three page components: *R-HOME*, *R-ABOUT* and *R-CONTACTS*, we will use one *R-CONTENT* component for all pages, and the components above, we will simply remove them from the application so that they do not interfered with rendering.
+
+Let's first change the *R-MENU* component, in which instead of three handlers for each page, we will make one handler for all requests:
+
+```html
+<!-- R-MENU component -->
+<r-menu>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="/contacts">Contacts</a>
+  </nav>
+
+  <style>
+    a { margin-right: 10px; }
+  </style>
+
+  <script>
+    // define a new Router with a NAV element and start it immediately
+    const router = this.$router(this.$('nav'), { start: true })
+
+    // define a new Observer object
+    const obs = this.$observer()
+
+    // define route ".*" for all requests
+    router.on('.*', () => fetch('db.json')
+      // get data from the server and decode the response into JSON format
+      .then(response => response.json())
+      
+      // pass the database to the second parameter of the "change-page" event handler
+      .then(db => obs.trigger('change-page', db)))
+  </script>
+</r-menu>
+```
+
+The following changes will affect the *R-CONTENT* component, we no longer need the special attribute ***$view*** and the default page too:
+
+```html
+<!-- R-CONTENT component -->
+<r-content>
+  <h2>${ title }</h2>
+  <p>${ text }</p>
+
+  <script>
+    // define a new Observer object
+    const obs = this.$observer()
+
+    /* create a new Promise and suspend the execution of the R-CONTENT component until called
+      event "change-page" in the handler of which data is assigned to the component and the Promise is resolved */
+    await new Promise(done => {
+      obs.on('change-page', (event, db) => {
+        // determine the name of the requested component
+        const pathname = location.pathname.slice(1) || 'home'
+
+        // assign a value to the title and text
+        this.title = db[pathname].title
+        this.text = db[pathname].text
+
+        // resolve the Promise
+        done()
+      })
+    })
+  </script>
+</r-content>
+```
+
+ЗThis uses the **await** operator, introduced in the latest version of Rigl, followed by a Promise. Inside this Promise, the *change-page* event handlers are defined. The handler has two parameters. The first parameter is the *Event* event object, and the second is the database that is passed from the *R-MENU* component:
+
+```js
+// pass the database to the second parameter of the "change-page" event handler
+.then(db => obs.trigger('change-page', db)))
+```
+
+Inside the handler for this event, we first get the name of the requested component from the global **location** object. Based on the result obtained, assign the **title** and **text** properties of the *R-CONTENT* component to the corresponding value from the database. At the end of the handler, the Promise is resolved. This design eliminates the use of [whenDefined](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/whenDefined), which was necessary before the appearance of the **await** operator in Rigl.
+
+The last component *R-HEADER* will remain unchanged, we will simply add a style for the heading color to it:
+
+```html
+<!-- R-HEADER component -->
+<r-header>
+  <r-menu></r-menu>
+  <h1>Header</h1>
+
+  <style>
+    h1 {
+      color: orangered;
+    }
+  </style>
+</r-header>
+```
+
+To fully display the site, let's create another *R-FOOTER* component:
+
+```html
+<!-- R-FOOTER component -->
+<r-footer>
+  <p>${ message }</p>
+
+  <script>
+    this.message = `Copyright @ Rigl ${new Date().getFullYear()}`
+  </script>
+</r-footer>
+```
+
+In addition, inside the directory of our application, create a *db.json* file, which will store our database:
+
+```json
+{
+  "home": {
+    "title": "Home",
+    "text": "Lorem ipsum dolor sit amet consectetur adipisicing."
+  },
+  "about": {
+    "title": "About",
+    "text": "Lorem ipsum dolor sit amet consectetur."
+  },
+  "contacts": {
+    "title": "Contacts",
+    "text": "Lorem ipsum dolor sit amet consectetur, adipisicing elit."
+  }
+}
+```
+
+Thus, the complete view of the *components.htm* file will look like this:
+
+```html
+<!-- R-HEADER component -->
+<r-header>
+  <r-menu></r-menu>
+  <h1>Header</h1>
+
+  <style>
+    h1 {
+      color: orangered;
+    }
+  </style>
+</r-header>
+
+
+<!-- R-MENU component -->
+<r-menu>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="/contacts">Contacts</a>
+  </nav>
+
+  <style>
+    a { margin-right: 10px; }
+  </style>
+
+  <script>
+    // define a new Router with a NAV element and start it immediately
+    const router = this.$router(this.$('nav'), { start: true })
+
+    // define a new Observer object
+    const obs = this.$observer()
+
+    // define route ".*" for all requests
+    router.on('.*', () => fetch('db.json')
+      // get data from the server and decode the response into JSON format
+      .then(response => response.json())
+      
+      // pass the database to the second parameter of the "change-page" event handler
+      .then(db => obs.trigger('change-page', db)))
+  </script>
+</r-menu>
+
+
+<!-- R-CONTENT component -->
+<r-content>
+  <h2>${ title }</h2>
+  <p>${ text }</p>
+
+  <script>
+    // define a new Observer object
+    const obs = this.$observer()
+
+    /* create a new Promise and suspend the execution of the R-CONTENT component until called
+      event "change-page" in the handler of which data is assigned to the component and the Promise is resolved */
+    await new Promise(done => {
+      obs.on('change-page', (event, db) => {
+        // determine the name of the requested component
+        const pathname = location.pathname.slice(1) || 'home'
+
+        // assign a value to the title and text
+        this.title = db[pathname].title
+        this.text = db[pathname].text
+
+        // resolve the Promise
+        done()
+      })
+    })
+  </script>
+</r-content>
+
+
+<!-- R-FOOTER component -->
+<r-footer>
+  <p>${ message }</p>
+
+  <script>
+    this.message = `Copyright @ Rigl ${new Date().getFullYear()}`
+  </script>
+</r-footer>
+```
+
+And the file *index.html* is shown below:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rigl</title>
+</head>
+<body>
+  <!-- mount the R-HEADER component -->
+  <r-header></r-header>
+
+  <!-- mount the R-CONTENT component -->
+  <r-content></r-content>
+
+  <!-- mount the R-FOOTER component -->
+  <r-footer></r-footer>
+  
+
+  <script src="rigl.min.js"></script>
+  
+  <script>
+    Rigl.load('components.htm')
+    
+    // output the textual HTML content of the application to the console
+    Rigl.render().then(htmlText => console.log(htmlText))
+  </script>
+</body>
+</html>
+```
+
+If you now run your application in a browser through any server, you will see the contents of all components cleared of garbage nodes in the console:
+
+```
+<body><r-header><r-menu><nav><a href="/">Home</a><a href="/about">About</a><a href="/contacts">Contacts</a></nav></r-menu><h1>Header</h1></r-header><r-content><h2>Home</h2><p>Lorem ipsum dolor sit amet consectetur adipisicing.</p></r-content><r-footer><p>Copyright @ Rigl 2021</p></r-footer></body>
+```
+
+But before proceeding with the creation of the server, it is necessary to make a small correction to the *R-MENU* component. The fact is that Rigl uses the [JSDOM](https://github.com/jsdom/jsdom) virtual browser to render web components, which currently does not support the [fetch()](https://javascript.info/fetch). We will have to replace it with the old [XMLHttpRequest](https://javascript.info/xmlhttprequest) object, as shown below:
+
+```html
+<!-- R-MENU component -->
+<r-menu>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="/contacts">Contacts</a>
+  </nav>
+
+  <style>
+    a { margin-right: 10px; }
+  </style>
+
+  <script>
+    // define a new Router with a NAV element and start it immediately
+    const router = this.$router(this.$('nav'), { start: true })
+
+    // define a new Observer object
+    const obs = this.$observer()
+
+    // define route ".*" for all requests
+    router.on('.*', () => {
+      // create a new XMLHttpRequest object
+      const xhr = new XMLHttpRequest()
+
+      // initialize the request method and path
+      xhr.open('GET', 'db.json')
+     
+      // decode response to JSON format
+      xhr.responseType = 'json'
+
+      // execute request
+      xhr.send()
+
+      // pass the database to the second parameter of the "change-page" event handler
+      xhr.onload = () => obs.trigger('change-page', xhr.response)
+    })
+  </script>
+</r-menu>
+```
+
+Now you can move on to creating a server in Node.js. To create the server, we will use the [Express](https://expressjs.com/) framework. Create a new folder on disk and name it, for example, *ssr*. Inside the folder, create two subfolders: *public* and *views*.
+
+Copy the following files into the *public* folder: *components.htm*, *db.json* and *rigl.min.js*. In addition, create a *img* subfolder in it and place the *logo.png* file in it:
+
+![rigl](https://raw.githubusercontent.com/rigljs/rigl/main/img/logo.png)
+
+Let's add this image to the *R-HEADER* component found in the *components.htm* file:
+
+```html
+<!-- R-HEADER component -->
+<r-header>
+  <r-menu></r-menu>
+  <img src="img/logo.png" alt="logo">
+  <h1>Header</h1>
+
+  <style>
+    h1 {
+      color: orangered;
+    }
+  </style>
+</r-header>
+```
+
+The *public* folder will contain all the site's static files, and the *img* folder will contain all its images. Now go to the *views* folder and create a *main.hbs* file in it, which will be the main view of the [Handlebars](https://handlebarsjs.com/) templating engine, as shown below:
+
+```hbs
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rigl</title>
+</head>
+  {{#if body}}
+    {{{body}}}
+  {{else}}
+    {{> body}}
+  {{/if}}
+</html>
+```
+
+This view will receive either the content of the **body** property of the template engine, if such a property is passed in the second argument of the **render()** method of the Express framework, for example:
+ 
+```js
+res.render("main.hbs", { body })
+```
+
+r a partial view with the same name, which we will create next. Add the *partials* subfolder to the *views* folder, in which create the *body.hbs* file, which is a partial view of the template engine:
+
+```hbs
+<body>
+  <!-- mount the R-HEADER component -->
+  <r-header></r-header>
+
+  <!-- mount the R-CONTENT component -->
+  <r-content></r-content>
+
+  <!-- mount the R-FOOTER component -->
+  <r-footer></r-footer>
+  
+
+  <script src="rigl.min.js"></script>
+  
+  <script>
+    Rigl.load('components.htm')
+  </script>
+</body>
+```
+
+It remains to add the application file *app.js* to the *ssr* folder:
+
+```js
+const express = require("express")
+const hbs = require("hbs")
+const { readFile } = require('fs/promises')
+const { JSDOM } = require("jsdom")
+const port = process.env.PORT || 3000
+
+const app = express()
+app.use(express.static(__dirname + "/public"))
+
+app.set("view engine", "hbs")
+hbs.registerPartials(__dirname + "/views/partials")
+
+
+// contains the names used in the titles of search engines
+const bots = ['YandexBot', 'Googlebot']
+
+// ----------------------------------------------------------------------
+const YandexBot = 'Mozilla/5.0 (compatible; YandexBot/3.0; +http://yandex.com/bots)'
+const Googlebot = 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'
+// ----------------------------------------------------------------------
+
+
+app.get('/favicon.ico', (req, res) => res.sendStatus(204))
+
+app.use(async (req, res) => {
+  // const userAgent = YandexBot
+  // const userAgent = Googlebot
+  const userAgent = req.get('User-Agent')
+
+  // if the request is from a bot, then the "isBot" constant will contain True
+  const isBot = bots.some(bot => userAgent.includes(bot))
+  
+  // if it's a bot
+  if (isBot) {
+    // get full request URL
+    const fullURL = req.protocol + "://" + req.hostname + `${port ? `:${port}` : ''}` + req.path
+
+    // contains the rendered content of the application
+    const body = await readFile(__dirname + '/views/partials/body.hbs').then(async data => {
+      // create a virtual JSDOM browser
+      const dom = new JSDOM(data.toString(), {
+        url: fullURL, // pass request URL to JSDOM virtual browser
+        runScripts: "dangerously",
+        resources: "usable"
+      })
+      
+      // render the application with "Rigl.render()"
+      return await new Promise(done => {
+        dom.window.onload = () => {
+          // return the textual HTML content to the constant "body"
+          dom.window.Rigl.render().then(done)
+        }
+      })
+    })
+
+    // pass the "body" constant to the template engine
+    res.render("main.hbs", { body })
+  }
+
+  // otherwise, if the request was made by the user
+  else {
+    // call the template engine with the default "body" view
+    res.render("main.hbs")
+  }
+})
+
+app.listen(port, () => console.log(`The server is running at http://localhost:${port}/`))
+```
+
+and add the *package.json* dependency file to the same folder:
+
+```json
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "hbs": "^4.1.2",
+    "jsdom": "^18.0.0"
+  }
+}
+```
+
+The *ssr* directory structure is shown below:
+
+```
+ssr
+  app.js
+  package.json
+  /public
+    components.htm
+    rigl.min.js
+    db.json
+    /img
+      logo.png
+  /views
+    main.hbs
+    /partials
+      body.hbs
+```
+
+You should already have [Node.js](https://nodejs.org/en/) installed on your computer. To install all dependencies from the *package.json* file, open the *ssr* folder from the terminal and enter the command in it:
+
+```
+npm i
+```
+
+After installing the dependencies, to start the server, enter the command in the terminal:
+
+```
+node app
+```
+
+and navigate to [http://localhost:3000/](http://localhost:3000/) in your browser. You will be presented with an application similar to the one we launched before, without the Node.js server.
+
+To see the site through the eyes of a bot, uncomment the line **const userAgent = YandexBot** or **const userAgent = Googlebot** in the *app.js* file and comment out **const userAgent = req.get ('User-Agent')**, for example:
+
+```js
+app.use(async (req, res) => {
+  // const userAgent = YandexBot
+  const userAgent = Googlebot
+  // const userAgent = req.get('User-Agent')
+```
+
+Open your browser console and go to the Elements tab. You will see there pure HTML, without styles, Shadow DOM and other components garbage for bots.
+
+For example, here was a check of only two of the most popular search engines:
+
+```js
+// ----------------------------------------------------------------------
+const YandexBot = 'Mozilla/5.0 (compatible; YandexBot/3.0; +http://yandex.com/bots)'
+const Googlebot = 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'
+// ----------------------------------------------------------------------
+```
+
+In a real project, the **bots** constant is an array from the full list of search engine headers, which can be found on the Internet:
+
+```js
+const bots = ['YandexBot', 'Googlebot']
+```
+
+If the request was made by a bot, then the code block shown below is executed:
+
+```js
+// if it's a bot
+if (isBot) {
+  // get full request URL
+  const fullURL = req.protocol + "://" + req.hostname + `${port ? `:${port}` : ''}` + req.path
+
+  // contains the rendered content of the application
+  const body = await readFile(__dirname + '/views/partials/body.hbs').then(async data => {
+    // create a virtual JSDOM browser
+    const dom = new JSDOM(data.toString(), {
+      url: fullURL, // pass request URL to JSDOM virtual browser
+      runScripts: "dangerously",
+      resources: "usable"
+    })
+    
+    // render the application with "Rigl.render()"
+    return await new Promise(done => {
+      dom.window.onload = () => {
+        // return the textual HTML content to the constant "body"
+        dom.window.Rigl.render().then(done)
+      }
+    })
+  })
+
+  // pass the "body" constant to the template engine
+  res.render("main.hbs", { body })
+}
+```
+
+From the **window** property of the JSDOM virtual browser, the already familiar **render()** method of the Rigl framework is called:
+
+```js
+// render the application with "Rigl.render()"
+return await new Promise(done => {
+  dom.window.onload = () => {
+    // return the textual HTML content to the constant "body"
+    dom.window.Rigl.render().then(done)
+  }
+})
+```
+
+which returns the textual HTML content for the **body** constant as shown below:
+
+```js
+// contains the rendered content of the application
+const body = await readFile(__dirname + '/views/partials/body.hbs').then(async data => {
+```
+
+Which is then passed as the **body** property to the template engine in the second argument:
+
+```js
+// pass the "body" constant to the template engine
+res.render("main.hbs", { body })
+```
+
+If the request was made by the user, then a partial view named **body** is given by default:
+
+```js
+// otherwise, if the request was made by the user
+else {
+  // call the template engine with the default "body" view
+  res.render("main.hbs")
+}
 ```

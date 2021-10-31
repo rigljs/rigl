@@ -1,0 +1,90 @@
+<!-- R-HEADER component -->
+<r-header>
+  <r-menu></r-menu>
+  <img src="img/logo.png" alt="logo">
+  <h1>Header</h1>
+
+  <style>
+    h1 {
+      color: orangered;
+    }
+  </style>
+</r-header>
+
+
+<!-- R-MENU component -->
+<r-menu>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="/contacts">Contacts</a>
+  </nav>
+
+  <style>
+    a { margin-right: 10px; }
+  </style>
+
+  <script>
+    // define a new Router with a NAV element and start it immediately
+    const router = this.$router(this.$('nav'), { start: true })
+
+    // define a new Observer object
+    const obs = this.$observer()
+
+    // define route ".*" for all requests
+    router.on('.*', () => {
+      // create a new XMLHttpRequest object
+      const xhr = new XMLHttpRequest()
+
+      // initialize the request method and path
+      xhr.open('GET', 'db.json')
+     
+      // decode response to JSON format
+      xhr.responseType = 'json'
+
+      // execute request
+      xhr.send()
+
+      // pass the database to the second parameter of the "change-page" event handler
+      xhr.onload = () => obs.trigger('change-page', xhr.response)
+    })
+  </script>
+</r-menu>
+
+
+<!-- R-CONTENT component -->
+<r-content>
+  <h2>${ title }</h2>
+  <p>${ text }</p>
+
+  <script>
+    // define a new Observer object
+    const obs = this.$observer()
+
+    /* create a new Promise and suspend the execution of the R-CONTENT component until called
+      event "change-page" in the handler of which data is assigned to the component and the Promise is resolved */
+    await new Promise(done => {
+      obs.on('change-page', (event, db) => {
+        // determine the name of the requested component
+        const pathname = location.pathname.slice(1) || 'home'
+
+        // assign a value to the title and text
+        this.title = db[pathname].title
+        this.text = db[pathname].text
+
+        // resolve the Promise
+        done()
+      })
+    })
+  </script>
+</r-content>
+
+
+<!-- R-FOOTER component -->
+<r-footer>
+  <p>${ message }</p>
+
+  <script>
+    this.message = `Copyright @ Rigl ${new Date().getFullYear()}`
+  </script>
+</r-footer>

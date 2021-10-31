@@ -7,11 +7,15 @@
 
 <br>
 
-**[Текущая версия: 2.0.0](https://raw.githubusercontent.com/rigljs/rigl/main/rigl.min.js)**
+**[Текущая версия: 2.1.0](https://raw.githubusercontent.com/rigljs/rigl/main/rigl.min.js)**
 
 <br>
 
-Rigl - это фреймворк для создания реактивных Веб-компонентов. Кроме удобного способа создания компонентов и добавления им реактивного поведения, Rigl предоставляет Наблюдателя для отслеживания событий между различными компонентами и несложный Маршрутизатор.
+Rigl - это фреймворк для создания реактивных Веб-компонентов с поддержкой серверного рендеринга [(SSR)](#ssr). Кроме удобного способа создания компонентов и добавления им реактивного поведения, Rigl предоставляет Наблюдателя для отслеживания событий между различными компонентами и несложный Маршрутизатор.
+
+<br>
+
+> В версии **2.1.0** была добавлена поддержка [SSR](#ssr); оператора [await](#await); события [$connected()](#connected) и [параметров](#params) маршрутов
 
 <br>
 
@@ -34,18 +38,21 @@ Rigl - это фреймворк для создания реактивных В
     - [$timer()](#timer)
     - [$()](#one-element)
     - [$$()](#all-elements)
+    - [$connected()](#connected)
     - [$disconnected()](#disconnected)
     - [$adopted()](#adopted)
     - [$before()](#before)
     - [$after()](#after)
     - [$load()](#load)
     - [$create()](#create)
+    - [await](#await)
 15. [События](#events)
 16. [Закрытые компоненты](#closed-components)
 17. [Внешние компоненты](#outer-components)
 18. [Разделяемое состояние](#shared-state)
 19. [Наблюдатель](#observer)
 20. [Маршрутизатор](#router)
+21. [SSR](#ssr)
 
 <br>
 <hr>
@@ -1341,6 +1348,37 @@ NodeList(3) [p, p, p]
 
 <br>
 
+<h3 id="connected">$connected(function1, function2, ...functionN)</h3>
+
+Метод **$connected()** позволяет определить функции, которые будут вызваны после срабатывания события [connectedCallback](https://learn.javascript.ru/custom-elements), например:
+
+```html
+<r-header>
+  <h1>Hello ${ message }!</h1>
+
+  <style>
+    h1 {
+      color: orangered;
+    }
+  </style>
+
+  <script>
+    this.message = 'Rigl'
+    
+    // определить функцию, которая будет вызываться после срабатывания события "connectedCallback"
+    this.$connected(() => console.log('компонент R-HEADER добавлен в документ'))
+  </script>
+</r-header>
+```
+
+После добавления компонента в документ, в консоли будет выведено сообщение:
+
+```
+компонент R-HEADER добавлен в документ
+```
+
+<br>
+
 <h3 id="disconnected">$disconnected(function1, function2, ...functionN)</h3>
 
 Метод **$disconnected()** позволяет определить функции, которые будут вызваны после срабатывания события [disconnectedCallback](https://learn.javascript.ru/custom-elements), например:
@@ -1400,8 +1438,6 @@ NodeList(3) [p, p, p]
   </script>
 </r-header>
 ```
-
-> Кроме событий жизненного цикла *disconnectedCallback* и *adoptedCallback*, существует ещё одно событие [connectedCallback](https://learn.javascript.ru/custom-elements). Но оно испольуется самим Rigl для определения DOM компонента, поэтому фреймворк не предоставляет для него специальных методов.
 
 Это событие возникает очень редко, поэтому в данном руководстве оно не рассматривается подробно.
 
@@ -1557,6 +1593,33 @@ NodeList(3) [p, p, p]
 
 <h1>Hello Rigl!</h1>
 <h2>Новый компонент R-TEST</h2>
+
+
+<br>
+
+<h3 id="await">await</h3>
+
+Оператор [await](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Operators/await) используется для ожидания окончания Промиса. Начиная с версии **2.1.0**, все скрипты компонентов выполняются внутри асинхронной функции, что позволяет в них использовать оператор **await**, например:
+
+```html
+<r-user>
+  <p>
+    <b>Id</b>: ${ user.id }
+  </p>
+  <p>
+    <b>Имя</b>: ${ user.firstName }
+  </p>
+  <p>
+    <b>Фамилия</b>: ${ user.lastName }
+  </p>
+  
+  <script>
+    // присвоить значение свойству "user" после выполнения "fetch"
+    this.user = await fetch('https://rem-rest-api.herokuapp.com/api/users/1')
+      .then(response => response.json())
+  </script>
+</r-user>
+```
 <br>
 <br>
 
@@ -2744,7 +2807,7 @@ router.on(/\/abo.+/, () =>
 router.on('/', event => console.log(event))
 ```
 
-Если мы сейчас перезагрузим браузер, то ничего не увидим в консоли. Только кликнув по соответствующей ссылке в компоненте *R-MENU*, в консоль будет выведена информация из объекта *Event*. Чтобы маршрутизатор сразу начинал работать, ему необходимо передать объект со свойством **start** равным Истине, во втором аргументе метода **$router()**, например:
+Если мы сейчас перезагрузим браузер, то ничего не увидим в консоли. Только кликнув по соответствующей ссылке в компоненте *R-MENU*, в консоль будет выведена информация из объекта *Event*. Чтобы *Маршрутизатор* сразу начинал работать, ему необходимо передать объект со свойством **start** равным Истине, во втором аргументе метода **$router()**, например:
 
 ```js
 // определить новый Маршрутизатор и сразу его запустить
@@ -2753,7 +2816,7 @@ const router = this.$router(null, { start: true })
 
 Как вы заметили, в первом аргументе указывается значение *null*. Это сделано для того, чтобы *Маршрутизатор* по умолчанию использовал глобальный объект [document](https://developer.mozilla.org/ru/docs/Web/API/Document) в качестве элемента, на котором будут ловиться и обрабатываться события. Тот же самый объект используется по умолчанию, когда мы вызваем метод **$router()** без аргументов.
 
-Вернёмся к объекту *Event*. В нём имеется несколько предопределённых, в самом JavaScript, для пользовательских событий свойств. Мы познакомимся только с некоторыми из них:
+Вернёмся к объекту *Event*. В нём имеется несколько предопределённых для пользовательских событий свойств. Мы познакомимся только с некоторыми из них:
 
 - **target** - всегда ссылается на элемент, который возбудил событие. При нажатии на ссылку, это будет элемент *A*, а при навигации с помощью кнопок браузера *Вперёд/Назад*, им станет объект *Window*
 - **type** - содержит название события маршрута
@@ -2785,7 +2848,7 @@ router.on('/', event => ['target', 'type', 'url'].forEach(prop => console.log(pr
 
 Поскольку детали *Теневого DOM* будут недоступны для обработки *Маршрутизатором*. [Подробнее...](https://learn.javascript.ru/shadow-dom-events)
 
-Если всё-таки понадобится создать закрытый компонент, то необходимо будет перенести *Маршрутизатор* в него, а элемент *NAV* содержащий ссылки, назначить вместо объекта *Document* по умолчанию. Кроме этого, здесь потребуется передать дополнительный аргумент в методе **trigger()**, где он будет доступен во втором параметре обработчика события:
+Если всё-таки понадобится создать закрытый компонент, то необходимо будет перенести *Маршрутизатор* в него, а элемент *NAV*, содержащий ссылки, назначить вместо объекта *Document* по умолчанию. Кроме этого, здесь потребуется передать дополнительный аргумент в методе **trigger()**, где он будет доступен во втором параметре обработчика события:
 
 ```html
 <!-- закрытый компонент R-MENU -->
@@ -2858,4 +2921,727 @@ router.on('/', event => ['target', 'type', 'url'].forEach(prop => console.log(pr
     obs.on('change-page', (event, path) => this.page = path)
   </script>
 </r-content>
+```
+
+В объекте *Event* обработчика события, можно получить <span id="params">параметры</span> маршрута. Добавьте в меню ещё одну ссылку, как показано ниже:
+
+```html
+<nav>
+  <a href="/">Главная</a>
+  <a href="/about">О нас</a>
+  <a href="/contacts">Контакты</a>
+
+  <!-- добавить ссылку на продукт -->
+  <a href="/products/phones/8">Продукты</a>
+</nav>
+```
+
+Добавьте ещё один обработчик в компонент *R-MENU*:
+
+```js
+// определить маршрут "/products" и параметры "category" и "id"
+router.on('/products/:category/:id', event => {
+  console.log(event.params.category, event.params.id)
+})
+```
+
+Параметры маршрута предваряются двоеточием в пути. Мы можем получить к ним доступ в обработчике, через свойство **params**  объекта *Event*. Кроме этого, параметры можно определять не только в строке, но и в регулярном выражении. Перепишем предыдущий пример, используя регулярное выражение в качестве маршрута:
+
+```js
+// определить маршрут "/products" и параметры "category" и "id"
+router.on(/products\/(?<category>\w+)\/(?<id>\w+)/, event => {
+  console.log(event.params.category, event.params.id)
+})
+```
+
+Внутри регулярного выражения, параметры маршрута заключаются в именованные группы вида:
+
+```
+(?<name>\w+)
+```
+
+Для маршрутов определяемых в строке, можно использовать специальные символы: **?**, **+**, **\***, **.** и **()**
+
+```js
+// соответствует "/bk" или "/bok"
+router.on('/bo?k', event => ...)
+
+// соответствует "/bok", "/book", "/boook" и так далее
+router.on('/bo+k', event => ...)
+
+// соответствует "/bork", "/bonk", "/bor.dak", "/bor/ok" и так далее
+router.on('/bo*k', event => ...)
+
+// соответствует "/bok", "/bork", "/book" и так далее
+router.on('/bo.*k', event => ...)
+
+// указывает, что подстрока "/fantastic" может встречаться или отсутствовать в запросе
+router.on('/book(/fantastic)?', event => ...)
+```
+<br>
+<br>
+
+<h2 id="ssr"># SSR</h2>
+
+<br>
+
+Начиная с версии **2.1.0** в Rigl была добавлена поддержка рендеринга на стороне сервера (SSR) Node.js, что делает его полноценным фреймворком для создания Веб-приложений. Для пользователей содержимое по-прежнему выводится в [Теневом DOM](https://learn.javascript.ru/shadow-dom), а для поисковых ботов оно отдаётся в виде очищенного от мусорных узлов *HTML*. К мусорным узлам для поисковых систем относятся комментарии, пустые текстовые ноды, теги *TEMPLATE* без атрибута ***name***, стили и скрипты компонентов. Теги *SLOT* компонентов отдаются в виде тегов *DIV* для роботов поисковых систем.
+
+Для рендеринга Веб-компонентов, используется служебный метод **render()**. Это метод глобального объекта Rigl:
+
+```js
+Rigl.render([array, HTMLElement])
+```
+
+Данный метод принимает два необязательных параметра. Первый аргумент, это массив с названиями компонентов, содержимое которых необходимо обработать. Второй аргумент определяет корневой элемент страницы, начиная с которого, Rigl будет обрабатывать компоненты. Например:
+
+```js
+// обработать четыре компонента и вывести в консоль содержимое тега MAIN 
+Rigl.render(['r-header', 'r-menu', 'r-home', 'r-footer'], document.querySelector('main'))
+  .then(htmlText => console.log(htmlText))
+```
+
+По умолчанию, обрабатываются все компоненты и корневым элементом является элемент *BODY* страницы. Метод **render()** возвращает Промис. После рендеринга компонентов, их HTML-содержимое в виде текста передаётся в первый параметр метода **then()**. В примере выше, этот параметр называется **htmlText**, но его можно назвать как угодно.
+
+Кроме этого, закрыте компоненты, чьи шаблоны имеют атрибут ***closed***, НЕ РЕНДЕРЯТСЯ! Доступ к содержимому можно получить только у обычных, открытых компонентов.
+
+В качестве примера для рендера, мы будем использовать предыдущий пример для *Маршрутизатора*. Сначала удалите у шаблона компонента *R-MENU* атрибут ***closed***. Затем необходимо передать в *Маршрутизатор*, во втором аргументе, объект со свойством **start** равным Истине, как показано ниже:
+
+```js
+// определить новый Маршрутизатор с элементом NAV и сразу же его запустить
+const router = this.$router(this.$('nav'), { start: true })
+```
+
+Поскольку *Маршрутизатор* теперь запускается сразу, то свойство **page** у компонента *R-CONTENT* будет содержать пустую строку, в качестве названия для компонента по умолчанию:
+
+```js
+// определить страницу по умолчанию
+this.page = ''
+```
+
+Перед тем, как рендерить компоненты на сервере, давайте выведем содержимое приложения в браузере. Внесите изменения в файл *index.html*:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rigl</title>
+</head>
+<body>
+  <!-- монтировать компонент R-HEADER -->
+  <r-header></r-header>
+
+  <!-- монтировать компонент R-CONTENT -->
+  <r-content></r-content>
+
+
+  <script src="rigl.min.js"></script>
+
+  <script>
+    Rigl.load('components.htm')
+
+    // вывести текстовое HTML-содержимое приложения в консоль
+    Rigl.render().then(htmlText => console.log(htmlText))
+  </script>
+</body>
+</html>
+```
+
+Если мы сейчас запустим браузер, то ничего не увидим в консоли. Это связано с тем, что по умолчанию, метод **render()** ждет пока поключатся все компоненты и только потом, он начинает их обрабатывать. Чтобы увидить рендер приложения, необходимо будет щелкнуть по ссылкам *О нас* и *Контакты*. Но, мы можем передать методу названия тех компонентов, рендер которых мы хотим получить:
+
+> Поскольку для всех примеров используются [внешние компоненты](#external-components), то для их выполнения необходимо запускать приложение через любой сервер
+
+```js
+// вывести текстовое HTML-содержимое приложения в консоль
+Rigl.render(['r-header', 'r-menu', 'r-home', 'r-footer'])
+  .then(htmlText => console.log(htmlText))
+```
+Этот пример будет работать, но при этом, нам придётся динамически определять названия компонентов для остальных страниц, в зависимости от текущего адреса по которому запущено приложение, например:
+
+```js
+// вывести текстовое HTML-содержимое приложения в консоль
+Rigl.render(['r-header', 'r-menu', `r-${location.pathname.slice(1) || 'home'}`, 'r-footer'])
+  .then(htmlText => console.log(htmlText))
+```
+
+Вторым недостатком такого способа является то, что количество страниц может исчисляться тысячами, и создавать для каждой страницы свой компонент является невозможным. Вместо трёх компонентов страниц: *R-HOME*, *R-ABOUT* и *R-CONTACTS*, мы будем использовать один компонент *R-CONTENT* для всех страниц, а компоненты выше, мы просто удалим из приложения, чтобы они не мешали рендерингу.
+
+Давайте сначала изменим компонент *R-MENU*, в котором мы вместо трёх обработчиков для каждой страницы, сделаем один обработчик для всех запросов:
+
+```html
+<!-- компонент R-MENU -->
+<r-menu>
+  <nav>
+    <a href="/">Главная</a>
+    <a href="/about">О нас</a>
+    <a href="/contacts">Контакты</a>
+  </nav>
+
+  <style>
+    a { margin-right: 10px; }
+  </style>
+
+  <script>
+    // определить новый Маршрутизатор с элементом NAV и сразу же его запустить
+    const router = this.$router(this.$('nav'), { start: true })
+
+    // определить новый объект Наблюдателя
+    const obs = this.$observer()
+
+    // определить маршрут ".*" для всех запросов
+    router.on('.*', () => fetch('db.json')
+      // получить данные от сервера и декодировать ответ в формат JSON
+      .then(response => response.json())
+      
+      // передать базу данных во второй параметр обработчика события "change-page"
+      .then(db => obs.trigger('change-page', db)))
+  </script>
+</r-menu>
+```
+
+Следующие изменения коснутся компонента *R-CONTENT*, специальный атрибут ***$view*** нам больше не нужен и страница по умолчанию тоже:
+
+```html
+<!-- компонент R-CONTENT -->
+<r-content>
+  <h2>${ title }</h2>
+  <p>${ text }</p>
+
+  <script>
+    // определить новый объект Наблюдателя
+    const obs = this.$observer()
+
+    /* создать новый Промис и приостановить выполнение компонента R-CONTENT до тех пор, пока не будет вызвано
+      событие "change-page" в обработчике которого, компоненту присваиваются даннные и разрешается Промис */
+    await new Promise(done => {
+      obs.on('change-page', (event, db) => {
+        // определить имя запрашиваемого компонента
+        const pathname = location.pathname.slice(1) || 'home'
+
+        // присвоить заголовку и тексту значение
+        this.title = db[pathname].title
+        this.text = db[pathname].text
+
+        // разрешить Промис
+        done()
+      })
+    })
+  </script>
+</r-content>
+```
+
+Здесь используется появившийся в последней версии Rigl оператор **await** за которым следует Промис. Внутри этого Промиса определяется обработчики события *change-page*. В обработчике имеется два параметра. Первый параметр, это объект событя *Event*, а второй, это база данных, которая передается из компонента *R-MENU*:
+
+```js
+// передать базу данных во второй параметр обработчика события "change-page"
+.then(db => obs.trigger('change-page', db)))
+```
+
+Внутри обработчика этого события, вначале мы получаем имя запрашиваемого компонента из глобального объекта **location**. Исходя из полученного результата, присваиваем свойствам **title** и **text** компонента *R-CONTENT*, соответствующее значение из базы данных. В конце обработчика разрешается Промис. Такая конструкция, позволяет отказаться от использования [whenDefined](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/whenDefined), которая была необходима до появления оператора **await** в Rigl.
+
+Последний компонент *R-HEADER* у нас останется без изменений, мы просто добавим в него стиль для цвета заголовка:
+
+```html
+<!-- компонент R-HEADER -->
+<r-header>
+  <r-menu></r-menu>
+  <h1>Заголовок</h1>
+
+  <style>
+    h1 {
+      color: orangered;
+    }
+  </style>
+</r-header>
+```
+
+Для полноценного отображения сайта, давайте создадим ещё один компонент *R-FOOTER*:
+
+```html
+<!-- компонент R-FOOTER -->
+<r-footer>
+  <p>${ message }</p>
+
+  <script>
+    this.message = `Copyright @ Rigl ${new Date().getFullYear()}`
+  </script>
+</r-footer>
+```
+
+Кроме этого, внутри каталога нашего приложения, создайте файл *db.json*, в котором будет храниться наша база данных:
+
+```json
+{
+  "home": {
+    "title": "Главная",
+    "text": "Lorem ipsum dolor sit amet consectetur adipisicing."
+  },
+  "about": {
+    "title": "О нас",
+    "text": "Lorem ipsum dolor sit amet consectetur."
+  },
+  "contacts": {
+    "title": "Контакты",
+    "text": "Lorem ipsum dolor sit amet consectetur, adipisicing elit."
+  }
+}
+```
+
+Таким образом, полный вид файла *components.htm* будет выглядеть следующим образом:
+
+```html
+<!-- компонент R-HEADER -->
+<r-header>
+  <r-menu></r-menu>
+  <h1>Заголовок</h1>
+
+  <style>
+    h1 {
+      color: orangered;
+    }
+  </style>
+</r-header>
+
+
+<!-- компонент R-MENU -->
+<r-menu>
+  <nav>
+    <a href="/">Главная</a>
+    <a href="/about">О нас</a>
+    <a href="/contacts">Контакты</a>
+  </nav>
+
+  <style>
+    a { margin-right: 10px; }
+  </style>
+
+  <script>
+    // определить новый Маршрутизатор с элементом NAV и сразу же его запустить
+    const router = this.$router(this.$('nav'), { start: true })
+
+    // определить новый объект Наблюдателя
+    const obs = this.$observer()
+
+    // определить маршрут ".*" для всех запросов
+    router.on('.*', () => fetch('db.json')
+      // получить данные от сервера и декодировать ответ в формат JSON
+      .then(response => response.json())
+      
+      // передать базу данных во второй параметр обработчика события "change-page"
+      .then(db => obs.trigger('change-page', db)))
+  </script>
+</r-menu>
+
+
+<!-- компонент R-CONTENT -->
+<r-content>
+  <h2>${ title }</h2>
+  <p>${ text }</p>
+
+  <script>
+    // определить новый объект Наблюдателя
+    const obs = this.$observer()
+
+    /* создать новый Промис и приостановить выполнение компонента R-CONTENT до тех пор, пока не будет вызвано
+      событие "change-page" в обработчике которого, компоненту присваиваются даннные и разрешается Промис*/
+    await new Promise(done => {
+      obs.on('change-page', (event, db) => {
+        // определить имя запрашиваемого компонента
+        const pathname = location.pathname.slice(1) || 'home'
+
+        // присвоить заголовку и тексту значение
+        this.title = db[pathname].title
+        this.text = db[pathname].text
+
+        // разрешить Промис
+        done()
+      })
+    })
+  </script>
+</r-content>
+
+
+<!-- компонент R-FOOTER* -->
+<r-footer>
+  <p>${ message }</p>
+
+  <script>
+    this.message = `Copyright @ Rigl ${new Date().getFullYear()}`
+  </script>
+</r-footer>
+```
+
+А вид файла *index.html* показан ниже:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rigl</title>
+</head>
+<body>
+  <!-- монтировать компонент R-HEADER -->
+  <r-header></r-header>
+
+  <!-- монтировать компонент R-CONTENT -->
+  <r-content></r-content>
+
+  <!-- монтировать компонент R-FOOTER -->
+  <r-footer></r-footer>
+  
+
+  <script src="rigl.min.js"></script>
+  
+  <script>
+    Rigl.load('components.htm')
+    
+    // вывести текстовое HTML-содержимое приложения в консоль
+    Rigl.render().then(htmlText => console.log(htmlText))
+  </script>
+</body>
+</html>
+```
+
+Если вы сейчас запустите своё приложение в браузере через любой сервер, то увидите в консоли очищенное от мусорных узлов содержимое всех компонентов:
+
+```
+<body><r-header><r-menu><nav><a href="/">Главная</a><a href="/about">О нас</a><a href="/contacts">Контакты</a></nav></r-menu><h1>Заголовок</h1></r-header><r-content><h2>Главная</h2><p>Lorem ipsum dolor sit amet consectetur adipisicing.</p></r-content><r-footer><p>Copyright @ Rigl 2021</p></r-footer></body>
+```
+
+Но перед тем, как переходить к созданию сервера, необходимо внести небольшое исправление в компонент *R-MENU*. Дело в том, что Rigl использует для рендеринга веб-компонентов виртуальный браузер [JSDOM](https://github.com/jsdom/jsdom), который, на данный, момент не поддерживает метод [fetch()](https://learn.javascript.ru/fetch). Нам придётся заменить его старым объектом [XMLHttpRequest](https://learn.javascript.ru/xmlhttprequest), как показано ниже:
+
+```html
+<!-- компонент R-MENU -->
+<r-menu>
+  <nav>
+    <a href="/">Главная</a>
+    <a href="/about">О нас</a>
+    <a href="/contacts">Контакты</a>
+  </nav>
+
+  <style>
+    a { margin-right: 10px; }
+  </style>
+
+  <script>
+    // определить новый Маршрутизатор с элементом NAV и сразу же его запустить
+    const router = this.$router(this.$('nav'), { start: true })
+
+    // определить новый объект Наблюдателя
+    const obs = this.$observer()
+
+    // определить маршрут ".*" для всех запросов
+    router.on('.*', () => {
+      // создать новый объект XMLHttpRequest
+      const xhr = new XMLHttpRequest()
+
+      // инициализировать метод и путь запроса
+      xhr.open('GET', 'db.json')
+     
+      // декодировать ответ в формат JSON
+      xhr.responseType = 'json'
+
+      // выполнить запрос
+      xhr.send()
+
+      // передать базу данных во второй параметр обработчика события "change-page"
+      xhr.onload = () => obs.trigger('change-page', xhr.response)
+    })
+  </script>
+</r-menu>
+```
+
+Теперь можно переходить к созданию сервера на Node.js. Для создания сервера, мы будем использовать фреймворк [Express](https://expressjs.com/). Создайте новую папку на диске и назовите её, например, *ssr*. Внутри папки создайте две подпапки: *public* и *views*.
+
+Скопируйте в папку *public* файлы: *components.htm*, *db.json* и *rigl.min.js*. Кроме этого, создайте в ней подпапку *img* и поместите в неё файл *logo.png*:
+
+![rigl](https://raw.githubusercontent.com/rigljs/rigl/main/img/logo.png)
+
+Давайте добавим это изображение в компонент *R-HEADER*, который находится в файле *components.htm*:
+
+```html
+<!-- компонент R-HEADER -->
+<r-header>
+  <r-menu></r-menu>
+  <img src="img/logo.png" alt="logo">
+  <h1>Заголовок</h1>
+
+  <style>
+    h1 {
+      color: orangered;
+    }
+  </style>
+</r-header>
+```
+
+В папке *public* будут находиться все статические файлы сайта, а в папке *img*, все его изображения. Теперь перейдите в папку *views* и создайте в ней файл *main.hbs*, который будет являться главным представлением шаблонизатора [Handlebars](https://handlebarsjs.com/), как показано ниже:
+
+```hbs
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rigl</title>
+</head>
+  {{#if body}}
+    {{{body}}}
+  {{else}}
+    {{> body}}
+  {{/if}}
+</html>
+```
+
+В это представление будет отдаваться или содержимое свойства **body** шаблонизатора, если такое свойство передаётся во втором аргументе метода **render()** фреймворка Express, например:
+ 
+```js
+res.render("main.hbs", { body })
+```
+
+или частичное представление с таким же названием, которое мы создадим далее. Добавьте в папку *views* подпапку *partials*, в которой создайте файл *body.hbs*, являющийся частичным представлением шаблонизатора:
+
+```hbs
+<body>
+  <!-- монтировать компонент R-HEADER -->
+  <r-header></r-header>
+
+  <!-- монтировать компонент R-CONTENT -->
+  <r-content></r-content>
+
+  <!-- монтировать компонент R-FOOTER -->
+  <r-footer></r-footer>
+  
+
+  <script src="rigl.min.js"></script>
+  
+  <script>
+    Rigl.load('components.htm')
+  </script>
+</body>
+```
+
+Осталось добавить файл приложения *app.js* в папку *ssr*:
+
+```js
+const express = require("express")
+const hbs = require("hbs")
+const { readFile } = require('fs/promises')
+const { JSDOM } = require("jsdom")
+const port = process.env.PORT || 3000
+
+const app = express()
+app.use(express.static(__dirname + "/public"))
+
+app.set("view engine", "hbs")
+hbs.registerPartials(__dirname + "/views/partials")
+
+
+// содержит названия используемые в заголовках поисковых систем
+const bots = ['YandexBot', 'Googlebot']
+
+// ----------------------------------------------------------------------
+const YandexBot = 'Mozilla/5.0 (compatible; YandexBot/3.0; +http://yandex.com/bots)'
+const Googlebot = 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'
+// ----------------------------------------------------------------------
+
+
+app.get('/favicon.ico', (req, res) => res.sendStatus(204))
+
+app.use(async (req, res) => {
+  // const userAgent = YandexBot
+  // const userAgent = Googlebot
+  const userAgent = req.get('User-Agent')
+
+  // если запрос от бота, то константа "isBot" будет содержать Истину
+  const isBot = bots.some(bot => userAgent.includes(bot))
+  
+  // если это бот
+  if (isBot) {
+    // получить полный URL запроса
+    const fullURL = req.protocol + "://" + req.hostname + `${port ? `:${port}` : ''}` + req.path
+
+    // содержит отрендеренное содержимое приложения
+    const body = await readFile(__dirname + '/views/partials/body.hbs').then(async data => {
+      // создать виртуальный браузер JSDOM
+      const dom = new JSDOM(data.toString(), {
+        url: fullURL, // передать URL запроса в виртуальный браузер JSDOM
+        runScripts: "dangerously",
+        resources: "usable"
+      })
+      
+      // выполнить рендер приложения с помощью "Rigl.render()"
+      return await new Promise(done => {
+        dom.window.onload = () => {
+          // вернуть текстовое HTML-содержимое в константу "body"
+          dom.window.Rigl.render().then(done)
+        }
+      })
+    })
+
+    // передать константу "body" в шаблонизатор 
+    res.render("main.hbs", { body })
+  }
+
+  // иначе, если запрос был сделан пользователем
+  else {
+    // вызвать шаблонизатор с представлением "body" по умолчанию
+    res.render("main.hbs")
+  }
+})
+
+app.listen(port, () => console.log(`The server is running at http://localhost:${port}/`))
+```
+
+и в эту же папку добавить файл зависимостей *package.json*:
+
+```json
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "hbs": "^4.1.2",
+    "jsdom": "^18.0.0"
+  }
+}
+```
+
+Структура каталога *ssr* показана ниже:
+
+```
+ssr
+  app.js
+  package.json
+  /public
+    components.htm
+    rigl.min.js
+    db.json
+    /img
+      logo.png
+  /views
+    main.hbs
+    /partials
+      body.hbs
+```
+
+У вас уже должнен быть установлен на компьютере [Node.js](https://nodejs.org/ru/). Чтобы установить все зависимости из файла *package.json*, откройте папку *ssr* из терминала и введите в нём команду:
+
+```
+npm i
+```
+
+После установки зависимостей, для запуска сервера введите в терминале команду:
+
+```
+node app
+```
+
+и перейдите в браузере по адресу [http://localhost:3000/](http://localhost:3000/). У вас откроется приложение аналогичое тому, что мы что мы запускали перед этим, без сервера Node.js.
+
+Чтобы увидеть сайт глазами бота, раскомментируйте в файле *app.js* строку **const userAgent = YandexBot** или **const userAgent = Googlebot** и закомментируйте **const userAgent = req.get('User-Agent')**, например:
+
+```js
+app.use(async (req, res) => {
+  // const userAgent = YandexBot
+  const userAgent = Googlebot
+  // const userAgent = req.get('User-Agent')
+```
+
+Откройте консоль браузера и перейдите на вкладку Элементы. Вы увите там чистый HTML, без стилей, Теневого DOM и остальных, мусорных для ботов узлов компонента.
+
+Для примера, здесь была проверка всего двух наиболее популярных систем поиска:
+
+```js
+// ----------------------------------------------------------------------
+const YandexBot = 'Mozilla/5.0 (compatible; YandexBot/3.0; +http://yandex.com/bots)'
+const Googlebot = 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'
+// ----------------------------------------------------------------------
+```
+
+В реальном проекте, в константу **bots** отдаётся массив из полного списка заголовков поисковых систем, который можно найти в интернете:
+
+```js
+const bots = ['YandexBot', 'Googlebot']
+```
+
+Если запрос был сделан ботом, то выполняется блок кода показанный ниже:
+
+```js
+// если это бот
+if (isBot) {
+  // получить полный URL запроса
+  const fullURL = req.protocol + "://" + req.hostname + `${port ? `:${port}` : ''}` + req.path
+
+  // содержит отрендеренное содержимое приложения
+  const body = await readFile(__dirname + '/views/partials/body.hbs').then(async data => {
+    // создать виртуальный браузер JSDOM
+    const dom = new JSDOM(data.toString(), {
+      url: fullURL, // передать URL запроса в виртуальный браузер JSDOM
+      runScripts: "dangerously",
+      resources: "usable"
+    })
+    
+    // выполнить рендер приложения с помощью "Rigl.render()"
+    return await new Promise(done => {
+      dom.window.onload = () => {
+        // вернуть текстовое HTML-содержимое в константу "body"
+        dom.window.Rigl.render().then(done)
+      }
+    })
+  })
+
+  // передать константу "body" в шаблонизатор 
+  res.render("main.hbs", { body })
+}
+```
+
+Из свойства **window** виртуального браузера JSDOM, вызывается уже знакомый нам метод **render()** фреймворка Rigl:
+
+```js
+// выполнить рендер приложения с помощью "Rigl.render()"
+return await new Promise(done => {
+  dom.window.onload = () => {
+    // вернуть текстовое HTML-содержимое в константу "body"
+    dom.window.Rigl.render().then(done)
+  }
+})
+```
+
+который возвращает текстовое HTML-содержимое константе **body**, как показано ниже:
+
+```js
+// содержит отрендеренное содержимое приложения
+const body = await readFile(__dirname + '/views/partials/body.hbs').then(async data => {
+```
+
+Которая затем передаётся в качесте свойства **body** шаблонизатору во втором аргументе:
+
+```js
+// передать константу "body" в шаблонизатор 
+res.render("main.hbs", { body })
+```
+
+Если запрос был сделан пользователем, то ему отдаётся частичное представление с именем **body** по умолчанию:
+
+```js
+// иначе, если запрос был сделан пользователем
+else {
+  // вызвать шаблонизатор с представлением "body" по умолчанию
+  res.render("main.hbs")
+}
 ```
