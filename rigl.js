@@ -1,5 +1,5 @@
 /*!
- * Rigl.js v2.1.0 | https://github.com/rigljs/rigl
+ * Rigl.js v2.1.1 | https://github.com/rigljs/rigl
  * Released under the MIT License
  */
  (function(modules) { 
@@ -1686,6 +1686,11 @@ methods_Methods.prototype.$after = function () {
   args.forEach(function (callback) {
     return typeof callback === 'function' ? STORE.get(_this8.$host).after.add(callback) : null;
   });
+}; 
+
+
+methods_Methods.prototype.$defined = function (name) {
+  return customElements.whenDefined(name);
 }; 
 
 

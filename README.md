@@ -15,7 +15,7 @@ Rigl is a framework for building reactive Web Components with Server Rendering [
 
 <br>
 
-> Version **2.1.0** added support for [SSR](#ssr); operator [await](#await); events [$connected()](#connected) and [parameters](#params) routes
+> Version **2.1.0** added support for [SSR](#ssr); operator [await](#await); event [$connected()](#connected); method [$defined()](#defined) and [parameters](#params) routes
 
 <br>
 
@@ -2534,7 +2534,7 @@ But it won't work if the event is called before it is defined. For example, let'
 </r-one>
 ```
 
-For an event in the *R-TWO* component to be triggered after it is defined in the *R-ONE* component, you must use the [whenDefined()](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/whenDefined) method as shown below:
+For an event in the *R-TWO* component to be triggered after it is defined in the *R-ONE* component, you must use the <b id="defined">$defined()</b> service method, which is analogous to the [whenDefined()](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/whenDefined) as shown below:
 
 ```html
 <!-- R-TWO component template -->
@@ -2547,7 +2547,7 @@ For an event in the *R-TWO* component to be triggered after it is defined in the
     
     /* create an Observer and fire the "get-arr" event with the passing of the "this" keyword,
       which will be available in the second parameter of the event handler */
-    customElements.whenDefined('r-one').then(() => this.$observer().trigger('get-arr', this))
+    this.$defined('r-one').then(() => this.$observer().trigger('get-arr', this))
   </script>
 </r-two>
 ```
@@ -3140,7 +3140,7 @@ The following changes will affect the *R-CONTENT* component, we no longer need t
 .then(db => obs.trigger('change-page', db)))
 ```
 
-Inside the handler for this event, we first get the name of the requested component from the global **location** object. Based on the result obtained, assign the **title** and **text** properties of the *R-CONTENT* component to the corresponding value from the database. At the end of the handler, the Promise is resolved. This design eliminates the use of [whenDefined](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/whenDefined), which was necessary before the appearance of the **await** operator in Rigl.
+Inside the handler for this event, we first get the name of the requested component from the global **location** object. Based on the result obtained, assign the **title** and **text** properties of the *R-CONTENT* component to the corresponding value from the database. At the end of the handler, the Promise is resolved. This design allows you to abandon the use of the [$defined()](#defined) method, which was necessary before the appearance of the **await** operator in Rigl.
 
 The last component *R-HEADER* will remain unchanged, we will simply add a style for the heading color to it:
 
