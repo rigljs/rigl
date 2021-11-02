@@ -12,7 +12,7 @@ hbs.registerPartials(__dirname + "/views/partials")
 
 
 // contains the names used in the titles of search engines
-const bots = ['YandexBot', 'Googlebot']
+const bots = require("./bots")
 
 // ----------------------------------------------------------------------
 const YandexBot = 'Mozilla/5.0 (compatible; YandexBot/3.0; +http://yandex.com/bots)'
