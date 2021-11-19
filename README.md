@@ -15,7 +15,7 @@ Rigl is a framework for building reactive Web Components with Server Rendering [
 
 <br>
 
-> Added assemblies for [Sass](#sass) and [Pug + BEM](#pugbem)
+> Added assemblies for [Sass](#sass) and [Pug + BEM](#pug-bem)
 
 > Version **2.1.0** added support for [SSR](#ssr); operator [await](#await); event [$connected()](#connected); method [$defined()](#defined) and [parameters](#params) routes
 
