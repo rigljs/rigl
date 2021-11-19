@@ -3722,7 +3722,7 @@ r-menu
     //- Модификатор -active
     a._item.-active(href="#") Rigl
 
-  //- Output HTML
+  //- Выходной HTML
     <nav class="menu">
       <a class="menu__item" href="#">Pug</a>
       <a class="menu__item menu__item--active" href="#">Rigl</a>
