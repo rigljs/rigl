@@ -3656,7 +3656,7 @@ else {
 
 <br>
 
-Сборка *gulp-sass* позволяет использовать препроцессор [Sass](https://sass-lang.com/) в файлах компонентов Rigl. Например:
+Сборка [gulp-sass](https://github.com/rigljs/rigl/tree/main/gulp-sass) позволяет использовать препроцессор [Sass](https://sass-lang.com/) в файлах компонентов Rigl. Например:
 
 
 ```html
@@ -3710,7 +3710,7 @@ else {
 
 <br>
 
-Сборка *gulp-pug-bem* позволяет использовать шаблонизатор [Pug](https://pugjs.org/api/getting-started.html) и методологию [БЭМ](https://ru.bem.info/methodology/quick-start/) в файлах компонентов Rigl. Например:
+Сборка [gulp-pug-bem](https://github.com/rigljs/rigl/tree/main/gulp-pug-bem) позволяет использовать шаблонизатор [Pug](https://pugjs.org/api/getting-started.html) и методологию [БЭМ](https://ru.bem.info/methodology/quick-start/) в файлах компонентов Rigl. Например:
 
 
 ```pug

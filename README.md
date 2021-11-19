@@ -3656,7 +3656,7 @@ else {
 
 <br>
 
-Building *gulp-sass* allows you to use the [Sass](https://sass-lang.com/) preprocessor in Rigl component files. For example:
+Building [gulp-sass](https://github.com/rigljs/rigl/tree/main/gulp-sass) allows you to use the [Sass](https://sass-lang.com/) preprocessor in Rigl component files. For example:
 
 
 ```html
@@ -3710,7 +3710,7 @@ All Rigl expressions used in *STYLE* tags are placed in [Quoted Strings](https:/
 
 <br>
 
-Building *gulp-pug-bem* allows you to use the [Pug](https://pugjs.org/api/getting-started.html) templating engine and the [BEM](https://en.bem.info/methodology/quick-start/) methodology in Rigl component files. For example:
+Building [gulp-pug-bem](https://github.com/rigljs/rigl/tree/main/gulp-pug-bem) allows you to use the [Pug](https://pugjs.org/api/getting-started.html) templating engine and the [BEM](https://en.bem.info/methodology/quick-start/) methodology in Rigl component files. For example:
 
 
 ```pug
