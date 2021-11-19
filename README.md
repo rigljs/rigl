@@ -3056,7 +3056,7 @@ Before rendering the components on the server, let's render the content of the a
 
 If we launch the browser now, we will not see anything in the console. This is due to the fact that by default, the **render()** method waits until all components are connected and only then it starts processing them. To see the render of the application, you will need to click on the links *About* and *Contacts*. But, we can pass to the method the names of those components, the render of which we want to receive:
 
-> Since all examples use [external-components](# external-components), to run them you need to run the application through any server
+> Since all examples use [external-components](#external-components), to run them you need to run the application through any server
 
 ```js
 // output the textual HTML content of the application to the console
