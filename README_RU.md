@@ -15,6 +15,8 @@ Rigl - это фреймворк для создания реактивных В
 
 <br>
 
+> Добавлены сборки для [Sass](#sass) и [Pug + BEM](#pugbem)
+
 > В версии **2.1.0** была добавлена поддержка [SSR](#ssr); оператора [await](#await); события [$connected()](#connected); метода [$defined()](#defined) и [параметров](#params) маршрутов
 
 <br>
@@ -53,6 +55,8 @@ Rigl - это фреймворк для создания реактивных В
 19. [Наблюдатель](#observer)
 20. [Маршрутизатор](#router)
 21. [SSR](#ssr)
+22. [Sass](#sass)
+23. [Pug + BEM](#pug-bem)
 
 <br>
 <hr>
@@ -3644,4 +3648,97 @@ else {
   // вызвать шаблонизатор с представлением "body" по умолчанию
   res.render("main.hbs")
 }
+```
+<br>
+<br>
+
+<h2 id="sass"># Sass</h2>
+
+<br>
+
+Сборка *gulp-sass* позволяет использовать препроцессор [Sass](https://sass-lang.com/) в файлах компонентов Rigl. Например:
+
+
+```html
+<r-header>
+  <h1>
+    <p>Hello ${ message }!</p>
+  </h1>
+
+  <style>
+    /* Синтаксис Sass */
+    h1 {
+      p {
+        color: orangered;
+      }
+    }
+  </style>
+
+  <script>
+    this.message = 'Rigl'
+  </script>
+</r-header>
+```
+
+Все выражения Rigl, которые используются в тегах *STYLE*, помещаются в [Цитированные Строки](https://sass-lang.com/documentation/interpolation#quoted-strings) Sass, как показано ниже:
+
+```html
+<r-footer>
+  <p>${ copyright }</p>
+
+  <style>
+    :host {
+      display: block;
+      margin-top: 50px;
+    }
+    p {
+      /* Цитированные Cтроки */
+      color:  #{"${ textColor() }"};
+    }
+  </style>
+
+  <script>
+    this.copyright = 'Copyright Rigl.js'
+    this.textColor = () => 'green'
+  </script>
+</r-footer>
+```
+<br>
+<br>
+
+<h2 id="pug-bem"># Pug + BEM</h2>
+
+<br>
+
+Сборка *gulp-pug-bem* позволяет использовать шаблонизатор [Pug](https://pugjs.org/api/getting-started.html) и методологию [БЭМ](https://ru.bem.info/methodology/quick-start/) в файлах компонентов Rigl. Например:
+
+
+```pug
+r-menu
+  //- Блок .menu
+  nav.menu
+    //- Элемент _item
+    a._item(href="#") Pug
+    //- Модификатор -active
+    a._item.-active(href="#") Rigl
+
+  //- Output HTML
+    <nav class="menu">
+      <a class="menu__item" href="#">Pug</a>
+      <a class="menu__item menu__item--active" href="#">Rigl</a>
+    </nav>
+
+  style.
+    /* Блок .menu */
+    .menu {
+      margin-left: 20px;
+    }
+    /* Элемент __item */
+    .menu__item {
+      margin-right: 10px;
+    }
+    /* Модификатор --active */
+    .menu__item--active {
+      color: red;
+    }
 ```

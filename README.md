@@ -15,6 +15,8 @@ Rigl is a framework for building reactive Web Components with Server Rendering [
 
 <br>
 
+> Added assemblies for [Sass](#sass) and [Pug + BEM](#pugbem)
+
 > Version **2.1.0** added support for [SSR](#ssr); operator [await](#await); event [$connected()](#connected); method [$defined()](#defined) and [parameters](#params) routes
 
 <br>
@@ -53,6 +55,8 @@ Rigl is a framework for building reactive Web Components with Server Rendering [
 19. [Observer](#observer)
 20. [Router](#router)
 21. [SSR](#ssr)
+22. [Sass](#sass)
+23. [Pug + BEM](#pug-bem)
 
 <br>
 <hr>
@@ -3644,4 +3648,97 @@ else {
   // call the template engine with the default "body" view
   res.render("main.hbs")
 }
+```
+<br>
+<br>
+
+<h2 id="sass"># Sass</h2>
+
+<br>
+
+Building *gulp-sass* allows you to use the [Sass](https://sass-lang.com/) preprocessor in Rigl component files. For example:
+
+
+```html
+<r-header>
+  <h1>
+    <p>Hello ${ message }!</p>
+  </h1>
+
+  <style>
+    /* Sass syntax */
+    h1 {
+      p {
+        color: orangered;
+      }
+    }
+  </style>
+
+  <script>
+    this.message = 'Rigl'
+  </script>
+</r-header>
+```
+
+All Rigl expressions used in *STYLE* tags are placed in [Quoted Strings](https://sass-lang.com/documentation/interpolation#quoted-strings) Sass as shown below:
+
+```html
+<r-footer>
+  <p>${ copyright }</p>
+
+  <style>
+    :host {
+      display: block;
+      margin-top: 50px;
+    }
+    p {
+      /* Quoted Strings */
+      color:  #{"${ textColor() }"};
+    }
+  </style>
+
+  <script>
+    this.copyright = 'Copyright Rigl.js'
+    this.textColor = () => 'green'
+  </script>
+</r-footer>
+```
+<br>
+<br>
+
+<h2 id="pug-bem"># Pug + BEM</h2>
+
+<br>
+
+Building *gulp-pug-bem* allows you to use the [Pug](https://pugjs.org/api/getting-started.html) templating engine and the [BEM](https://en.bem.info/methodology/quick-start/) methodology in Rigl component files. For example:
+
+
+```pug
+r-menu
+  //- Block .menu
+  nav.menu
+    //- Element _item
+    a._item(href="#") Pug
+    //- Modifier -active
+    a._item.-active(href="#") Rigl
+
+  //- Output HTML
+    <nav class="menu">
+      <a class="menu__item" href="#">Pug</a>
+      <a class="menu__item menu__item--active" href="#">Rigl</a>
+    </nav>
+
+  style.
+    /* Block .menu */
+    .menu {
+      margin-left: 20px;
+    }
+    /* Element __item */
+    .menu__item {
+      margin-right: 10px;
+    }
+    /* Modifier --active */
+    .menu__item--active {
+      color: red;
+    }
 ```
