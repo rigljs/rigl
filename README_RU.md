@@ -15,7 +15,7 @@ Rigl - это фреймворк для создания реактивных В
 
 <br>
 
-> Добавлены сборки для [Sass](#sass) и [Pug + BEM](#pug-bem)
+> Добавлены сборки для [Sass](#sass) и [Pug + БЭМ](#pug-bem)
 
 > В версии **2.1.0** была добавлена поддержка [SSR](#ssr); оператора [await](#await); события [$connected()](#connected); метода [$defined()](#defined) и [параметров](#params) маршрутов
 
@@ -56,7 +56,7 @@ Rigl - это фреймворк для создания реактивных В
 20. [Маршрутизатор](#router)
 21. [SSR](#ssr)
 22. [Sass](#sass)
-23. [Pug + BEM](#pug-bem)
+23. [Pug + БЭМ](#pug-bem)
 
 <br>
 <hr>
@@ -3706,7 +3706,7 @@ else {
 <br>
 <br>
 
-<h2 id="pug-bem"># Pug + BEM</h2>
+<h2 id="pug-bem"># Pug + БЭМ</h2>
 
 <br>
 
