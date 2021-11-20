@@ -2989,7 +2989,7 @@ router.on('/book(/fantastic)?', event => ...)
 
 <br>
 
-Starting with version **2.1.0**, Rigl has added support for Server Side Rendering (SSR) Node.js, making it a complete framework for building Web applications. For users, the content is still displayed in the [Shadow DOM](https://javascript.info/shadow-dom), and for search bots it is served as *HTML* cleared of garbage nodes. Garbage nodes for search engines include comments, empty text nodes, *TEMPLATE* tags without the ***name*** attribute, styles and component scripts. Component tags *SLOT* are returned as *DIV* tags for search engine robots.
+Starting with version **2.1.0**, Rigl has added support for [Server Side Rendering](https://github.com/rigljs/rigl/tree/main/ssr) Node.js, making it a complete framework for building Web applications. For users, the content is still displayed in the [Shadow DOM](https://javascript.info/shadow-dom), and for search bots it is served as *HTML* cleared of garbage nodes. Garbage nodes for search engines include comments, empty text nodes, *TEMPLATE* tags without the ***name*** attribute, styles and component scripts. Component tags *SLOT* are returned as *DIV* tags for search engine robots.
 
 To render Web Components, the **render()** utility method is used. This is a method of the global Rigl object:
 
