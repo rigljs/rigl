@@ -15,7 +15,7 @@ Rigl - это фреймворк для создания реактивных В
 
 <br>
 
-> Добавлены сборки для [Sass](#sass) и [Pug + БЭМ](#pug-bem)
+> Добавлены сборки для [Sass](#sass), [Pug + БЭМ](#pug-bem) и [Pug + БЭМ + Sass](#pug-bem-sass)
 
 > В версии **2.1.0** была добавлена поддержка [SSR](#ssr); оператора [await](#await); события [$connected()](#connected); метода [$defined()](#defined) и [параметров](#params) маршрутов
 
@@ -57,6 +57,7 @@ Rigl - это фреймворк для создания реактивных В
 21. [SSR](#ssr)
 22. [Sass](#sass)
 23. [Pug + БЭМ](#pug-bem)
+24. [Pug + БЭМ + Sass](#pug-bem-sass)
 
 <br>
 <hr>
@@ -3741,4 +3742,64 @@ r-menu
     .menu__item--active {
       color: red;
     }
+```
+<br>
+<br>
+
+<h2 id="pug-bem-sass"># Pug + БЭМ + Sass</h2>
+
+<br>
+
+Сборка [gulp-pug-bem-sass](https://github.com/rigljs/rigl/tree/main/gulp-pug-bem-sass) позволяет использовать шаблонизатор [Pug](https://pugjs.org/api/getting-started.html), методологию [БЭМ](https://ru.bem.info/methodology/quick-start/) и препроцессор [Sass](https://sass-lang.com/) в файлах компонентов Rigl. Например:
+
+
+```pug
+r-menu
+  //- Блок .menu
+  nav.menu
+    //- Элемент _item
+    a._item(href="#") Pug
+    //- Модификатор -active
+    a._item.-active(href="#") Rigl
+
+  //- Выходной HTML
+    <nav class="menu">
+      <a class="menu__item" href="#">Pug</a>
+      <a class="menu__item menu__item--active" href="#">Rigl</a>
+    </nav>
+
+  style.
+    /* Блок .menu */
+    .menu {
+      margin-left: 20px;
+      /* Элемент __item */
+      &__item {
+        margin-right: 10px;
+        /* Модификатор --active */
+        &--active {
+          color: red;
+        }
+      }
+    }
+```
+
+Обратите внимание, что [Цитированные Строки](https://sass-lang.com/documentation/interpolation#quoted-strings) Sass, в Pug необходимо экранировать обратным слешем:
+
+```pug
+r-footer
+  p ${ copyright }
+
+  style.
+    :host {
+      display: block;
+      margin-top: 50px;
+    }
+    p {
+      /* экранировать Цитированную Строку символом \ */
+      color:  \#{"${ textColor() }"};
+    }
+
+  script.
+    this.copyright = 'Copyright Rigl.js'
+    this.textColor = () => 'green'
 ```

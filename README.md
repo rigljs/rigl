@@ -15,7 +15,7 @@ Rigl is a framework for building reactive Web Components with Server Rendering [
 
 <br>
 
-> Added assemblies for [Sass](#sass) and [Pug + BEM](#pug-bem)
+> Added assemblies for [Sass](#sass), [Pug + BEM](#pug-bem) and [Pug + BEM + Sass](#pug-bem-sass)
 
 > Version **2.1.0** added support for [SSR](#ssr); operator [await](#await); event [$connected()](#connected); method [$defined()](#defined) and [parameters](#params) routes
 
@@ -57,6 +57,7 @@ Rigl is a framework for building reactive Web Components with Server Rendering [
 21. [SSR](#ssr)
 22. [Sass](#sass)
 23. [Pug + BEM](#pug-bem)
+24. [Pug + BEM + Sass](#pug-bem-sass)
 
 <br>
 <hr>
@@ -3741,4 +3742,64 @@ r-menu
     .menu__item--active {
       color: red;
     }
+```
+<br>
+<br>
+
+<h2 id="pug-bem-sass"># Pug + BEM + Sass</h2>
+
+<br>
+
+Building [gulp-pug-bem-sass](https://github.com/rigljs/rigl/tree/main/gulp-pug-bem-sass) allows you to use the [Pug](https://pugjs.org/api/getting-started.html) templating engine, the [BEM](https://en.bem.info/methodology/quick-start/) methodology and the [Sass](https://sass-lang.com/) preprocessor in the files Rigl components. For example:
+
+
+```pug
+r-menu
+  //- Block .menu
+  nav.menu
+    //- Element _item
+    a._item(href="#") Pug
+    //- Modifier -active
+    a._item.-active(href="#") Rigl
+
+  //- Output HTML
+    <nav class="menu">
+      <a class="menu__item" href="#">Pug</a>
+      <a class="menu__item menu__item--active" href="#">Rigl</a>
+    </nav>
+
+  style.
+    /* Block .menu */
+    .menu {
+      margin-left: 20px;
+      /* Element __item */
+      &__item {
+        margin-right: 10px;
+        /* Modifier --active */
+        &--active {
+          color: red;
+        }
+      }
+    }
+```
+
+Note that [Quoted Strings](https://sass-lang.com/documentation/interpolation#quoted-strings) Sass, in Pug needs to be escaped with a backslash:
+
+```pug
+r-footer
+  p ${ copyright }
+
+  style.
+    :host {
+      display: block;
+      margin-top: 50px;
+    }
+    p {
+      /* escaping Quoted Strings with a character \ */
+      color:  \#{"${ textColor() }"};
+    }
+
+  script.
+    this.copyright = 'Copyright Rigl.js'
+    this.textColor = () => 'green'
 ```
