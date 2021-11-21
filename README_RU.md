@@ -17,7 +17,7 @@ Rigl - это фреймворк для создания реактивных В
 
 > Добавлены сборки для [Sass](#sass), [Pug + БЭМ](#pug-bem) и [Pug + БЭМ + Sass](#pug-bem-sass)
 
-![pug](https://raw.githubusercontent.com/rigljs/rigl/main/img/pug.png)
+![pug](https://raw.githubusercontent.com/rigljs/rigl/main/img/pug_ru.png)
 
 > В версии **2.1.0** была добавлена поддержка [SSR](#ssr); оператора [await](#await); события [$connected()](#connected); метода [$defined()](#defined) и [параметров](#params) маршрутов
 
