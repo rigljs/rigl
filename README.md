@@ -11,7 +11,7 @@
 
 <br>
 
-Rigl is a framework for building reactive Web Components with Server Rendering [(SSR)](#ssr) support. In addition to a convenient way to create components and add reactive behavior to them, Rigl provides an Observer for tracking events between different components and a simple Router.
+Rigl is a framework for building reactive Web Components with [SSR](#ssr) (Server Side Rendering) support. In addition to a convenient way to create components and add reactive behavior to them, Rigl provides an Observer for tracking events between different components and a simple Router.
 
 <br>
 
@@ -2992,9 +2992,9 @@ router.on('/book(/fantastic)?', event => ...)
 
 <br>
 
-Starting with version **2.1.0**, Rigl has added support for Server Side Rendering Node.js, making it a complete framework for building Web applications. For users, the content is still displayed in the [Shadow DOM](https://javascript.info/shadow-dom), and for search bots it is served as *HTML* cleared of garbage nodes. Garbage nodes for search engines include comments, empty text nodes, *TEMPLATE* tags without the ***name*** attribute, styles and component scripts. Component tags *SLOT* are returned as *DIV* tags for search engine robots.
+Starting with version **2.1.0**, Rigl has added support for Server Side Rendering Node.js, making it a complete framework for building Web applications. For users, the content is still displayed in the [Shadow DOM](https://javascript.info/shadow-dom), and for search bots it is served as *HTML* cleared of garbage nodes.
 
-> You can download the finished assembly using the [ssr](https://github.com/rigljs/rigl/tree/main/ssr) link
+Garbage nodes for search engines include comments, empty text nodes, *TEMPLATE* tags without the ***name*** attribute, styles and component scripts. Component tags *SLOT* are returned as *DIV* tags for search engine robots. You can download the finished assembly using the [ssr](https://github.com/rigljs/rigl/tree/main/ssr) link.
 
 To render Web Components, the **render()** utility method is used. This is a method of the global Rigl object:
 
