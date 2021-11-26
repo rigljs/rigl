@@ -33,7 +33,7 @@ app.use(async (req, res) => {
   // if it's a bot
   if (isBot) {
     // get full request URL
-    const fullURL = req.protocol + "://" + req.hostname + `${port ? `:${port}` : ''}` + req.path
+    const fullURL = req.protocol + "://" + req.hostname + `${port ? `:${port}` : ''}` + req.originalUrl
 
     // contains the rendered content of the application
     const body = await readFile(__dirname + '/views/partials/body.hbs').then(async data => {
